@@ -1,0 +1,862 @@
+﻿
+@{
+    ViewData["Title"] = "Asignacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>
+    Asignación
+</h1>
+<link href="~/css/site.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <form id="cedulaForm" method="post">
+                <label for="Cedula">Cédula Funcionario</label>
+                <input type="text" class="form-control" id="Cedula" placeholder="Ingrese la cedula del funcionario">
+                <br />
+               
+
+                <button type="button" class="btn btn-primary" onclick="consultarCedulaBtn()">Consultar Cédula</button>
+
+                <div id="errorMensajeCedula" class="alert alert-danger mt-3" style="display:none;">
+                    No se encontraron resultados para la cédula ingresada.
+                </div>
+                <div id="errorMensajeCedulaInput" class="alert alert-danger mt-3" style="display:none;">
+                    Debes ingresar una cedula.
+                </div>
+            </form>
+
+            <div id="resultadosCedula" style="display:none;">
+                <div class="form-group">
+                    <label for="Funcionario">idFuncionario:</label>
+                    <input type="text" class="form-control" id="idFuncionario" name="idFuncionario" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombres:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellidos:</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo:</label>
+                    <input type="text" class="form-control" id="correo" name="correo" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" class="form-control" id="telefono" name="telefono" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="area">Área:</label>
+                    <input type="text" class="form-control" id="area" name="area" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="cargo">Cargo:</label>
+                    <input type="text" class="form-control" id="cargo" name="cargo" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="piso">Piso:</label>
+                    <input type="text" class="form-control" id="piso" name="piso" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <form id="placaForm" method="post" style="display:none;">
+                <label for="Placa">Placa Artículo</label>
+                <input type="text" class="form-control" id="Placa" placeholder="Ingrese la Placa del Artículo">
+                <br />
+                <button type="button" class="btn btn-primary" onclick="consultarPlacaBtn()">Consultar Placa</button>
+                <div id="errorMensajePlaca" class="alert alert-danger mt-3" style="display:none;">
+                    No se encontraron resultados para la Placa del Artículo.
+                </div>
+
+                <div id="errorMensajePlacaInput" class="alert alert-danger mt-3" style="display:none;">
+                    Debes ingresar una Placa.
+                </div>
+            </form>
+
+            <div id="resultadosPlaca" style="display:none;">
+                <div class="form-group">
+                    <label for="idarticulo">Id Articulo:</label>
+                    <input type="text" class="form-control" id="idArticulo" name="idArticulo" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="ArticuloCategoria">Categoría:</label>
+                    <input type="text" class="form-control" id="ArticuloCategoria" name="ArticuloCategoria" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="ArticuloModelo">Modelo:</label>
+                    <input type="text" class="form-control" id="ArticuloModelo" name="ArticuloModelo" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="ArticuloSerial">Serial:</label>
+                    <input type="text" class="form-control" id="ArticuloSerial" name="ArticuloSerial" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="ArticuloPlaca">Placa:</label>
+                    <input type="text" class="form-control" id="ArticuloPlaca" name="ArticuloPlaca" disabled>
+                </div>
+
+                <div class="form-group">
+                    <div id="adicionalesContainer"></div>
+                </div>
+
+                <div id="AgregarAdicional" class="form-group" style="display:none;">
+                    <h3 class="mt-3">Agregar Adicional:</h3>
+                    <label for="selectadicional" id="labeladicional">Agregar Adicional</label>
+                    <select class="form-select" id="selectadicional" onchange="MostarAdicional()">
+                        <option value="0" disabled selected>No aplica</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                    </select>
+                    <div id="consultaadicional" style="display:none;">
+                        <label for="placaadiciona">Buscar placa adicional</label>
+                        <input type="text" class="form-control" id="placaadicional" placeholder="Ingresa placa de adicional">
+                        <br />
+                        <input type="button" class="btn btn-primary" value="Consultar Placa Adicional" onclick="consultarPlacaAdicionalBtn()">
+                        <div class="alert alert-danger mt-3" role="alert" style="" id="errorMensajeAdicional">
+                            No se encontraron resultados para la placa adicional ingresada.
+                        </div>
+                        <div class="form-group">
+                            <div id="resultadosplacaadicional" style="">
+                                <label for="idAdicionalAgregar">ID Adicional:</label>
+                                <input type="text" class="form-control" id="idAdicionalAgregar" disabled>
+                                <br />
+                                <label for="SerialAdicionalAgregar">Serial Adicional:</label>
+                                <input type="text" class="form-control" id="SerialAdicionalAgregar" disabled>
+                                <br />
+                                <input type="button" class="btn btn-success" value="Agregar Placa Adicional" onclick="AgregarPlacaAdicionalBtn()">
+                                <div class="alert alert-success mt-3" role="alert" style="" id="successMensajeAdicional">
+                                    Se agrego correctamente la placa adicional ingresada.
+                                </div>
+                                <div class="alert alert-danger mt-3" role="alert" style="" id="errorMensajeAdicionalAgregar">
+                                    No se agrego el adicional a la placa
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="Contratista" class="form-group" style="display:none;">
+                    <h3 class="mt-3">Contratista:</h3>
+                    <label for="selectcontratista" id="labelcontratista">Es contratista</label>
+                    <select class="form-select" id="selectContratista" onchange="MostrarDatosContratista()">
+
+                        <option value="0" disabled selected>No aplica</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                    </select>
+
+                    <div id="consultarcontratista" style="display:none;">
+                        <label for="cedulacontra">Buscar cédula contratista</label>
+                        <input type="text" class="form-control" id="cedulaContra" placeholder="Ingresa cédula de contratista">
+                        <br />
+                        <input type="button" class="btn btn-primary" value="Consultar Cédula Contratista" onclick="consultarCedulaContraBtn()">
+
+                        <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeContratista">
+                            No se encontraron resultados para la cédula del contratista ingresada.
+                        </div>
+
+                        <div class="form-group">
+                            <div id="resultadoscedulacontra" style="display:none;">
+
+                                <div id="idFuncionarioContraRes" style="">
+                                    <label for="idFuncionarioContra">Id Funcionario Contratista:</label>
+                                    <input type="text" class="form-control" id="idFuncionarioContra" disabled>
+                                </div>
+
+                                <label for="nombreContratista">Nombre Contratista:</label>
+                                <input type="text" class="form-control" id="nombreContratista" disabled>
+                                <br />
+                                @* <input type="button" class="btn btn-success" value="Agregar Cédula Contratista"  > *@
+                                <div class="alert alert-success mt-3" style="display:none;" id="successMensajeContratista">
+                                    Se agrego correctamente la cédula del contratista ingresada.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="Firmar" class="form-group" style="display:none;">
+                    <h3 class="mt-3">Firmar:</h3>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-primary" id="open-signature-modal-funcionario">Firmar Entrega Funcionario</button>
+                        <button class="btn btn-warning" id="open-signature-modal-contratista">Firmar Entrega Contratista</button>
+                    </div>
+                    <div class="form-group">
+                        <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaFunc">
+                            Error al firmar funcionario.
+                        </div>
+                        <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaCont">
+                            Error al firmar Contratista.
+                        </div>
+                        <div class="alert alert-success mt-3" style="display:none;" id="successMensajeFirmaFunc">
+                            Se agregó correctamente la firma de funcionario.
+                        </div>
+                        <div class="alert alert-success mt-3" style="display:none;" id="successMensajeFirmaCont">
+                            Se agregó correctamente la firma de Contratista.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overlay -->
+                <div id="rotate-device-overlay">
+                    <div>
+                        <h1>Por favor, gira tu dispositivo a modo horizontal para firmar</h1>
+                    </div>
+                </div>
+
+                <!-- Modal Firma Funcionario -->
+                <div class="modal fade" id="signatureModalFuncionario" tabindex="-1" aria-labelledby="signatureModalLabelFuncionario" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="signatureModalLabelFuncionario">Firma Funcionario</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <canvas id="signature-pad-funcionario" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
+                                <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaFuncionario">
+                                    Error al firmar, firma dentro del recuadro.
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" id="clear-funcionario">Limpiar</button>
+                                <button type="button" class="btn btn-success" id="save-funcionario">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Firma Contratista -->
+                <div class="modal fade" id="signatureModalContratista" tabindex="-1" aria-labelledby="signatureModalLabelContratista" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="signatureModalLabelContratista">Firma Contratista</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <canvas id="signature-pad-contratista" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
+                                <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaContratista">
+                                    Error al firmar, firma dentro del recuadro.
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" id="clear-contratista">Limpiar</button>
+                                <button type="button" class="btn btn-success" id="save-contratista">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para mostrar la firma guardada -->
+                <div class="modal fade" id="signatureImageModal" tabindex="-1" aria-labelledby="signatureImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="signatureImageModalLabel">Firma Guardada</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="signatureImage" src="" alt="Firma Guardada" style="width: 100%; border: 1px solid #000;">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Asignar" class="form-group" style="display:none;">
+                    <h3 class="mt-3">Terminar Asignación:</h3>
+                    <button class="btn btn-primary" onclick="asignarEquipoBtn()">Asignar</button>
+                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeAsignar">
+                        Error al asignar.
+                    </div>
+                    <div class="alert alert-success mt-3" style="display:none;" id="successMensajeAsignar">
+                        Se asigno correctamente espere unos segundos.
+                    </div>
+                    <div class="alert alert-success mt-3" style="display:none;" id="successMensajeCorreo">
+                        Correo enviado correctamente.
+                    </div>
+                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeCorreo">
+                        No se pudo enviar correo contacte al administrador.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        var signaturePadFuncionario, signaturePadContratista;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeSignaturePad();
+            setupEventListeners();
+        });
+
+        function initializeSignaturePad() {
+            var canvasFuncionario = document.getElementById('signature-pad-funcionario');
+            var canvasContratista = document.getElementById('signature-pad-contratista');
+            signaturePadFuncionario = new SignaturePad(canvasFuncionario);
+            signaturePadContratista = new SignaturePad(canvasContratista);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('open-signature-modal-funcionario').addEventListener('click', openSignatureModalF);
+            document.getElementById('open-signature-modal-contratista').addEventListener('click', openSignatureModalR);
+
+            window.addEventListener('resize', handleWindowResize);
+
+            $('#signatureModalFuncionario').on('shown.bs.modal', function () {
+                resizeCanvas('funcionario');
+                signaturePadFuncionario.clear();
+                checkOrientation();
+            });
+
+            $('#signatureModalContratista').on('shown.bs.modal', function () {
+                resizeCanvas('contratista');
+                signaturePadContratista.clear();
+                checkOrientation();
+            });
+
+            document.getElementById('clear-funcionario').addEventListener('click', clearSignaturePadF);
+            document.getElementById('clear-contratista').addEventListener('click', clearSignaturePadR);
+
+            document.getElementById('save-funcionario').addEventListener('click', saveSignatureF);
+            document.getElementById('save-contratista').addEventListener('click', saveSignatureR);
+        }
+
+        function openSignatureModalF() {
+            $('#signatureModalFuncionario').modal('show');
+            $('#successMensajeFirmaFunc').hide();
+            $('#errorMensajeFirmaFunc').hide();
+            checkOrientation();
+        }
+
+        function openSignatureModalR() {
+            $('#signatureModalContratista').modal('show');
+            $('#successMensajeFirmaCont').hide();
+            $('#errorMensajeFirmaCont').hide();
+            checkOrientation();
+        }
+
+        function resizeCanvas(type) {
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            var canvas = type === 'funcionario' ? document.getElementById('signature-pad-funcionario') : document.getElementById('signature-pad-contratista');
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                document.getElementById('rotate-device-overlay').style.display = 'flex';
+            } else {
+                document.getElementById('rotate-device-overlay').style.display = 'none';
+            }
+        }
+
+        function handleWindowResize() {
+            if ($('#signatureModalFuncionario').is(':visible')) {
+                resizeCanvas('funcionario');
+                checkOrientation();
+            } else if ($('#signatureModalContratista').is(':visible')) {
+                resizeCanvas('contratista');
+                checkOrientation();
+            }
+        }
+
+        function clearSignaturePadF() {
+            signaturePadFuncionario.clear();
+        }
+
+        function clearSignaturePadR() {
+            signaturePadContratista.clear();
+        }
+
+        function saveSignatureF() {
+            if (signaturePadFuncionario.isEmpty()) {
+                $('#errorMensajeFirmaRequeridaFuncionario').show();
+            } else {
+                $('#errorMensajeFirmaRequeridaFuncionario').hide();
+                var dataURL = signaturePadFuncionario.toDataURL();
+                var idFuncionario = $('#idFuncionario').val();
+
+                $.ajax({
+                    url: '@Url.Action("SaveSignatureFuncionario", "Asignacion")',
+                    type: 'POST',
+                    data: {
+                        idFuncionario: idFuncionario,
+                        dataURL: dataURL
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#successMensajeFirmaFunc').show();
+                            $('#errorMensajeFirmaFunc').hide();
+
+                            if ($('#open-signature-modal-contratista').is(':visible')) {
+                                $('#Asignar').hide();
+                            } else {
+                                $('#Asignar').show();
+                            }
+
+                            // Mostrar la imagen de la firma guardada
+                            $('#signatureImage').attr('src', dataURL);
+                            //$('#signatureImageModal').modal('show');
+                        } else {
+                            $('#Asignar').hide();
+                            $('#successMensajeFirmaFunc').hide();
+                            $('#errorMensajeFirmaFunc').show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error en la solicitud AJAX.');
+                    }
+                });
+
+                $('#signatureModalFuncionario').modal('hide');
+            }
+        }
+
+        function saveSignatureR() {
+            if (signaturePadContratista.isEmpty()) {
+                $('#errorMensajeFirmaRequeridaContratista').show();
+            } else {
+                $('#errorMensajeFirmaRequeridaContratista').hide();
+                var dataURLR = signaturePadContratista.toDataURL();
+                var idContratista = $('#idContratista').val();
+
+                $.ajax({
+                    url: '@Url.Action("SaveSignatureContratista", "Asignacion")',
+                    type: 'POST',
+                    data: {
+                        idContratista: idContratista,
+                        dataURLR: dataURLR
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#successMensajeFirmaCont').show();
+                            $('#errorMensajeFirmaCont').hide();
+                            $('#Asignar').show();
+
+                            // Mostrar la imagen de la firma guardada
+                            $('#signatureImage').attr('src', dataURLR);
+                            $('#signatureImageModal').modal('show');
+                        } else {
+                            $('#Asignar').hide();
+                            $('#successMensajeFirmaCont').hide();
+                            $('#errorMensajeFirmaCont').show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error en la solicitud AJAX.');
+                    }
+                });
+
+                $('#signatureModalContratista').modal('hide');
+            }
+        }
+
+        function consultarCedulaBtn() {
+            var cedula = $('#Cedula').val();
+
+            // Validar que el campo de cédula no esté vacío
+            if (cedula.trim() === '') {
+                // Mostrar mensaje de error
+                $('#errorMensajeCedula').hide();
+                $('#errorMensajeCedulaInput').show();
+                $('#resultadosCedula').hide();
+                $('#placaForm').hide();
+
+
+                return; // Salir de la función si la validación falla
+            }
+            $('#errorMensajeCedulaInput').hide();
+            // Continuar con la consulta si la cédula no está vacía
+            $.ajax({
+                url: '@Url.Action("ResultadoCedula", "Asignacion")',
+                type: 'POST',
+                data: { Cedula: cedula },
+                success: function (response) {
+                    if (response.success) {
+                        $('#resultadosCedula').show();
+                        $('#errorMensajeCedula').hide();
+
+                        $('#idFuncionario').val(response.data.idFuncionario);
+                        $('#nombre').val(response.data.nombres);
+                        $('#apellido').val(response.data.apellidos);
+                        $('#correo').val(response.data.correo);
+                        $('#telefono').val(response.data.telefono);
+                        $('#area').val(response.data.area);
+                        $('#cargo').val(response.data.cargo);
+                        $('#piso').val(response.data.piso);
+                        $('#placaForm').show();
+                    } else {
+                        $('#resultadosCedula').hide();
+                        $('#errorMensajeCedula').show();
+                        $('#placaForm').hide();
+                    }
+                }
+            });
+        }
+
+        function consultarPlacaBtn() {
+            var placa = $('#Placa').val();
+
+
+
+            if (placa.trim() === '') {
+                $('#errorMensajePlacaInput').show();
+                $('#resultadosPlaca').hide();
+                return;
+            }
+            $('#errorMensajePlacaInput').hide();
+            $.ajax({
+                url: '@Url.Action("ResultadoPlaca", "Asignacion")',
+                type: 'POST',
+                data: { Placa: placa },
+                success: function (response) {
+                    if (response.success && response.data2.length > 0) {
+                        $('#resultadosPlaca').show();
+                        $('#errorMensajePlaca').hide();
+                        $('#Contratista').hide();
+                        $('#Firmar').hide();
+                        $('#Asignar').hide();
+                        AgregarAdicional
+                        selectadicional.value = '0';
+                        selectContratista.value = '0';
+
+                        $('#successMensajeFirmaFunc').hide();
+                        $('#errorMensajeAsignar').hide();
+                        $('#successMensajeAsignar').hide();
+
+                        var articulo = response.data2[0]; // Usar el primer artículo
+                        $('#idArticulo').val(articulo.idArticulo);
+                        $('#ArticuloCategoria').val(articulo.articuloCategoria);
+                        $('#ArticuloModelo').val(articulo.articuloModelo);
+                        $('#ArticuloSerial').val(articulo.articuloSerial);
+                        $('#ArticuloPlaca').val(articulo.articuloPlaca);
+
+                        var adicionalesHtml = '';
+                        var sumaAdicional = 0;
+
+                        response.data2.forEach(function (adicional, index) {
+
+                            if (adicional.idAdicional == null) {
+                                $('#AgregarAdicional').show();
+                            } else {
+                                sumaAdicional = index + 1;
+                                adicionalesHtml += `
+                                                            <h3 class="mt-3">Adicional ${sumaAdicional}:</h3>
+                                                    <div class="form-group">
+                                                        <label for="idAdicional${index}">Id Adicional:</label>
+                                                        <input type="text" class="form-control" id="idAdicional${index}" name="idAdicional" value="${adicional.idAdicional}" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AdicionalCategoria${index}">Categoría:</label>
+                                                        <input type="text" class="form-control" id="AdicionalCategoria${index}" name="AdicionalCategoria" value="${adicional.adicionalCategoria}" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AdicionalModelo${index}">Modelo:</label>
+                                                        <input type="text" class="form-control" id="AdicionalModelo${index}" name="AdicionalModelo" value="${adicional.adicionalModelo}" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AdicionalSerial${index}">Serial:</label>
+                                                        <input type="text" class="form-control" id="AdicionalSerial${index}" name="AdicionalSerial" value="${adicional.adicionalSerial}" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="AdicionalPlaca${index}">Placa:</label>
+                                                        <input type="text" class="form-control" id="AdicionalPlaca${index}" name="AdicionalPlaca" value="${adicional.adicionalPlaca}" disabled>
+                                                    </div>
+                                                `;
+
+                            }
+                        });
+
+                        $('#adicionalesContainer').html(adicionalesHtml);
+
+                        $('#AgregarAdicional').show();
+                    } else {
+                        $('#resultadosPlaca').hide();
+                        $('#errorMensajePlaca').show();
+
+                    }
+                }
+            });
+
+        }
+
+        function consultarPlacaAdicionalBtn() {
+            var placaadicional = $('#placaadicional').val();
+            $.ajax({
+                url: '@Url.Action("ResultadoPlacaAdicional", "Asignacion")',
+                type: 'POST',
+                data: { Placaadicional: placaadicional },
+                success: function (response) {
+                    if (response.success) {
+                        $('#idAdicionalAgregar').val(response.data.idAdicional);
+                        $('#SerialAdicionalAgregar').val(response.data.serial);
+
+                        $('#resultadosplacaadicional').show();
+                        $('#errorMensajeAdicional').hide();
+                        $('#errorMensajeAdicionalAgregar').hide();
+                    } else {
+                        $('#errorMensajeAdicional').show();
+                        $('#resultadosplacaadicional').hide();
+                        $('#errorMensajeAdicionalAgregar').hide();
+
+                    }
+
+                }
+            });
+        }
+
+        function AgregarPlacaAdicionalBtn() {
+            var idAdicionalAgregar = $('#idAdicionalAgregar').val();
+            var idArticulo = $('#idArticulo').val();
+
+
+            $.ajax({
+                url: '@Url.Action("AgregarPlacaAdicional", "Asignacion")',
+                type: 'POST',
+                data: {
+                    IdArticulo: idArticulo,
+                    IdAdicionalAgregar: idAdicionalAgregar
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#successMensajeAdicional').show();
+                        $('#errorMensajeAdicionalAgregar').hide();
+                        consultarPlaca();
+                    } else {
+                        $('#successMensajeAdicional').hide();
+                        $('#errorMensajeAdicionalAgregar').show();
+                    }
+                }
+            });
+        }
+
+        function consultarCedulaContraBtn() {
+            var cedulaContra = $('#cedulaContra').val();
+
+            $.ajax({
+                url: '@Url.Action("ResultadoCedulaContra", "Asignacion")',
+                type: 'POST',
+                data: { cedulaContra: cedulaContra },
+                success: function (response) {
+                    if (response.success) {
+                        $('#resultadoscedulacontra').show();
+                        $('#errorMensajeContratista').hide();
+
+                        $('#idFuncionarioContra').val(response.data.idFuncionarioContra);
+                        var nombreCompleto = response.data.nombresContra + ' ' + response.data.apellidosContra;
+                        $('#nombreContratista').val(nombreCompleto);
+                        $('#Firmar').show();
+                        // $('#Asignar').hide();
+                        $('#open-signature-modal-contratista').show();
+                        $('#successMensajeFirmaFunc').hide();
+                        $('#successMensajeFirmaCont').hide();
+
+                    } else {
+                        $('#errorMensajeContratista').show();
+                    }
+                }
+            });
+        }
+
+        function consultarPlaca() {
+            var placa = $('#Placa').val();
+            $.ajax({
+                url: '@Url.Action("ResultadoPlaca", "Asignacion")',
+                type: 'POST',
+                data: { Placa: placa },
+                success: function (response) {
+                    if (response.success && response.data2.length > 0) {
+                        $('#resultadosPlaca').show();
+                        $('#errorMensajePlaca').hide();
+
+                        var articulo = response.data2[0]; // Usar el primer artículo
+                        $('#idArticulo').val(articulo.idArticulo);
+                        $('#ArticuloCategoria').val(articulo.articuloCategoria);
+                        $('#ArticuloModelo').val(articulo.articuloModelo);
+                        $('#ArticuloSerial').val(articulo.articuloSerial);
+                        $('#ArticuloPlaca').val(articulo.articuloPlaca);
+
+                        var adicionalesHtml = '';
+                        var sumaAdicional = 0;
+
+                        response.data2.forEach(function (adicional, index) {
+                            if (adicional.idAdicional == null) {
+                                $('#AgregarAdicional').show();
+                            } else {
+                                sumaAdicional = index + 1;
+                                adicionalesHtml += `
+                                                        <h3 class="mt-3">Adicional ${sumaAdicional}:</h3>
+                                                        <div class="form-group">
+                                                            <label for="idAdicional${index}">Id Adicional:</label>
+                                                            <input type="text" class="form-control" id="idAdicional${index}" name="idAdicional" value="${adicional.idAdicional}" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="AdicionalCategoria${index}">Categoría:</label>
+                                                            <input type="text" class="form-control" id="AdicionalCategoria${index}" name="AdicionalCategoria" value="${adicional.adicionalCategoria}" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="AdicionalModelo${index}">Modelo:</label>
+                                                            <input type="text" class="form-control" id="AdicionalModelo${index}" name="AdicionalModelo" value="${adicional.adicionalModelo}" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="AdicionalSerial${index}">Serial:</label>
+                                                            <input type="text" class="form-control" id="AdicionalSerial${index}" name="AdicionalSerial" value="${adicional.adicionalSerial}" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="AdicionalPlaca${index}">Placa:</label>
+                                                            <input type="text" class="form-control" id="AdicionalPlaca${index}" name="AdicionalPlaca" value="${adicional.adicionalPlaca}" disabled>
+                                                        </div>`;
+                            }
+                        });
+
+                        $('#adicionalesContainer').html(adicionalesHtml);
+
+
+                    } else {
+                        $('#resultadosPlaca').hide();
+                        $('#errorMensajePlaca').show();
+                    }
+                }
+            });
+        }
+
+        function MostrarDatosContratista() {
+            var select = document.getElementById("selectContratista");
+            var consultarcontratista = document.getElementById("consultarcontratista");
+            if (select.value == "1") {
+                consultarcontratista.style.display = "block";
+                $('#Firmar').hide();
+                $('#Asignar').hide();
+
+            } else {
+
+                $('#cedulaContra').val('');
+                $('#nombreContratista').val('');
+                $('#resultadoscedulacontra').hide();
+                $('#Firmar').show();
+                $('#open-signature-modal-contratista').hide();
+                consultarcontratista.style.display = "none";
+                Firmar.style.display = "block";
+            }
+        }
+
+        function MostarAdicional() {
+            var select = document.getElementById("selectadicional"); // Agrega el operador de asignación '='
+            var consultaadicional = document.getElementById("consultaadicional");
+            if (select.value == "1") {
+                consultaadicional.style.display = "block";
+
+                $('#errorMensajeAdicional').hide();
+                $('#resultadosplacaadicional').hide();
+                $('#successMensajeAdicional').hide();
+
+            } else {
+                consultaadicional.style.display = "none";
+                $('#placaadicional').val('');
+                $('#Contratista').show();
+
+            }
+        }
+
+        function asignarEquipoBtn() {
+            var idFuncionario = $('#idFuncionario').val();
+            var idArticulo = $('#idArticulo').val();
+            var idFuncionarioContra = $("#idFuncionarioContra").val();
+
+            $.ajax({
+                url: '@Url.Action("AsignarEquipo", "Asignacion")',
+                type: 'POST',
+                data: {
+                    idFuncionario: idFuncionario,
+                    idArticulo: idArticulo,
+                    idFuncionarioContra: idFuncionarioContra
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#successMensajeAsignar').show();
+                        var idAsignacion = response.idAsignacion;
+                        generar(idAsignacion);
+                        $('#errorMensajeAsignar').text(response.errorMessage).hide()
+                    } else {
+                        $('#successMensajeAsignar').hide();
+                        $('#errorMensajeAsignar').text(response.errorMessage).show(); // Mostrar mensaje de error
+                        $('#successMensajeCorreo').hide(); // Mostrar mensaje de éxito
+                        $('#errorMensajeCorreo').hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    $('#errorMensajeAsignar').text('Error en la solicitud. Por favor, inténtelo de nuevo más tarde.').show();
+                }
+            });
+        }
+
+
+        //console.log("ID Asignacion recibido:", typeof(idAsignacion));
+
+        function generar(idAsignacion) {
+            var idAsignacion = idAsignacion;
+            $.ajax({
+                url: '@Url.Action("EnviarIdAsignacion", "Asignacion")',
+                type: 'POST',
+                data: {
+                    idAsignacion: idAsignacion
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#successMensajeCorreo').show(); // Mostrar mensaje de éxito
+                        $('#errorMensajeCorreo').hide(); // Ocultar mensaje de error si está visible
+                    } else {
+                        $('#errorMensajeCorreo').show(); // Mostrar mensaje de error
+                        $('#successMensajeCorreo').hide(); // Ocultar mensaje de éxito si está visible
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores de la solicitud AJAX si es necesario
+                    console.error('Error en la solicitud AJAX:', error);
+                }
+            });
+        }
+
+
+
+
+
+    </script>
+}

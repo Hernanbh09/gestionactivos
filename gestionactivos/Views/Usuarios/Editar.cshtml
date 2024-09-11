@@ -1,0 +1,54 @@
+﻿@model UsuarioModel
+@{
+    ViewData["Title"] = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        Editar Funcionario
+    </div>
+    <div class="card-body">
+        <form asp-action="Editar" asp-controller="Usuarios" method="post">
+            <input  asp-for="idUsuario" type="hidden" type="text" class="form-control" />
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input asp-for="Nombre" type="text" class="form-control"/>
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+                @* <div class="alert alert-danger mt-3" role="alert" style="">
+                    <span asp-validation-for="Nombre"></span>
+                </div> *@
+               
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellido</label>
+                <input asp-for="Apellidos" type="text" class="form-control" />
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Correo</label>
+                <input asp-for="Correo" type="text" class="form-control" />
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input asp-for="Contrasena" type="password" class="form-control"/>
+                <span asp-validation-for="Contrasena" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cargo</label>
+                <input asp-for="Cargo" type="text" class="form-control"/>
+                <span asp-validation-for="Cargo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <input asp-for="Rol" type="text" class="form-control" />
+                <span asp-validation-for="Rol" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Usuarios" class="btn btn-warning">Volver a la lista</a>
+
+        </form>
+    </div>
+</div>

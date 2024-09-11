@@ -1,0 +1,834 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documento para PDF</title>
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            width: 21.6cm; /* Ancho de tamaño carta */
+            height: 27.9cm; /* Alto de tamaño carta */
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+
+
+        @media print {
+            .page {
+                size: 8.5in 11in; /* Ajusta el tamaño de la página a tamaño carta */
+                margin: 0;
+            }
+        }
+
+        .content {
+            border: 1px solid black;
+        }
+
+        .texto-formato {
+            display: flex;
+            height: 70px;
+            border-bottom: 1px solid black;
+        }
+
+        .imagen {
+            width: 30%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid black;
+        }
+
+            .imagen img {
+                width: 150px;
+            }
+
+        .titulo {
+            width: 50%;
+            border-right: 1px solid black;
+        }
+
+            .titulo .titulo-texto {
+                width: 100%;
+                height: 50%;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        .border {
+            border-bottom: 1px solid black;
+        }
+
+        .border-right {
+            border-right: 1px solid black;
+        }
+
+        .codigo {
+            width: 20%;
+        }
+
+        .codigo-texto-1 {
+            height: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .codigo-texto-2 {
+            height: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .codigo-texto-3 {
+            height: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .espacio {
+            background-color: #c3c3c3;
+            width: 100%;
+            height: 20px;
+            /* border-top: 1px solid black; */
+            border-bottom: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-cliente {
+            height: 90px;
+            padding: 5px;
+        }
+
+        .info-cliente-table {
+            display: flex;
+            width: 100%;
+            height: 90px;
+        }
+
+        .info-cliente-table1 {
+            width: 100%;
+            text-align: left;
+        }
+
+            .info-cliente-table1 th {
+                width: 20%;
+            }
+
+            .info-cliente-table1 td {
+                width: 80%;
+            }
+
+        .info-entrega {
+            height: 80px;
+            padding: 5px;
+        }
+
+        .info-entrega-table {
+            display: flex;
+            width: 100%;
+        }
+
+        .info-entrega-table1 {
+            width: 70%;
+            text-align: left;
+        }
+
+            .info-entrega-table1 th {
+                width: 33%;
+            }
+
+            .info-entrega-table1 td {
+                border-bottom: 1px solid black;
+            }
+
+        .info-entrega-table2 {
+            width: 45%;
+            text-align: left;
+        }
+
+            .info-entrega-table2 th {
+                width: 20%;
+            }
+
+            .info-entrega-table2 td {
+                border-bottom: 1px solid black;
+            }
+
+        .info-articulo {
+            width: 100%;
+        }
+
+        .info-articulo-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .info-articulo-table th, .info-articulo-table td {
+                width: 20%;
+                border: 1px solid black;
+                text-align: center;
+            }
+
+                .info-articulo-table th:nth-last-child(-n+2),
+                .info-articulo-table td:nth-last-child(-n+2) {
+                    border-right: none;
+                }
+
+                .info-articulo-table th:nth-child(-n+2),
+                .info-articulo-table td:nth-child(-n+2) {
+                    border-left: none;
+                }
+
+        .info-cumplimiento {
+            background-color: #c3c3c3;
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .info-cumplimiento-software {
+            border-right: 1px solid black;
+            width: 40%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-cumplimiento-cumple {
+            border-right: 1px solid black;
+            width: 20%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-cumplimiento-observacion {
+            width: 40%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-programas table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .info-programas table tr {
+                height: 15px;
+                border-bottom: 1px solid black;
+            }
+
+        .software {
+            width: 40%;
+            padding-left: 5px;
+            border-right: 1px solid black;
+        }
+
+        .si {
+            width: 10%;
+            text-align: center;
+            border-right: 1px solid black;
+        }
+
+        .no {
+            width: 10%;
+            text-align: center;
+            border-right: 1px solid black;
+        }
+
+        .observacion {
+            width: 40%;
+            padding-left: 5px;
+            word-break: break-all;
+            font-size: 9px;
+        }
+
+        .info-elementos table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .info-elementos table tr {
+                height: 15px;
+                border-bottom: 1px solid black;
+            }
+
+        .item {
+            width: 10%;
+            padding-left: 5px;
+            border-right: 1px solid black;
+        }
+
+        .descripcion {
+            width: 10%;
+            border-right: 1px solid black;
+            word-break: break-all;
+        }
+
+            .descripcion:nth-last-child(-n+2) {
+                border-right: none;
+            }
+
+        .info-observaciones {
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+
+        .info-observaciones-titulo {
+            background-color: #c3c3c3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 157px;
+            border-right: 1px solid black;
+        }
+
+        .info-contratista {
+            width: 100%;
+        }
+
+        .info-contratista-texto {
+            background-color: #c3c3c3;
+            width: 100%;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .info-contratista-datos {
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+
+            .info-contratista-datos table {
+                border-collapse: collapse;
+            }
+
+        .info-contratista-cc {
+            width: 60%;
+        }
+
+            .info-contratista-cc tr {
+                border-bottom: 1px solid black;
+            }
+
+                .info-contratista-cc tr:nth-last-child(-n+1) {
+                    border-bottom: none;
+                }
+
+                .info-contratista-cc tr td {
+                    border-right: 1px solid black;
+                }
+
+
+        .txt {
+            width: 30%;
+        }
+
+        .dato {
+            word-break: break-all;
+        }
+
+        .info-contratista-img {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .activo {
+            border-right: 1px solid black;
+        }
+
+        .info-contratista-img tr td {
+            width: 50%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+            .info-contratista-img tr td img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .observaciones {
+            width: 98%;
+            height: auto;
+            word-break: break-all;
+            padding: 5px;
+        }
+
+        .info-anexos {
+            display: flex;
+            border-bottom: 1px solid black;
+            width: 100%;
+        }
+
+        .info-anexos-titulo {
+            width: 131px;
+            background-color: #c3c3c3;
+            border-right: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-anexos-texto {
+            width: 80%;
+            padding: 5px;
+            word-break: break-all;
+            text-align: justify;
+        }
+
+        .info-firma {
+            width: 100%;
+            height: 170px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-firma-tecico {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .info-firma-funcionario {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .info-firma-img {
+            height: 100px;
+            margin-top: 10px;
+        }
+
+        .info-firma-img1 {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .info-firma-img img {
+            width: 200px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .info-firma-nombre1 {
+            border-bottom: 1px solid black;
+            padding: 2px;
+        }
+
+        .info-firma-img2 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+
+        <div class="texto-formato">
+
+            <div class="titulo">
+                <div class="titulo-texto border">
+                    <h3>
+                        SERVICIO Y GARANTÍAS
+                    </h3>
+                </div>
+                <div class="titulo-texto">
+                    <h3>
+                        REPORTE DE SERVICIOS
+                    </h3>
+                </div>
+            </div>
+            <div class="codigo">
+                <div class="codigo-texto-1 border">CÓDIGO: SG-FR34</div>
+                <div class="codigo-texto-2 border">FECHA: 16/05/2023</div>
+                <div class="codigo-texto-3">VERSIÓN: 3</div>
+            </div>
+        </div>
+
+        <div class="espacio">
+        </div>
+
+
+        <div class="info-cliente border">
+            <div class="info-cliente-table">
+                <table class="info-cliente-table1">
+                    <tr>
+                        <th>DE:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>DIRECCIÓN:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>NIT:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>TEL: / FAX:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>PROYECTO / CLIENTE:</th>
+                        <td>MINISTERIO DE TECNOLOGÍAS DE LA INFORMACIÓN Y COMUNICACIONES - MINTIC</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="info-entrega ">
+            <div class="info-entrega-table">
+                <table class="info-entrega-table1">
+                    <tr>
+                        <th>FECHA:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>LUGAR DE ENTREGA:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>ENTREGADO A:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>ÁREA:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                </table>
+                <table class="info-entrega-table2">
+                    <tr>
+                        <th>CUIDAD:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>TELÉFONO:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>CARGO:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                    <tr>
+                        <th>PISO:</th>
+                        <td>*VARIABLE*</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="info-articulo">
+            <table class="info-articulo-table">
+                <tr>
+                    <th>ITEM</th>
+                    <th> SERIAL</th>
+                    <th>PLACA SUMIMAS</th>
+                    <th>PLACA MINTIC</th>
+                    <th>MODELO / DESCRIPCIÓN</th>
+                </tr>
+                <tr>
+                    <td>item</td>
+                    <td>serial</td>
+                    <td>placa</td>
+                    <td>placa</td>
+                    <td>modelo</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="espacio">
+            VALIDACIÓN DE ENTREGA
+        </div>
+
+        <div class="info-cumplimiento">
+
+            <div class="info-cumplimiento-software">
+                SOFTWARE O COMPLEMENTO
+            </div>
+            <div class="info-cumplimiento-cumple">
+                CUMPLE
+            </div>
+            <div class="info-cumplimiento-observacion">
+                OBSERVACIÓN
+            </div>
+
+        </div>
+
+        <div class="info-programas">
+
+            <table>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">Observacion</td>
+                </tr>
+                <tr>
+                    <td class="software">SOFTWARE O COMPLEMENTO</td>
+                    <td class="si">Si</td>
+                    <td class="no">No</td>
+                    <td class="observacion">
+                        SE APRUEBA POR PARTE DEL USUARIO LA COPIA DE LA FORMACIÓN, DONDE
+                        REALIZA LA VALIDACIÓN DE TODOS SUS DATOS Y DA VISTO BUENO A LA
+                        TRANSFERENCIA DE SU INFORMACIÓN.
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+        </div>
+
+        <div class="espacio">ELEMENTOS ENTREGADOS</div>
+        <div class="info-elementos">
+            <table>
+                <tr>
+                    <td class="item">TECLADO</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                </tr>
+                <tr>
+                    <td class="item">TECLADO</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+
+                </tr>
+                <tr>
+                    <td class="item">TECLADO</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                </tr>
+                <tr>
+                    <td class="item">TECLADO</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                </tr>
+                <tr>
+                    <td class="item">TECLADO</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                    <td class="item">PAD MOUSE</td>
+                    <td class="descripcion">*VARIABLE*</td>
+                </tr>
+
+            </table>
+
+        </div>
+        <div class="info-observaciones">
+            <div class="info-observaciones-titulo">
+                OBSERVACIONES
+            </div>
+            <div class="info-contratista">
+                <div class="info-contratista-texto">
+                    DATOS DE ENTREGA PARA CONTRATISTA
+                </div>
+
+                <div class="info-contratista-datos">
+                    <table class="info-contratista-cc">
+                        <tr>
+                            <td class="txt">CEDULA</td>
+                            <td class="dato">*VARIABLE*</td>
+                        </tr>
+                        <tr>
+                            <td class="txt">ENTREGADO A</td>
+                            <td class="dato">*VARIABLE*</td>
+                        </tr>
+                        <tr>
+                            <td class="txt">AREA</td>
+                            <td class="dato">*VARIABLE*</td>
+                        </tr>
+                        <tr>
+                            <td class="txt">PISO</td>
+                            <td class="dato">*VARIABLE*</td>
+                        </tr>
+
+                    </table>
+                    <table class="info-contratista-img">
+                        <tr>
+                            <td class="activo">FIRMA CONTRATISTA</td>
+
+                        </tr>
+                    </table>
+                </div>
+                <div class="observaciones">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex repellat doloremque quos doloribus cumque sequi soluta nobis sit! Quos, vel.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex repellat doloremque quos doloribus cumque sequi soluta nobis sit! Quos, vel.
+                </div>
+            </div>
+        </div>
+
+
+        <div class="info-anexos">
+            <div class="info-anexos-titulo">
+                Anexos
+            </div>
+            <div class="info-anexos-texto">
+                LOS COMPONENTES SE ENTREGAN EN EXCELENTES CONDICIONES Y EL CLIENTE
+                DECLARA HABERLOS RECIBIDO A SATISFACCIÓN Y ASUME LA RESPONSABILIDAD SOBRE
+                LOS MISMOS A PARTIR DE LA FIRMA DE LA PRESENTE ACTA. EL CLIENTE ASUME LA RESPONSABILIDAD DE LA CUSTODIA DE LOS PRODUCTOS, CONDICIONES DE
+                ALMACENAMIENTO Y AL FIRMAR ESTA ACTA LIBRA A SUMIMAS S.A.S., DE CUALQUIER RESPONSABILIDAD O RIESGO QUE PUEDAN SUFRIR LOS EQUIPOS.
+            </div>
+        </div>
+
+
+        <div class="info-firma">
+            <div class="info-firma-tecico">
+                <div class="info-firma-tecico1">
+
+                    <div class="info-firma-nombre">
+                        <div class="info-firma-nombre1">
+                            BrayanHernandez
+                        </div>
+                        <div class="info-firma-nombre2">
+                            ENTREGADO Y REALIZADO POR EL TECNICO :
+                        </div>
+                    </div>
+                    <div class="info-firma-img">
+
+                        <div class="info-firma-img2">
+                            FIRMA TECNICO SUMIMAS S.A.S
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="info-firma-funcionario">
+                <div class="info-firma-funcionario1">
+
+                    <div class="info-firma-nombre">
+                        <div class="info-firma-nombre1">
+                            BrayanHernandez
+                        </div>
+                        <div class="info-firma-nombre2">
+                            RECIBIDO O ENTREGADO POR :
+                        </div>
+                    </div>
+                    <div class="info-firma-img">
+
+                        <div class="info-firma-img2">
+                            FIRMA FUNCIONARIO MINTIC
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+﻿@model FuncionarioModel
+@{
+    ViewData["Title"] = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        Editar Funcionario
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Editar" asp-controller="Funcionarios" method="post">
+            <input asp-for="idFuncionario" type="hidden" type="text" class="form-control">
+            <div class="mb-3">
+                <label class="form-label">Cliente</label>
+
+                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+               
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Sede</label>
+
+
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cedula</label>
+                <input asp-for="Cedula" type="text" class="form-control">
+                <span asp-validation-for="Cedula" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nombres</label>
+                <input asp-for="Nombre" type="text" class="form-control">
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellidos</label>
+                <input asp-for="Apellidos" type="text" class="form-control">
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Telefono</label>
+                <input asp-for="Telefono" ype="text" class="form-control">
+                <span asp-validation-for="Correo" class="text-danger"></span>
+
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Correo</label>
+                <input asp-for="Correo" type="text" class="form-control">
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Area</label>
+                <input asp-for="Area" type="text" class="form-control">
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div> 
+            <div class="mb-3">
+                <label class="form-label">Cargo</label>
+                <input asp-for="Cargo" type="text" class="form-control">
+                <span asp-validation-for="Cargo" class="text-danger"></span>
+            </div> 
+            <div class="mb-3">
+                <label class="form-label">Piso</label>
+                <input asp-for="Piso" type="text" class="form-control">
+                <span asp-validation-for="Piso" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Funcionarios" class="btn btn-warning">Volver a la lista</a>
+        </form>
+
+
+
+    </div>
+</div>

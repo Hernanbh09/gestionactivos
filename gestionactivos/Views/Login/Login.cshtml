@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-center">Login</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (TempData["Message"] != null)
+                        {
+                            var messageType = TempData["MessageType"]?.ToString() ?? "info";
+                            var alertClass = messageType == "success" ? "alert-success" : "alert-danger";
+
+                            <div class="alert @alertClass" role="alert">
+                                @TempData["Message"]
+                            </div>
+                        }
+
+                        <form asp-controller="Login" asp-action="ResultadoLogin" method="post">
+                            <div class="form-group">
+                                <label for="Correo">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="Correo" name="Correo" placeholder="Ingresa tu correo electrónico" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="Clave">Contraseña</label>
+                                <input type="password" class="form-control" id="Clave" name="Clave" placeholder="Ingresa tu contraseña" required />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+﻿@model IEnumerable<gestionactivos.Models.DevolucionModel>
+
+<link href="~/css/site.css" rel="stylesheet" />
+@* <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script> *@
+
+<style>
+    .btn-separado {
+        margin-right: 10px; /* Puedes ajustar el valor según lo necesites */
+    }
+</style>
+<div class="table-responsive">
+    <table id="DevolucionTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Encargado Cedula</th>
+                <th>Encargado Nombres</th>
+                <th>Encargado Apellidos</th>
+                <th>Encargado Correo</th>
+                <th>Responsable Cedula</th>
+                <th>Responsable Nombre</th>
+                <th>Responsable Apellido</th>
+                <th>Responsable Correo</th>
+                <th>Fecha Movimiento</th>
+                <th>id Articulo</th>
+                <th>Categoria Articulo</th>
+                <th>Modelo Articulo</th>
+                <th>Serial Articulo</th>
+                <th>Placa Articulo</th>
+                <td>Devolver</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var articuloGroup in Model.GroupBy(m => m.idArticulo))
+            {
+                var articulo = articuloGroup.First();
+                <tr>
+                    <td>@articulo.EncargadoCedula</td>
+                    <td>@articulo.EncargadoNombres</td>
+                    <td>@articulo.EncargadoApellidos</td>
+                    <td>@articulo.EncargadoCorreo</td>
+                    <td>@articulo.ResponsableCedula</td>
+                    <td>@articulo.ResponsableNombre</td>
+                    <td>@articulo.ResponsableApellido</td>
+                    <td>@articulo.ResponsableCorreo</td>
+                    <td>@articulo.FechaMovimiento?.ToString("yyyy-MM-dd")</td>
+                    <td>@articulo.idArticulo</td>
+                    <td>@articulo.CategoriaArticulo</td>
+                    <td>@articulo.ModeloArticulo</td>
+                    <td>@articulo.SerialArticulo</td>
+                    <td>@articulo.PlacaArticulo</td>
+                    <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DevolverEquipo" data-id="@articulo.idMovimientos"
+                                data-encargado-cedula="@articulo.EncargadoIdFuncionario"
+                                data-responsable-cedula="@articulo.ResponsableIdFuncionario">
+                            Devolver
+                        </button>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td colspan="14">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>id Adicional</th>
+                                        <th>Categoria Adicional</th>
+                                        <th>Modelo Adicional</th>
+                                        <th>Serial Adicional</th>
+                                        <th>Placa Adicional</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var adicional in articuloGroup)
+                                    {
+                                        <tr>
+                                            <td>@adicional.idAdicional</td>
+                                            <td>@adicional.CategoriaAdicional</td>
+                                            <td>@adicional.ModeloAdicional</td>
+                                            <td>@adicional.SerialAdicional</td>
+                                            <td>@adicional.PlacaAdicional</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="DevolverEquipo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="DevolverEquipoLabel"></h1>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="rotate-device-overlay">
+    <div>
+        <h1>Por favor, gira tu dispositivo a modo horizontal para firmar</h1>
+    </div>
+</div>
+
+<!-- Modal Firma Encargado -->
+<div class="modal fade" id="signatureModalEncargado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex=" -1" aria-labelledby="signatureModalLabelEncargado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signatureModalLabelEncargado">Firma Encargado</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="signature-pad-encargado" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
+                <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaEncargado">
+                    Error al firmar, firma dentro del recuadro.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="clear-encargado">Limpiar</button>
+                <button type="button" class="btn btn-success" id="save-encargado">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Firma Responsable -->
+<div class="modal fade" id="signatureModalResponsable" data-bs-backdrop="static" data-bs-keyboard="false" tabindex=" -1" aria-labelledby="signatureModalLabelEncargado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signatureModalLabelResponsable">Firma Responsable</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="signature-pad-responsable" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
+                <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaResponsable">
+                    Error al firmar, firma dentro del recuadro.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="clear-responsable">Limpiar</button>
+                <button type="button" class="btn btn-success" id="save-responsable">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var signaturePadEncargado, signaturePadResponsable;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setupEventListeners();
+    });
+
+    function setupEventListeners() {
+        window.addEventListener('resize', handleWindowResize);
+
+        $('#signatureModalEncargado').on('shown.bs.modal', function () {
+            initializeSignaturePad('encargado');
+            resizeCanvas('encargado');
+            signaturePadEncargado.clear();
+            checkOrientation();
+        });
+
+        $('#signatureModalResponsable').on('shown.bs.modal', function () {
+            initializeSignaturePad('responsable');
+            resizeCanvas('responsable');
+            signaturePadResponsable.clear();
+            checkOrientation();
+        });
+
+        document.getElementById('clear-encargado').addEventListener('click', clearSignaturePadE);
+        document.getElementById('clear-responsable').addEventListener('click', clearSignaturePadR);
+
+        document.getElementById('save-encargado').addEventListener('click', saveSignatureE);
+        document.getElementById('save-responsable').addEventListener('click', saveSignatureR);
+    }
+
+    function initializeSignaturePad(type) {
+        if (type === 'encargado') {
+            var canvasEncargado = document.getElementById('signature-pad-encargado');
+            signaturePadEncargado = new SignaturePad(canvasEncargado);
+        } else if (type === 'responsable') {
+            var canvasResponsable = document.getElementById('signature-pad-responsable');
+            signaturePadResponsable = new SignaturePad(canvasResponsable);
+        }
+    }
+
+    function resizeCanvas(type) {
+        var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        var canvas = type === 'encargado' ? document.getElementById('signature-pad-encargado') : document.getElementById('signature-pad-responsable');
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+    }
+
+    function checkOrientation() {
+        if (window.innerHeight > window.innerWidth) {
+            document.getElementById('rotate-device-overlay').style.display = 'flex';
+        } else {
+            document.getElementById('rotate-device-overlay').style.display = 'none';
+        }
+    }
+
+    function handleWindowResize() {
+        if ($('#signatureModalEncargado').is(':visible')) {
+            resizeCanvas('encargado');
+            checkOrientation();
+        } else if ($('#signatureModalResponsable').is(':visible')) {
+            resizeCanvas('responsable');
+            checkOrientation();
+        }
+    }
+
+    function clearSignaturePadE() {
+        signaturePadEncargado.clear();
+    }
+
+    function clearSignaturePadR() {
+        signaturePadResponsable.clear();
+    }
+
+    // Usando delegación de eventos para manejar los botones dinámicos
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('open-signature-modal-encargado')) {
+            const EncargadoCedula = event.target.id.split('-')[1];
+            const modalTitle = `Firma Encargado - ID: ${EncargadoCedula}`;
+            document.querySelector('#signatureModalEncargado .modal-title').textContent = modalTitle;
+            const signatureModal = new bootstrap.Modal(document.querySelector('#signatureModalEncargado'));
+            signatureModal.show();
+        }
+
+        if (event.target.classList.contains('open-signature-modal-responsable')) {
+            const ResponsableCedula = event.target.id.split('-')[1];
+            const modalTitle = `Firma Responsable - ID: ${ResponsableCedula}`;
+            document.querySelector('#signatureModalResponsable .modal-title').textContent = modalTitle;
+            const signatureModal = new bootstrap.Modal(document.querySelector('#signatureModalResponsable'));
+            signatureModal.show();
+        }
+    });
+
+    document.querySelectorAll('#DevolucionTable button').forEach(boton => {
+        boton.addEventListener('click', () => {
+            const dataId = boton.getAttribute('data-id');
+            const encargadoCedula = boton.getAttribute('data-encargado-cedula');
+            const responsableCedula = boton.getAttribute('data-responsable-cedula');
+
+            document.querySelector('#DevolverEquipoLabel').textContent = `Devolver equipo con ID: ${dataId}`;
+
+            const modalBody = document.querySelector('#DevolverEquipo .modal-body');
+            modalBody.innerHTML = '';
+
+            if (parseInt(encargadoCedula) > 0) {
+                const firmaEncargadoButton = document.createElement('button');
+                firmaEncargadoButton.type = 'button';
+                firmaEncargadoButton.className = 'btn btn-primary btn-separado open-signature-modal-encargado ';
+                firmaEncargadoButton.id = `EncargadoCedula-${encargadoCedula}`;
+                firmaEncargadoButton.textContent = 'Firma Encargado';
+                modalBody.appendChild(firmaEncargadoButton);
+            }
+
+            if (parseInt(responsableCedula) > 0) {
+                const firmaResponsableButton = document.createElement('button');
+                firmaResponsableButton.type = 'button';
+                firmaResponsableButton.className = 'btn btn-primary btn-separado open-signature-modal-responsable';
+                firmaResponsableButton.id = `ResponsableCedula-${responsableCedula}`;
+                firmaResponsableButton.textContent = 'Firma Responsable';
+                modalBody.appendChild(firmaResponsableButton);
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+  
+

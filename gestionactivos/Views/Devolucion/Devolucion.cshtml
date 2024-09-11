@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Devolucion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Devolucion</h1>
+
+@model gestionactivos.Models.DevolucionModel
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <form id="cedulaForm" method="post">
+                <label for="Cedula">Cédula Funcionario</label>
+                <input asp-for="Cedula" type="text" class="form-control" />
+                <span asp-validation-for="Cedula" class="text-danger"></span>
+                <br />
+                <button type="submit" class="btn btn-primary">Consultar Cédula</button>
+                <div id="message" class="text-danger"></div>
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+
+<div id="resultTable"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#cedulaForm').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    type: form.attr('method'),
+                    url: '@Url.Action("ResultadoCedula", "Devolucion")',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#resultTable').html(response.html);
+                            $('#message').text(''); // Limpiar mensaje en caso de éxito
+                        } else {
+                            $('#resultTable').html(''); // Limpiar resultados
+                            $('#message').text(response.message); // Mostrar mensaje de error
+                        }
+                    },
+                    error: function () {
+                        alert('Error al procesar la solicitud.');
+                    }
+                });
+            });
+        });
+    </script>
+}
