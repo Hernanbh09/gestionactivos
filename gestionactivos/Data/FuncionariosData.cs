@@ -36,7 +36,6 @@ namespace gestionactivos.Data
                             Cargo = dr["Cargo"].ToString(),
                             Piso = dr["Piso"].ToString()
                         });
-
                         }
                     }
                 }
@@ -46,7 +45,6 @@ namespace gestionactivos.Data
         public FuncionarioModel Obtener(int idFuncionario)
         {
             var oContacto = new FuncionarioModel();
-
             //instacion de conexion
             var cn = new Conexion();
             using (var conexion = new SqlConnection(cn.getCadenaSQL()))
@@ -70,20 +68,22 @@ namespace gestionactivos.Data
                         oContacto.Area = dr["Area"].ToString();
                         oContacto.Cargo = dr["Cargo"].ToString();
                         oContacto.Piso = dr["Piso"].ToString();
-
+                        oContacto.idClientes = Convert.ToInt32(dr["idClientes"]);
+                        oContacto.idSedes = Convert.ToInt32(dr["idSedes"]);
                     }
                 }
             }
             return oContacto;
         }
 
-        public bool Guardar(FuncionarioModel oContacto, int idSede)
+        public (bool Resultado, string Mensaje) Guardar(FuncionarioModel oContacto, int idSede)
         {
-            bool rspta;
+            bool rspta = false; // Inicializar como false
+            string error = string.Empty; // Variable para almacenar el mensaje de error
 
-            try{
-               
-                //instacion de conexion
+            try
+            {
+                // Instanciación de conexión
                 var cn = new Conexion();
 
                 using (var conexion = new SqlConnection(cn.getCadenaSQL()))
@@ -99,33 +99,35 @@ namespace gestionactivos.Data
                     cmd.Parameters.AddWithValue("Cargo", oContacto.Cargo);
                     cmd.Parameters.AddWithValue("Piso", oContacto.Piso);
                     cmd.Parameters.AddWithValue("@SedeID", idSede);
-
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery(); // Ejecutar el procedimiento almacenado
                 }
                 rspta = true;
-
-            }catch (Exception ex){
-                 string error = ex.Message;
-                 rspta = false;
+                return (rspta, string.Empty);
+            }
+            catch (SqlException sqlEx)
+            {
+                error = sqlEx.Message; // Captura el mensaje de error
+                rspta = false; // Establece rspta a false
+                return (rspta, error); // Devuelve falso y el mensaje de error de SQL
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message; // Captura el mensaje de error general
+                rspta = false; // Establece rspta a false
+                return (rspta, error); // Devuelve falso y el mensaje de error general
             }
 
-            return rspta;
         }
-
-
 
         public bool Editar(FuncionarioModel oContacto)
         {
             bool rspta;
-
             try
             {
-
-                //instacion de conexion
+                // Instancia de la conexión
                 var cn = new Conexion();
-
                 using (var conexion = new SqlConnection(cn.getCadenaSQL()))
                 {
                     conexion.Open();
@@ -139,31 +141,27 @@ namespace gestionactivos.Data
                     cmd.Parameters.AddWithValue("Area", oContacto.Area);
                     cmd.Parameters.AddWithValue("Cargo", oContacto.Cargo);
                     cmd.Parameters.AddWithValue("Piso", oContacto.Piso);
-
-
+                    cmd.Parameters.AddWithValue("idClientes", oContacto.idClientes); // Agregar el cliente
+                    cmd.Parameters.AddWithValue("SedeID", oContacto.idSedes); // Agregar la sede
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.ExecuteNonQuery();
+
                 }
                 rspta = true;
-
             }
             catch (Exception ex)
             {
                 string error = ex.Message;
                 rspta = false;
             }
-
             return rspta;
         }
 
         public bool Eliminar(int idFuncionario)
         {
             bool rspta;
-
             try
             {
-
                 //instacion de conexion
                 var cn = new Conexion();
 

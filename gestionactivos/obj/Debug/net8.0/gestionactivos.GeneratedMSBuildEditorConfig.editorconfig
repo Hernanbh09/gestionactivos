@@ -26,6 +26,38 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = C:\Users\TI1\Documents\gestiondeactivos\gestionactivos
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Adicionales/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRpY2lvbmFsZXNcRWRpdGFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Adicionales/Eliminar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRpY2lvbmFsZXNcRWxpbWluYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Adicionales/Guardar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRpY2lvbmFsZXNcR3VhcmRhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Adicionales/Listar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRpY2lvbmFsZXNcTGlzdGFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Articulos/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWN1bG9zXEVkaXRhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Articulos/Eliminar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWN1bG9zXEVsaW1pbmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Articulos/Guardar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWN1bG9zXEd1YXJkYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Articulos/Listar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWN1bG9zXExpc3Rhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Asignacion/Asignacion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNpZ25hY2lvblxBc2lnbmFjaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -34,12 +66,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2b2x1Y2lvblxEZXZvbHVjaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Devolucion/_DevolucionTable.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2b2x1Y2lvblxfRGV2b2x1Y2lvblRhYmxlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Documento/Documento.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdW1lbnRvXERvY3VtZW50by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Entrega/Entrega.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50cmVnYVxFbnRyZWdhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Funcionarios/Editar.cshtml]
@@ -76,6 +108,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Login/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Movimientos/Listar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aW1pZW50b3NcTGlzdGFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Shared/Error.cshtml]

@@ -1,3 +1,5 @@
+using gestionactivos.Configurations;
+using gestionactivos.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddSingleton<CorreoService>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 

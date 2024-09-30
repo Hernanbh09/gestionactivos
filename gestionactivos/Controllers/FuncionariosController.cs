@@ -28,33 +28,47 @@ namespace gestionactivos.Controllers
             //Metodo solo devuelve la vista
             return View();
         }
+        
         [HttpPost]
         public IActionResult Guardar(FuncionarioModel oContacto, int idCliente, int idSedes)
         {
+            if (!ModelState.IsValid)
+            {
+                // Cargar los clientes nuevamente antes de devolver la vista
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
+                // Opcionalmente, podrías también cargar las sedes si es necesario
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente); // Cargar sedes por cliente si es necesario
 
-            if(!ModelState.IsValid)
-                return View();
+                return View(oContacto); // Devuelve la vista con el modelo y los datos cargados
+            }
 
             oContacto.idClientes = idCliente;
             oContacto.idSedes = idSedes;
 
-
             // Guarda el contacto usando la capa de datos
             var data = new FuncionariosData();
-            bool resultado = data.Guardar(oContacto, idSedes);
+            var resultado = data.Guardar(oContacto, idSedes);
 
-            if (resultado)
+            if (resultado.Resultado)
             {
+              
                 // Redirige a la lista si el guardado fue exitoso
                 return RedirectToAction("Listar");
             }
             else
             {
+                // Cargar los clientes nuevamente en caso de fallo
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
+                // Cargar las sedes si es necesario
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente); // Cargar sedes por cliente
+
                 // Maneja el caso en que el guardado falló
-                ModelState.AddModelError("", "Error al guardar el funcionario.");
-                return View(oContacto);
+                ModelState.AddModelError("", resultado.Mensaje); // Agrega el mensaje de error al ModelState
+                return View(oContacto); // Devuelve la vista con el modelo
             }
         }
+
+
         [HttpPost]
         public JsonResult ObtenerSedes(int idCliente)
         {
@@ -65,29 +79,50 @@ namespace gestionactivos.Controllers
 
         public IActionResult Editar(int idFuncionario)
         {
-            //Metodo solo devuelve la vista
-             var ocontacto = _ContactoDatos.Obtener(idFuncionario);
-            return View(ocontacto);
+            // Obtener el funcionario a editar
+            var oContacto = _ContactoDatos.Obtener(idFuncionario);
+
+            // Comprobar si oContacto es nulo
+            if (oContacto == null)
+            {
+                return NotFound(); // O redirige a una página de error
+            }
+
+            // Obtener las listas de clientes
+            var clientes = _ContactoDatos.ListarClientes();
+            ViewData["Clientes"] = clientes;
+
+            // Comprobar si idClientes es válido antes de obtener las sedes
+            var sedes = oContacto.idClientes.HasValue ? _ContactoDatos.ListarSedes(oContacto.idClientes.Value) : new List<FuncionarioModel>();
+            ViewData["Sedes"] = sedes;
+
+            return View(oContacto);
         }
+
 
         [HttpPost]
         public IActionResult Editar(FuncionarioModel oContacto)
         {
-
             if (!ModelState.IsValid)
-                return View();
+            {
+                // Si la validación falla, recargar las listas para la vista
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0);
+                return View(oContacto);
+            }
 
-
-
-            //Recibir un objeto y guardarlo en la base de datos
+            // Llamar al método de edición en la capa de datos
             var respuesta = _ContactoDatos.Editar(oContacto);
             if (respuesta)
                 return RedirectToAction("Listar");
             else
-
-                return View();
+            {
+                // Si hay un error, recargar las listas y devolver la vista
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0);
+                return View(oContacto);
+            }
         }
-
 
         public IActionResult Eliminar(int idFuncionario)
         {

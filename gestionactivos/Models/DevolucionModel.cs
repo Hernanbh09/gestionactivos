@@ -4,7 +4,7 @@ namespace gestionactivos.Models
 {
     public class DevolucionModel
     {
-
+        public int IdMovimientos { get; set; }
 
         [Required(ErrorMessage = "Ingrese una cédula.")]
         public string Cedula { get; set; }

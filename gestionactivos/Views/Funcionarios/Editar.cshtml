@@ -14,18 +14,20 @@
 
         <form asp-action="Editar" asp-controller="Funcionarios" method="post">
             <input asp-for="idFuncionario" type="hidden" type="text" class="form-control">
-            <div class="mb-3">
-                <label class="form-label">Cliente</label>
-
-                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-               
+            <div class="form-group">
+                <label for="idClientes">Cliente</label>
+                <select asp-for="idClientes" class="form-control" asp-items="@(new SelectList(ViewData["Clientes"] as List<FuncionarioModel>, "idClientes", "Clientes", Model.idClientes))">
+                    <option value="">Seleccione un Cliente</option>
+                </select>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Sede</label>
-
-
+            <div class="form-group">
+                <label for="idSedes">Sede</label>
+                <select asp-for="idSedes" class="form-control" asp-items="@(new SelectList(ViewData["Sedes"] as List<FuncionarioModel>, "idSedes", "NombreSedes", Model.idSedes))">
+                    <option value="">Seleccione una Sede</option>
+                </select>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Cedula</label>
                 <input asp-for="Cedula" type="text" class="form-control">
@@ -76,3 +78,38 @@
 
     </div>
 </div>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#idClientes').change(function () {
+                var idCliente = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("ObtenerSedes", "Funcionarios")',
+                    type: 'POST',
+                    data: { idCliente: idCliente },
+                    success: function (data) {
+                        console.log(data);
+                        var sedeSelect = $('#idSedes');
+                        sedeSelect.empty(); // Limpiar opciones actuales
+                        sedeSelect.append('<option value="">Seleccione una Sede</option>');
+
+                        if (data && data.length > 0) {
+                            $.each(data, function (index, sede) {
+                                console.log('Sede ID: ' + sede.idSedes + ', Nombre: ' + sede.nombreSedes); // Asegúrate de que aquí se esté accediendo correctamente
+                                sedeSelect.append('<option value="' + sede.idSedes + '">' + sede.nombreSedes + '</option>');
+                            });
+                        } else {
+                            sedeSelect.append('<option value="">No hay sedes disponibles</option>');
+                        }
+                    },
+        
+                    error: function () {
+                        alert('Error al cargar las sedes.');
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -21,18 +21,25 @@ namespace gestionactivos.Controllers
             return View();
         }
 
+
         [HttpPost]
         public IActionResult Guardar(UsuarioModel oUsuario)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            var respuesta = _UsuariosDatos.Guardar(oUsuario);
-            if (respuesta)
-                return RedirectToAction("Listar");
-            else
+            string mensajeError;
+            var respuesta = _UsuariosDatos.Guardar(oUsuario, out mensajeError);
 
+            if (respuesta)
+            {
+                return RedirectToAction("Listar");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = mensajeError; // Pasar el mensaje de error a la vista
                 return View();
+            }
         }
 
         public IActionResult Editar(int idUsuario)

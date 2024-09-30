@@ -13,7 +13,7 @@
         Crear Funcionario
     </div>
     <div class="card-body">
-
+        
         <form asp-action="Guardar" asp-controller="Funcionarios" method="post">
 
             <div class="mb-3">
@@ -43,6 +43,7 @@
             <div class="mb-3">
                 <label class="form-label">Cedula</label>
                 <input asp-for="Cedula" type="text" class="form-control">
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <span asp-validation-for="Cedula" class="text-danger"></span>
             </div>
             <div class="mb-3">

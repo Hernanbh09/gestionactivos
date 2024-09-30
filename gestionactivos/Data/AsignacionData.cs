@@ -3,6 +3,7 @@ using gestionactivos.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
+using iText.StyledXmlParser.Jsoup.Helper;
 
 namespace gestionactivos.Data
 {
@@ -170,7 +171,7 @@ namespace gestionactivos.Data
             }
             return adicionales;
         }
-        public bool AgregarAdicional(int idArticulo, int idAdicional)
+        public (bool Success, string Message) AgregarAdicional(int idArticulo, int idAdicional)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -181,24 +182,35 @@ namespace gestionactivos.Data
                     command.Parameters.AddWithValue("@idArticulo", idArticulo);
                     command.Parameters.AddWithValue("@idAdicional", idAdicional);
 
+                    // Parámetro de salida para el mensaje
+                    SqlParameter mensajeParam = new SqlParameter("@Mensaje", SqlDbType.NVarChar, 255)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    command.Parameters.Add(mensajeParam);
+
                     connection.Open();
                     try
                     {
                         command.ExecuteNonQuery();
-                        return true; // Si se ejecuta correctamente, devolvemos true
+                        string mensaje = mensajeParam.Value.ToString();
+                        return (true, mensaje); // Mensaje de éxito o error
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        return false; // Si ocurre un error, devolvemos false
+                        return (false, ex.Message); // Captura cualquier error
                     }
                 }
             }
         }
+
+
         public bool GuardarFirmaFuncionario(int idFuncionario, string dataURL)
         {
             try
             {
-                byte[] firmaBytes = Convert.FromBase64String(dataURL.Split(',')[1]); // Convertir Base64 a binario
+                // Extraer la parte Base64 de la cadena Data URL
+                string base64String = dataURL.Split(',')[1]; // Usa `dataURL` en lugar de `dataURLR`
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -207,7 +219,7 @@ namespace gestionactivos.Data
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@IdFuncionario", idFuncionario);
-                        command.Parameters.AddWithValue("@FirmaFuncionario", firmaBytes);
+                        command.Parameters.AddWithValue("@FirmaFuncionario", base64String); // Pasar la cadena Base64 directamente
 
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -221,13 +233,12 @@ namespace gestionactivos.Data
                 Console.WriteLine(ex.Message);
                 return false; // Si ocurre un error, devolvemos false
             }
-
         }
         public bool GuardarFirmaContratista(int idContratista, string dataURLR)
         {
             try
             {
-                byte[] firmaBytes = Convert.FromBase64String(dataURLR.Split(',')[1]); // Convertir Base64 a binario
+                string base64String = dataURLR.Split(',')[1]; // Convertir Base64 a binario
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -236,7 +247,7 @@ namespace gestionactivos.Data
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@IdFuncionario", idContratista);
-                        command.Parameters.AddWithValue("@FirmaFuncionario", firmaBytes);
+                        command.Parameters.AddWithValue("@FirmaFuncionario", base64String);
 
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -284,40 +295,41 @@ namespace gestionactivos.Data
         }
 
 
-        public string ObtenerDocumento(int idAsignacion)
+
+        public (string CorreoEncargado, string CorreoResponsable) ObtenerCorreoPorAsignacion(int idAsignacion)
         {
-            DataTable resultTable = new DataTable();
-            string jsonResult = string.Empty;
+            string correoEncargado = null;
+            string correoResponsable = null;
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sqlQuery = "sp_CrearDocumento"; // Nombre del procedimiento almacenado
+                string sqlQuery = "sp_ConsultarCorreo"; // Nombre del procedimiento almacenado
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@idAsignacion", idAsignacion);
+                    command.Parameters.AddWithValue("@idMovimiento", idAsignacion); // Asegúrate que sea el parámetro correcto
 
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                    connection.Open(); // Asegúrate de abrir la conexión
 
-                    try
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        connection.Open();
-                        dataAdapter.Fill(resultTable);
-
-                        // Convertir DataTable a JSON
-                        jsonResult = JsonConvert.SerializeObject(resultTable);
+                        while (reader.Read())
+                        {
+                            // Aquí verificamos si los correos existen
+                            correoEncargado = reader.IsDBNull(0) ? null : reader.GetString(0);
+                            correoResponsable = reader.IsDBNull(1) ? null : reader.GetString(1);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // Manejo de errores, puedes registrar el error o lanzarlo según sea necesario
-                        Console.WriteLine("Error al ejecutar el procedimiento almacenado: " + ex.Message);
-                        // Puedes devolver un JSON vacío o null en caso de error
-                        jsonResult = null;
+                        Console.WriteLine("No se encontraron resultados para el idMovimiento: " + idAsignacion);
                     }
+
+                    reader.Close();
                 }
             }
-
-            return jsonResult;
+            return (correoEncargado, correoResponsable);
         }
 
 

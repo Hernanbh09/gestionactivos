@@ -126,7 +126,7 @@
                         <input type="text" class="form-control" id="placaadicional" placeholder="Ingresa placa de adicional">
                         <br />
                         <input type="button" class="btn btn-primary" value="Consultar Placa Adicional" onclick="consultarPlacaAdicionalBtn()">
-                        <div class="alert alert-danger mt-3" role="alert" style="" id="errorMensajeAdicional">
+                        <div class="alert alert-danger mt-3" role="alert" style="display:none;" id="errorMensajeAdicional">
                             No se encontraron resultados para la placa adicional ingresada.
                         </div>
                         <div class="form-group">
@@ -138,16 +138,15 @@
                                 <input type="text" class="form-control" id="SerialAdicionalAgregar" disabled>
                                 <br />
                                 <input type="button" class="btn btn-success" value="Agregar Placa Adicional" onclick="AgregarPlacaAdicionalBtn()">
-                                <div class="alert alert-success mt-3" role="alert" style="" id="successMensajeAdicional">
-                                    Se agrego correctamente la placa adicional ingresada.
-                                </div>
-                                <div class="alert alert-danger mt-3" role="alert" style="" id="errorMensajeAdicionalAgregar">
-                                    No se agrego el adicional a la placa
-                                </div>
+                                <div class="alert alert-success mt-3" role="alert" id="successMensajeAdicional" style="display:none;"></div>
+                                <div class="alert alert-danger mt-3" role="alert" id="errorMensajeAdicionalAgregar" style="display:none;"></div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
+
 
 
                 <div id="Contratista" class="form-group" style="display:none;">
@@ -454,7 +453,7 @@
             } else {
                 $('#errorMensajeFirmaRequeridaContratista').hide();
                 var dataURLR = signaturePadContratista.toDataURL();
-                var idContratista = $('#idContratista').val();
+                var idContratista = $('#idFuncionarioContra').val();
 
                 $.ajax({
                     url: '@Url.Action("SaveSignatureContratista", "Asignacion")',
@@ -640,11 +639,9 @@
                 }
             });
         }
-
         function AgregarPlacaAdicionalBtn() {
             var idAdicionalAgregar = $('#idAdicionalAgregar').val();
             var idArticulo = $('#idArticulo').val();
-
 
             $.ajax({
                 url: '@Url.Action("AgregarPlacaAdicional", "Asignacion")',
@@ -655,16 +652,20 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        $('#successMensajeAdicional').show();
-                        $('#errorMensajeAdicionalAgregar').hide();
-                        consultarPlaca();
+                        $('#successMensajeAdicional').text(response.message).show(); // Muestra el mensaje de éxito
+                        $('#errorMensajeAdicionalAgregar').hide(); // Oculta el mensaje de error
+                        consultarPlaca(); // Llama a la función para actualizar la vista o los datos si es necesario
                     } else {
-                        $('#successMensajeAdicional').hide();
-                        $('#errorMensajeAdicionalAgregar').show();
+                        $('#successMensajeAdicional').hide(); // Oculta el mensaje de éxito
+                        $('#errorMensajeAdicionalAgregar').text(response.message).show(); // Muestra el mensaje de error
                     }
                 }
             });
         }
+
+        
+
+
 
         function consultarCedulaContraBtn() {
             var cedulaContra = $('#cedulaContra').val();

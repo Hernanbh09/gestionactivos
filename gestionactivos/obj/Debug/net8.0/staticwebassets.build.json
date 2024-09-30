@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yDmJxz2PhJ/evMp52ehA9I4WBumcrCksaC8XdnkMUWk=",
+  "Hash": "HSxx3IUVAiTnHErVzInJ4rFBgd4iWfAh5PHmHucpB+Y=",
   "Source": "gestionactivos",
   "BasePath": "_content/gestionactivos",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Plantilla\\logoSumimas.png",
+      "SourceId": "gestionactivos",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\",
+      "BasePath": "_content/gestionactivos",
+      "RelativePath": "Img/Plantilla/logoSumimas.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Img\\Plantilla\\logoSumimas.png"
     },
     {
       "Identity": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\js\\site.js",

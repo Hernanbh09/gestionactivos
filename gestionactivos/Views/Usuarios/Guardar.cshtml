@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Guardar";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var errorMessage = ViewBag.ErrorMessage as string;
 }
 
 <h1>Guardar</h1>
@@ -30,6 +31,10 @@
             <div class="mb-3">
                 <label class="form-label">Correo</label>
                 <input asp-for="Correo" type="text" class="form-control" placeholder="Ingrese Correo">
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger">@errorMessage</div>
+                }
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -42,11 +47,17 @@
                 <input asp-for="Cargo" type="text" class="form-control">
                 <span asp-validation-for="Cargo" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label class="form-label">Rol</label>
-                <input asp-for="Rol" type="text" class="form-control">
+                <select class="form-select" id="seleccioneRol" name="Rol" asp-for="Rol">
+                    <option value="" disabled selected>Seleccione un rol</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Coordinador">Coordinador</option>
+                    <option value="Técnico">Técnico</option> <!-- Asegúrate de que cada valor sea único -->
+                </select>
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
+
 
             <button type="submit" class="btn btn-primary">Guardar</button>
             <a asp-action="Listar" asp-controller="Usuarios" class="btn btn-warning">Volver a la lista</a>

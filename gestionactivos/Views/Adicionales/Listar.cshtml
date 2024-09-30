@@ -1,0 +1,44 @@
+﻿@model List<AdicionalesModel>
+
+
+
+
+<div class="card">
+    <div class="card-header">
+        Lista de Adicionales
+    </div>
+    <div class="card-body">
+        <a asp-action="Guardar" asp-controller="Adicionales" class="btn btn-success">Crear Adicionales</a>
+        <hr />
+        <table id="AdicionalesTable" class="table table-bordered">
+            <thead>
+                <tr>
+
+                    <th>Categoria</th>
+                    <th>Modelo</th>
+                    <th>Serial</th>
+                    <th>Placa</th>
+
+                    <th>Editar - Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.Categoria</td>
+                        <td>@item.Modelo</td>
+                        <td>@item.Serial</td>
+                        <td>@item.Placa</td>
+
+                        <td>
+                            <a asp-action="Editar" asp-controller="Adicionales" class="btn btn-primary btn-sm" asp-route-idAdicional="@item.idAdicional">Editar</a>
+                            <a asp-action="Eliminar" asp-controller="Adicionales" class="btn btn-danger btn-sm" asp-route-idAdicional="@item.idAdicional">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

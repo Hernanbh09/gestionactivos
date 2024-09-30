@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\gestionactivos.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Plantilla\\logoSumimas.png",
+      "PackagePath": "staticwebassets\\Img\\Plantilla\\logoSumimas.png"
+    },
+    {
       "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

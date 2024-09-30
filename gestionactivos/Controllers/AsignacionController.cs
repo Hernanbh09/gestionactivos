@@ -8,11 +8,12 @@ using System.Net.Mail;
 using System.Net;
 using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.IO;
 using System.Data;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using gestionactivos.pdf;
+using gestionactivos.Services;
 
 namespace gestionactivos.Controllers
 {
@@ -21,11 +22,11 @@ namespace gestionactivos.Controllers
 
 
 
-        private readonly SmtpSettings _smtpSettings;
+        private readonly CorreoService _correoService;
 
-        public AsignacionController(IConfiguration configuration)
+        public AsignacionController(CorreoService correoService)
         {
-            _smtpSettings = configuration.GetSection("Smtp").Get<SmtpSettings>();
+            _correoService = correoService;
         }
 
         public IActionResult Asignacion()
@@ -102,16 +103,11 @@ namespace gestionactivos.Controllers
         public IActionResult AgregarPlacaAdicional(int IdArticulo, int IdAdicionalAgregar)
         {
             AsignacionData data4 = new AsignacionData();
-            bool resultado = data4.AgregarAdicional(IdArticulo, IdAdicionalAgregar);
-            if (resultado)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+            var resultado = data4.AgregarAdicional(IdArticulo, IdAdicionalAgregar);
+            return Json(new { success = resultado.Success, message = resultado.Message });
         }
+
+
 
         [HttpPost]
         public IActionResult SaveSignatureFuncionario(int idFuncionario, string dataURL)
@@ -204,16 +200,11 @@ namespace gestionactivos.Controllers
                 // Limpiar TempData después de usarlo
                 TempData["AsignacionExitosa"] = false;
 
-                // Proceder con la lógica de EnviarIdAsignacion
-                //AsignacionData data8 = new AsignacionData();
-
-                // Enviar el correo electrónico
-                bool envioExitoso = EnviarCorreo(idAsignacion);
+                // Enviar el correo electrónico usando CorreoService
+                bool envioExitoso = _correoService.EnviarCorreo(idAsignacion);
 
                 if (envioExitoso)
                 {
-
-
                     return Json(new { success = true, mensaje = "Correo enviado correctamente." });
                 }
                 else
@@ -223,57 +214,9 @@ namespace gestionactivos.Controllers
             }
             else
             {
-                // La asignación de equipo no fue exitosa, no se puede proceder con EnviarIdAsignacion
                 return Json(new { success = false, errorMessage = "La asignación de equipo debe completarse correctamente antes de enviar la asignación." });
             }
         }
-
-        private bool EnviarCorreo(int idAsignacion)
-        {
-            try
-            {
-                // Generar el PDF
-                generarpdf pdfGenerator = new generarpdf();
-                string pdfPath = pdfGenerator.GeneratePDF(idAsignacion); //archivo generado
-
-                using (var client = new SmtpClient(_smtpSettings.Host, 587)) // Cambiado a 587
-                {
-                    client.EnableSsl = _smtpSettings.EnableSsl;
-                    client.Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password);
-
-                    var mensaje = new MailMessage
-                    {
-                        From = new MailAddress(_smtpSettings.From, _smtpSettings.FromName),
-                        Subject = "Asunto del correo",
-                        Body = $"Se ha creado un documento con id de asignación: {idAsignacion}",
-                        IsBodyHtml = true
-                    };
-
-                    mensaje.To.Add("hernandezbrayan697@gmail.com");
-
-                    // Adjuntar el PDF al correo
-                    Attachment pdfAttachment = new Attachment(pdfPath);
-                    mensaje.Attachments.Add(pdfAttachment);
-
-                    client.Send(mensaje);
-                }
-
-                return true;
-            }
-            catch (SmtpException ex)
-            {
-                Console.WriteLine($"Error al enviar el correo electrónico: {ex.Message}");
-                Console.WriteLine($"Código de error SMTP: {ex.StatusCode}");
-                Console.WriteLine($"Detalles: {ex}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error general al enviar el correo electrónico: {ex.Message}");
-                return false;
-            }
-        }
-
 
 
 

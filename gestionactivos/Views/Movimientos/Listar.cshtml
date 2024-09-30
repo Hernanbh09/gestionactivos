@@ -1,0 +1,85 @@
+﻿@model List<MovimientosModel>
+
+<div class="card">
+    <div class="card-header">
+        Lista de Movimientos
+    </div>
+    <div class="card-body">
+        
+        <hr />
+        <table id="MovimientosTable" class="table table-bordered">
+            <thead>
+                <tr>
+
+                    <th>idMovimientos</th>
+                    <th>Evento</th>
+                    <th>NombreEncargado</th>
+                    <th>NombreResponsable</th>
+                    <th>Categoria</th>
+                    <th>Modelo</th>
+                    <th>Serial</th>
+                    <th>Placa</th>
+                    <th>Ver Archivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.idMovimientos</td>
+                        <td>@item.Evento</td>
+                        <td>@item.NombreEncargado</td>
+                        <td>@item.NombreResponsable</td>
+                        <td>@item.Categoria</td>
+                        <td>@item.Modelo</td>
+                        <td>@item.Serial</td>
+                        <td>@item.Placa</td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Archivo))
+                            {
+                                <!-- Botón habilitado si Archivo no es nulo o vacío -->
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verArchivoModal"
+                                        onclick="verArchivo('@item.Archivo')">
+                                    Ver PDF
+                                </button>
+                            }
+                            else
+                            {
+                                <!-- Botón deshabilitado si Archivo es nulo o vacío -->
+                                <button class="btn btn-secondary" disabled>No disponible</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal para ver el archivo PDF -->
+<div class="modal fade" id="verArchivoModal" tabindex="-1" aria-labelledby="verArchivoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verArchivoLabel">Archivo PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfViewer" src="" width="100%" height="600px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section script{
+    <script>
+        function verArchivo(base64Pdf) {
+            // Asignar el archivo PDF Base64 al iframe
+            const pdfViewer = document.getElementById("pdfViewer");
+            pdfViewer.src = "data:application/pdf;base64," + base64Pdf;
+        }
+    </script>
+
+}

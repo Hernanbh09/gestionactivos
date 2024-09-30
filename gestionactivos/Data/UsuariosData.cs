@@ -47,12 +47,13 @@ namespace gestionactivos.Data
         }
 
 
-        public bool Guardar(UsuarioModel oUsuario)
+        public bool Guardar(UsuarioModel oUsuario, out string mensajeError)
         {
+            mensajeError = string.Empty; // Inicializar el mensaje de error
             bool rspta;
             try
             {
-                //instacion de conexion
+                //instanciación de conexión
                 var cn = new Conexion();
 
                 using (var conexion = new SqlConnection(cn.getCadenaSQL()))
@@ -68,20 +69,23 @@ namespace gestionactivos.Data
                     cmd.Parameters.AddWithValue("Correo", oUsuario.Correo);
                     cmd.Parameters.AddWithValue("Contrasena", hashedPassword); // Use the hashed password
                     cmd.Parameters.AddWithValue("Cargo", oUsuario.Cargo);
-                    cmd.Parameters.AddWithValue("Rol", oUsuario.Rol);
+                    cmd.Parameters.AddWithValue("Rol", oUsuario.Rol); // Aquí ya es string
                     cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Ejecutar el comando y capturar el resultado
                     cmd.ExecuteNonQuery();
                 }
                 rspta = true;
             }
             catch (Exception ex)
             {
-                string error = ex.Message;
+                mensajeError = ex.Message; // Capturar el mensaje de error sin validar el tipo
                 rspta = false;
             }
 
             return rspta;
         }
+
 
         private string GenerateSHA256Hash(string input)
         {

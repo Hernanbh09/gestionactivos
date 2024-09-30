@@ -1,0 +1,28 @@
+﻿@model ArticulosModel
+
+
+<div class="card">
+    <div class="card-header">
+        Eliminar Articulos
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Eliminar" asp-controller="Articulos" method="post">
+
+
+
+            <input asp-for="idArticulo" type="hidden" class="form-control" />
+
+            <div class="alert alert-danger" role="alert">
+                Desea eliminar el Articulo: @Html.DisplayTextFor(m => m.Serial) ?
+            </div>
+
+
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Listar" asp-controller="Articulos" class="btn btn-warning">Volver a la lista</a>
+        </form>
+
+
+
+    </div>
+</div>

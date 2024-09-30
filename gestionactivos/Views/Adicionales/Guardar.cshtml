@@ -1,0 +1,50 @@
+﻿@model AdicionalesModel
+
+<h1>Guardar</h1>
+
+
+
+<div class="card">
+    <div class="card-header">
+        Crear Adicional
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Guardar" asp-controller="Adicionales" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Categoria</label>
+                <input asp-for="Categoria" type="text" class="form-control">
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Modelo</label>
+                <input asp-for="Modelo" type="text" class="form-control">
+                <span asp-validation-for="Modelo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Serial</label>
+                <input asp-for="Serial" type="text" class="form-control" placeholder="Ingrese Serial">
+                <span asp-validation-for="Serial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Placa</label>
+                <input asp-for="Placa" type="text" class="form-control">
+                <span asp-validation-for="Placa" class="text-danger"></span>
+            </div>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Adicionales" class="btn btn-warning">Volver a la lista</a>
+        </form>
+
+
+
+    </div>
+</div>
