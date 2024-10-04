@@ -1,12 +1,54 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|c:\\users\\ti1\\documents\\gestiondeactivos\\gestionactivos\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|solutionrelative:gestionactivos\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|c:\\users\\ti1\\documents\\gestiondeactivos\\gestionactivos\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|solutionrelative:gestionactivos\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "gestionactivos\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "gestionactivos\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAAAFgAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-04T13:29:25.847Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\appsettings.json",
+              "RelativeDocumentMoniker": "gestionactivos\\appsettings.json",
+              "ToolTip": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\appsettings.json",
+              "RelativeToolTip": "gestionactivos\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-04T13:28:25.565Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

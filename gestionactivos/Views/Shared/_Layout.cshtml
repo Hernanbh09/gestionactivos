@@ -57,7 +57,6 @@
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         @if (User.IsInRole("Administrador"))
                         {
-                            <li><a asp-controller="Clientes" asp-action="Listar">Clientes</a></li>
                             <li><a asp-controller="Usuarios" asp-action="Listar">Usuarios</a></li>
                             <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                             <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
@@ -88,7 +87,6 @@
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     @if (User.IsInRole("Administrador"))
                     {
-                        <li><a asp-controller="Clientes" asp-action="Listar">Clientes</a></li>
                         <li><a asp-controller="Usuarios" asp-action="Listar">Usuarios</a></li>
                         <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                         <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
