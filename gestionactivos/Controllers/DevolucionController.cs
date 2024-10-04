@@ -1,6 +1,7 @@
 ﻿using gestionactivos.Data;
 using gestionactivos.Models;
 using gestionactivos.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -10,6 +11,8 @@ using System.Security.Claims;
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")]
+    [Authorize(Roles = "Administrador,Coordinador,Tecnico")]
     public class DevolucionController : Controller
     {
         private readonly ICompositeViewEngine _viewEngine;

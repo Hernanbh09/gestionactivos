@@ -1,9 +1,12 @@
 ﻿using gestionactivos.Data;
 using gestionactivos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")]
+    [Authorize(Roles = "Administrador,Coordinador")]
     public class ArticulosController : Controller
     {
 

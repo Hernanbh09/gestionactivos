@@ -14,9 +14,12 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using gestionactivos.pdf;
 using gestionactivos.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")]
+    [Authorize(Roles = "Administrador,Coordinador,Tecnico")]
     public class AsignacionController : Controller
     {
 

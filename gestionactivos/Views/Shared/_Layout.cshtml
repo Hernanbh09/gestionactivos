@@ -61,11 +61,12 @@
                             <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                             <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
                             <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-                                <li><a asp-controller="Movimientos" asp-action="Listar">Movimientos</a></li>
-                                        <li><a asp-controller="Pendientes" asp-action="Pendientes">Pendientes</a></li>
+                          
                         }
                         @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Tecnico"))
                         {
+                            <li><a asp-controller="Movimientos" asp-action="Listar">Movimientos</a></li>
+                            <li><a asp-controller="Pendientes" asp-action="Pendientes">Pendientes</a></li>
                             <li><a asp-controller="Asignacion" asp-action="Asignacion">Asignar Articulo</a></li>
                             <li><a asp-controller="Devolucion" asp-action="Devolucion">Devolver Articulo</a></li>
                         }
@@ -91,11 +92,12 @@
                         <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                         <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
                         <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-                        <li><a asp-controller="Movimientos" asp-action="Listar">Movimientos</a></li>
-                        <li><a asp-controller="Pendientes" asp-action="Pendientes">Pendientes</a></li>
+                       
                     }
                     @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Tecnico"))
                     {
+                        <li><a asp-controller="Movimientos" asp-action="Listar">Movimientos</a></li>
+                        <li><a asp-controller="Pendientes" asp-action="Pendientes">Pendientes</a></li>
                         <li><a asp-controller="Asignacion" asp-action="Asignacion">Asignar Articulo</a></li>
                         <li><a asp-controller="Devolucion" asp-action="Devolucion">Devolver Articulo</a></li>
                     }

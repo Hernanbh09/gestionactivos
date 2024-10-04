@@ -15,37 +15,45 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> ResultadoLogin(string Correo, string Clave)
     {
+        // Validar si el correo o la clave son nulos o están vacíos
+        if (string.IsNullOrEmpty(Correo) || string.IsNullOrEmpty(Clave))
+        {
+            TempData["Message"] = "Correo y contraseña son obligatorios.";
+            TempData["MessageType"] = "error";
+            return View("Login"); // Regresar a la vista de login
+        }
+
         LoginData Data = new LoginData();
+
+        // Consultar el usuario en la base de datos
         LoginModel Login = Data.ConsultarUsuario(Correo, Clave);
 
         if (Login != null)
         {
-            // Configurar el ticket de autenticación
+            // Si el usuario existe, configurar el ticket de autenticación
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, Login.NombreCompleto),
-            new Claim(ClaimTypes.Role, Login.Rol),
-            new Claim(ClaimTypes.NameIdentifier, Login.IdUsuario.ToString())
-        };
-            
+            {
+                new Claim(ClaimTypes.Name, Login.NombreCompleto),
+                new Claim(ClaimTypes.Role, Login.Rol),
+                new Claim(ClaimTypes.NameIdentifier, Login.IdUsuario.ToString())
+            };
 
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            // Autenticar al usuario usando cookies
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-
-
-        // Guardar el mensaje de éxito en TempData después de la autenticación exitosa
-        TempData["Message"] = "Inicio de sesión exitoso. Bienvenido, " + Login.NombreCompleto;
-        TempData["MessageType"] = "success";
+            // Guardar mensaje de éxito en TempData
+            TempData["Message"] = "Inicio de sesión exitoso. Bienvenido, " + Login.NombreCompleto;
+            TempData["MessageType"] = "success";
             TempData.Clear();
-            // Redirigir a la vista principal o a otra página
+
+            // Redirigir a la página principal u otra página
             return RedirectToAction("Index", "Home");
         }
         else
         {
-            // Guardar el mensaje de error en TempData si la autenticación falla
+            // Si la autenticación falla, mostrar mensaje de error
             TempData["Message"] = "Correo o contraseña incorrectos.";
             TempData["MessageType"] = "error";
 
@@ -54,18 +62,14 @@ public class LoginController : Controller
         }
     }
 
-
     [HttpPost]
     public async Task<IActionResult> Logout()
     {
         // Cerrar sesión
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-
+        // Limpiar TempData y redirigir a la página de login
         TempData.Clear();
-
-        // Redirigir a la página de inicio de sesión
         return RedirectToAction("Login", "Login");
     }
-
 }

@@ -1,10 +1,13 @@
 ﻿using gestionactivos.Data;
 using gestionactivos.Models;
 using gestionactivos.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")] // Aplicar la política global
+    [Authorize(Roles = "Administrador,Tecnico")]
     public class PendientesController : Controller
     {
         // Método GET para listar los pendientes

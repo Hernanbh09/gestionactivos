@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using gestionactivos.Data;
 using gestionactivos.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")]
+    [Authorize(Roles = "Administrador,Coordinador")]
     public class FuncionariosController : Controller
     {
         FuncionariosData _ContactoDatos = new FuncionariosData();

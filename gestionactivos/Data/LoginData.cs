@@ -1,5 +1,6 @@
 ﻿using gestionactivos.Data;
 using gestionactivos.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Cryptography;
@@ -14,7 +15,7 @@ public class LoginData
         Conexion conexion = new Conexion();
         connectionString = conexion.getCadenaSQL();
     }
-
+    [ValidateAntiForgeryToken]
     public LoginModel ConsultarUsuario(string Correo, string Clave)
     {
         LoginModel usuario = null;
@@ -26,27 +27,43 @@ public class LoginData
             using (SqlCommand command = new SqlCommand(sqlQuery, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@Correo", Correo);
-                command.Parameters.AddWithValue("@Contrasena", hashClave);
 
+                // Parámetro de entrada para Correo
+                SqlParameter correoParam = new SqlParameter("@Correo", SqlDbType.VarChar, 100)
+                {
+                    Value = Correo
+                };
+                command.Parameters.Add(correoParam);
+
+                // Parámetro de entrada para Clave (hash)
+                SqlParameter claveParam = new SqlParameter("@Contrasena", SqlDbType.VarChar, 256)
+                {
+                    Value = hashClave
+                };
+                command.Parameters.Add(claveParam);
+
+                // Parámetro de salida para Mensaje
                 SqlParameter mensajeParam = new SqlParameter("@Mensaje", SqlDbType.VarChar, 100)
                 {
                     Direction = ParameterDirection.Output
                 };
                 command.Parameters.Add(mensajeParam);
 
+                // Parámetro de salida para idUsuario
                 SqlParameter idUsuarioParam = new SqlParameter("@idUsuario", SqlDbType.Int)
                 {
                     Direction = ParameterDirection.Output
                 };
                 command.Parameters.Add(idUsuarioParam);
 
+                // Parámetro de salida para Rol
                 SqlParameter rolParam = new SqlParameter("@Rol", SqlDbType.VarChar, 50)
                 {
                     Direction = ParameterDirection.Output
                 };
                 command.Parameters.Add(rolParam);
 
+                // Parámetro de salida para NombreCompleto
                 SqlParameter nombreCompletoParam = new SqlParameter("@NombreCompleto", SqlDbType.VarChar, 100)
                 {
                     Direction = ParameterDirection.Output
@@ -56,6 +73,7 @@ public class LoginData
                 connection.Open();
                 command.ExecuteNonQuery();
 
+                // Obtenemos los valores de los parámetros de salida
                 string mensaje = (string)mensajeParam.Value;
                 if (!string.IsNullOrEmpty(mensaje) && mensaje.Contains("Inicio de sesión exitoso"))
                 {
@@ -72,6 +90,7 @@ public class LoginData
         return usuario;
     }
 
+
     private string ObtenerHashSha256(string input)
     {
         using (SHA256 sha256 = SHA256.Create())
@@ -80,9 +99,9 @@ public class LoginData
             StringBuilder sb = new StringBuilder();
             foreach (byte b in hashBytes)
             {
-                sb.Append(b.ToString("x2"));
+                sb.Append(b.ToString("x2")); // Genera el hash en formato hexadecimal
             }
-            return sb.ToString();
+            return sb.ToString(); // Devuelve el hash como cadena
         }
     }
 }

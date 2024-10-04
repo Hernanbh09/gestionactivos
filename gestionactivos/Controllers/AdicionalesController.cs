@@ -1,17 +1,19 @@
 ﻿using gestionactivos.Data;
 using gestionactivos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace gestionactivos.Controllers
 {
+    [Authorize(Policy = "GlobalPolicy")]
+    [Authorize(Roles = "Administrador,Coordinador")] 
+
     public class AdicionalesController : Controller
     {
 
 
         AdicionalesData _AdicionalesData = new AdicionalesData();
-
-
 
         public IActionResult Listar()
         {
@@ -60,7 +62,6 @@ namespace gestionactivos.Controllers
 
                 return View();
         }
-
         public IActionResult Eliminar(int idAdicional)
         {
             var oAdicional = _AdicionalesData.Obtener(idAdicional);

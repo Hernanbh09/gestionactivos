@@ -3,6 +3,67 @@
     Layout = null;
 }
 
-<h1>Acceso Denegado</h1>
-<p>No tienes permisos para acceder a esta página.</p>
-<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Regresar</a>
+
+<html>
+<head>
+    <title>Error Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .error-title {
+            font-size: 10em;
+            font-weight: bold;
+            background: linear-gradient(to right, #1a73e8, #34a853);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .error-subtitle {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #000000;
+        }
+
+        .error-message {
+            font-size: 1em;
+            color: #000000;
+            margin: 0 0 20px 0;
+        }
+
+        .error-button {
+            background-color: #1a73e8;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-title">Error</div>
+        <div class="error-subtitle">Acceso Denegado</div>
+        <div class="error-message">No tiene permiso para ingresar a esta página.<br>Ponte en contacto con tu administrador de TI para obtener acceso.</div>
+        <button class="error-button" onclick="location.href='@Url.Action("Index", "Home")'">Aceptar</button>
+
+
+      
+    </div>
+</body>
+</html>

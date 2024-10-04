@@ -32,8 +32,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Login/Login";
         options.LogoutPath = "/Login/Logout";
-        options.AccessDeniedPath = "/Home/Index";
+        options.AccessDeniedPath = "/Home/AccessDenied";
     });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    // Define la política global con los roles deseados
+    options.AddPolicy("GlobalPolicy", policy =>
+        policy.RequireRole("Administrador", "Coordinador", "Tecnico"));
+});
 
 var app = builder.Build();
 

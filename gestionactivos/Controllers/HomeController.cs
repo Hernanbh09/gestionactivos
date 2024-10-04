@@ -5,7 +5,8 @@ using System.Diagnostics;
 
 namespace gestionactivos.Controllers
 {
-    [Authorize] // Asegúrate de que el usuario esté autenticado
+    [Authorize(Policy = "GlobalPolicy")] // Aplicar la política global
+    [Authorize(Roles = "Administrador,Coordinador,Tecnico")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -14,18 +15,8 @@ namespace gestionactivos.Controllers
         {
             _logger = logger;
         }
-        [Authorize(Roles = "Administrador,Coordinador,Tecnico")]
+     
         public IActionResult Index()
-        {
-            return View();
-        }
-        [Authorize(Roles = "Administrador")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        [Authorize(Roles = "Administrador,Coordinador")]
-        public IActionResult Asignacion()
         {
             return View();
         }

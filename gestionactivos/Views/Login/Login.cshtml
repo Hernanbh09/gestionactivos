@@ -1,4 +1,6 @@
-﻿@{
+﻿@model LoginModel
+
+@{
     Layout = null;
 }
 <html>
@@ -21,14 +23,17 @@
         <div class="right">
             <h2>Iniciar sesión</h2>
             <form asp-controller="Login" asp-action="ResultadoLogin" method="post">
+                @Html.AntiForgeryToken()
                 <div class="input-group">
                     <label for="username">Correo</label>
                     <input type="text" id="Correo" name="Correo" placeholder="Ingresa Correo">
+                    <span asp-validation-for="Correo" class="text-danger"></span>
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="input-group">
                     <label for="password">Contraseña</label>
                     <input type="password" id="Clave" name="Clave" placeholder="Ingresa Contraseña">
+                    <span asp-validation-for="Clave" class="text-danger"></span>
                     <i class="fas fa-lock"></i>
                 </div>
 
@@ -50,3 +55,6 @@
 </body>
 
 </html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
