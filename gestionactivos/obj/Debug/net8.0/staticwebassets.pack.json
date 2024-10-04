@@ -9,6 +9,30 @@
       "PackagePath": "staticwebassets\\Img\\Plantilla\\logoSumimas.png"
     },
     {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\firmar.webp",
+      "PackagePath": "staticwebassets\\Img\\firmar.webp"
+    },
+    {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\fon.jpg",
+      "PackagePath": "staticwebassets\\Img\\fon.jpg"
+    },
+    {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\fondo.avif",
+      "PackagePath": "staticwebassets\\Img\\fondo.avif"
+    },
+    {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\logo.svg",
+      "PackagePath": "staticwebassets\\Img\\logo.svg"
+    },
+    {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\css\\Layout.css",
+      "PackagePath": "staticwebassets\\css\\Layout.css"
+    },
+    {
+      "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\css\\Login.css",
+      "PackagePath": "staticwebassets\\css\\Login.css"
+    },
+    {
       "Id": "C:\\Users\\TI1\\Documents\\gestiondeactivos\\gestionactivos\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

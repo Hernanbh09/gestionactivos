@@ -54,7 +54,17 @@ namespace gestionactivos.Controllers
         public IActionResult ResultadoPlaca(string Placa)
         {
             AsignacionData data2 = new AsignacionData();
-            List<AsignacionModel> articulos = data2.ConsultarPlaca(Placa);
+            List<AsignacionModel> articulos = new List<AsignacionModel>();
+
+            try
+            {
+                articulos = data2.ConsultarPlaca(Placa);
+            }
+            catch (SqlException ex)
+            {
+                // Si ocurre un error, puedes retornar el mensaje del error
+                return Json(new { success = false, errorMessage = ex.Message });
+            }
 
             if (articulos != null && articulos.Count > 0)
             {
@@ -154,7 +164,7 @@ namespace gestionactivos.Controllers
         }
 
         [HttpPost]
-        public IActionResult AsignarEquipo(int idFuncionario, int idArticulo, int idFuncionarioContra)
+        public IActionResult AsignarEquipo(int idFuncionario, int idArticulo, int idFuncionarioContra, int? estadoCheckbox)
         {
             // Obtener el idUsuario del Claim en la sesión
             var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -169,7 +179,7 @@ namespace gestionactivos.Controllers
             try
             {
                 // Llamar al método AsignacionEquipoTerminada con el idUsuario obtenido de la sesión
-                AsignarEquipoTermi = data7.AsignacionEquipoTerminada(idFuncionario, idArticulo, idFuncionarioContra, idUsuario);
+                AsignarEquipoTermi = data7.AsignacionEquipoTerminada(idFuncionario, idArticulo, idFuncionarioContra, idUsuario, estadoCheckbox);
 
                 if (AsignarEquipoTermi != null)
                 {

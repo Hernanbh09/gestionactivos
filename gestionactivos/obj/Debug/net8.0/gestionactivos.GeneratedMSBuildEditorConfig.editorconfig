@@ -66,14 +66,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2b2x1Y2lvblxEZXZvbHVjaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Documento/Documento.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdW1lbnRvXERvY3VtZW50by5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Entrega/Entrega.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50cmVnYVxFbnRyZWdhLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Funcionarios/Editar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9zXEVkaXRhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -112,6 +104,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Movimientos/Listar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aW1pZW50b3NcTGlzdGFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Pendientes/Pendientes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVuZGllbnRlc1xQZW5kaWVudGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/TI1/Documents/gestiondeactivos/gestionactivos/Views/Shared/Error.cshtml]

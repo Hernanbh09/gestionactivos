@@ -688,18 +688,26 @@ namespace gestionactivos.pdf
 
 
             var FirmaEncargado = asignaciones[0].FirmaFuncionario;
-            byte[] imageBytes2 = Convert.FromBase64String(FirmaEncargado);
+            byte[] imageBytes2 = null;
+            if (FirmaEncargado != null)
+            {
+                imageBytes2 = Convert.FromBase64String(FirmaEncargado);
+                ImageData imageData2 = ImageDataFactory.Create(imageBytes2);
+                Image firmaImage2 = new Image(imageData2)
+                    .ScaleToFit(100, 50) // Escala la imagen
+                    .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                signatureTable.AddCell(new Cell().Add(firmaImage2).SetTextAlignment(TextAlignment.CENTER).SetBorderLeft(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER)); // Firma MINTIC
+            }
+            else
+            {
+                signatureTable.AddCell(new Cell().Add(new Paragraph("Pendiente por firmar"))
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetBorderLeft(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER)); // Mensaje de pendiente
+            }
 
-            ImageData imageData2 = ImageDataFactory.Create(imageBytes2);
-            Image firmaImage2 = new Image(imageData2)
-                .ScaleToFit(100, 50) // Escala la imagen
-                .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+            // Agregar la firma técnica asumiendo que firmaImage1 ya está definido antes
+            signatureTable.AddCell(new Cell().Add(firmaImage1).SetTextAlignment(TextAlignment.CENTER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER)); // Firma técnica
 
-
-
-
-            signatureTable.AddCell(new Cell().Add(firmaImage1).SetTextAlignment(TextAlignment.CENTER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER)); //irma técnica ass
-            signatureTable.AddCell(new Cell().Add(firmaImage2).SetTextAlignment(TextAlignment.CENTER).SetBorderLeft(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER)); // Firma MINTIC
 
 
             var NombreEntrega = $"{asignaciones[0].NombreUsuario} {asignaciones[0].ApellidoUsuario}";

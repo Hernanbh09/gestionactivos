@@ -43,7 +43,12 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Rol</label>
-                <input asp-for="Rol" type="text" class="form-control" />
+                <select class="form-select" id="seleccioneRol" name="Rol" asp-for="Rol">
+                    <option value="" disabled selected>Seleccione un rol</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Coordinador">Coordinador</option>
+                    <option value="Tecnico">Técnico</option> <!-- Asegúrate de que cada valor sea único -->
+                </select>
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>

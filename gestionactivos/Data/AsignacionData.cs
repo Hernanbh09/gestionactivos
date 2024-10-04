@@ -100,6 +100,7 @@ namespace gestionactivos.Data
             return articulos;
         }
 
+
         public AsignacionModel ConsultarCedulaContra(string cedulaContra)
         {
             AsignacionModel contratista = new AsignacionModel();
@@ -263,7 +264,7 @@ namespace gestionactivos.Data
             }
         }
 
-        public AsignacionModel AsignacionEquipoTerminada(int idFuncionario, int idArticulo, int idFuncionarioContra, int idUsuario)
+        public AsignacionModel AsignacionEquipoTerminada(int idFuncionario, int idArticulo, int idFuncionarioContra, int idUsuario, int? estadoCheckbox)
         {
             AsignacionModel AsignarEquipoTermi = new AsignacionModel();
 
@@ -278,6 +279,7 @@ namespace gestionactivos.Data
                     command.Parameters.AddWithValue("@idFuncionarioContra", idFuncionarioContra);
                     command.Parameters.AddWithValue("@idEvento",1);
                     command.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    command.Parameters.AddWithValue("@estadoCheckbox", estadoCheckbox);
 
                     SqlParameter outputIdParam = new SqlParameter("@idMovimientos", SqlDbType.Int)
                     {

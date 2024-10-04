@@ -155,7 +155,7 @@ namespace gestionactivos.Data
                     string hashedPassword = GenerateSHA256Hash(oUsuario.Contrasena);
                     cmd.Parameters.AddWithValue("Contrasena", hashedPassword); 
                     cmd.Parameters.AddWithValue("Cargo", oUsuario.Cargo);
-                    
+                    cmd.Parameters.AddWithValue("Rol", oUsuario.Rol);
 
 
                     cmd.CommandType = CommandType.StoredProcedure;

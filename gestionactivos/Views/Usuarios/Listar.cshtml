@@ -11,41 +11,41 @@
     </div>
     <div class="card-body">
         <a asp-action="Guardar" asp-controller="Usuarios" class="btn btn-success">Crear Usuario</a>
-        <hr />
-        <table id="usuariosTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Contraseña</th>
-                    <th>Cargo</th>
-                    <th>Rol</th>
-                    
-                    <th>Editar - Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <br />
+        <div class="table-responsive">
+            <!-- Agregar esta línea -->
+            <table id="usuariosTable" class="table table-bordered">
+                <thead>
                     <tr>
-                        
-                        <td>@item.Nombre</td>
-                        <td>@item.Apellidos</td>
-                        <td>@item.Correo</td>
-                        <td>@item.Contrasena</td>
-                        <td>@item.Cargo</td>
-                        <td>@item.Rol</td>
-                        
-                        <td>
-                            <a asp-action="Editar" asp-controller="Usuarios" class="btn btn-primary btn-sm" asp-route-idUsuario="@item.idUsuario">Editar</a>
-                            <a asp-action="Eliminar" asp-controller="Usuarios" class="btn btn-danger btn-sm" asp-route-idUsuario="@item.idUsuario">Eliminar</a>
-                        </td>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Contraseña</th>
+                        <th>Cargo</th>
+                        <th>Rol</th>
+                        <th>Editar - Eliminar</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Apellidos</td>
+                            <td>@item.Correo</td>
+                            <td>@item.Contrasena</td>
+                            <td>@item.Cargo</td>
+                            <td>@item.Rol</td>
+                            <td>
+                                <a asp-action="Editar" asp-controller="Usuarios" class="btn btn-primary btn-sm" asp-route-idUsuario="@item.idUsuario">Editar</a>
+                                <a asp-action="Eliminar" asp-controller="Usuarios" class="btn btn-danger btn-sm" asp-route-idUsuario="@item.idUsuario">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div> <!-- Cerrar div .table-responsive -->
     </div>
+
 </div>
 

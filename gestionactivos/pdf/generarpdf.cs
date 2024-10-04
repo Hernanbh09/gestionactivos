@@ -21,6 +21,9 @@ namespace gestionactivos.pdf
             if (asignaciones[0].EventoMovimiento == "Asignación - Histórica" || asignaciones[0].EventoMovimiento == "Devolucion - Historica")
             {
                 asignaciones[0].EventoMovimiento = "Devolución";
+            }else if(asignaciones[0].EventoMovimiento == "Pendiente Firmar")
+            {
+                asignaciones[0].EventoMovimiento = "Pendiente";
             }
 
             var NombrePdf = $"{asignaciones[0].EventoMovimiento}_{asignaciones[0].SerialArticulo}_{fechaMovimientoStr}_{asignaciones[0].idAsignacion}.pdf";
