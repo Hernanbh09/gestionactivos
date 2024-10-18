@@ -1,0 +1,23 @@
+﻿@model List<gestionactivos.Models.Usuario>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <!-- Agrega más columnas según el modelo -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.idUsuario</td>
+                <td>@usuario.Nombres</td>
+                <td>@usuario.Apellidos</td>
+                <!-- Muestra más datos si es necesario -->
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
 using gestionactivos.Configurations;
+using gestionactivos.Data;
 using gestionactivos.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -62,6 +63,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Login}/{id?}");
+    pattern: "{controller=Devolucion}/{action=Devolucion}/{id?}");
 
 app.Run();

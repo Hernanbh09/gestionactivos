@@ -1,0 +1,91 @@
+﻿@model SedesModel
+
+<div class="card">
+    <div class="card-header">
+        Editar Clientes
+    </div>
+    <div class="card-body">
+
+        @* Mostrar el mensaje si existe en ViewBag (para éxito) *@
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
+        @* Mostrar el mensaje si existe en ViewBag (para errores) *@
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Editar" asp-controller="Sedes" method="post">
+            <input asp-for="idSedes" type="text" class="form-control" />
+            <br />
+            <div class="mb-3">
+                <select class="form-select" id="seleccioneCliente" name="idClientes">
+                    <option value="0" disabled>Seleccione un cliente</option>
+                    @if (ViewData["Clientes"] != null)
+                    {
+                        var clientes = (List<SedesModel>)ViewData["Clientes"];
+                        foreach (var cliente in clientes)
+                        {
+                            <option value="@cliente.idClientes">
+                                @cliente.Cliente
+                            </option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="0">No hay clientes disponibles</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">NombreSede</label>
+                <input asp-for="NombreSede" type="text" class="form-control" />
+                <span asp-validation-for="NombreSede" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">DireccionSede</label>
+                <input asp-for="DireccionSede" type="text" class="form-control" />
+                <span asp-validation-for="DireccionSede" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">CuidadSede</label>
+                <input asp-for="CuidadSede" type="text" class="form-control" />
+                <span asp-validation-for="CuidadSede" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Sedes" class="btn btn-warning">Volver a la lista</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Esperar a que el documento esté listo
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener el valor de idClientes desde el modelo
+        var idClienteSeleccionado = @Model.idClientes;
+
+        // Obtener el elemento select
+        var selectCliente = document.getElementById("seleccioneCliente");
+
+        // Verificar si existe el cliente seleccionado
+        if (selectCliente) {
+            for (var i = 0; i < selectCliente.options.length; i++) {
+                if (parseInt(selectCliente.options[i].value) === idClienteSeleccionado) {
+                    selectCliente.selectedIndex = i; // Selecciona el cliente
+                    break; // Salir del bucle una vez encontrado
+                }
+            }
+        }
+    });
+</script>

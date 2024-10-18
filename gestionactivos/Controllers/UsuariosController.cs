@@ -2,19 +2,30 @@
 using gestionactivos.Data;
 using gestionactivos.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 
 
 namespace gestionactivos.Controllers
 {
     [Authorize(Policy = "GlobalPolicy")] // Aplicar la política global
-    [Authorize(Roles = "Administrador,Coordinador")]
+    [Authorize(Roles = "Administrador")]
     public class UsuariosController : Controller
     {
         UsuariosData _UsuariosDatos = new UsuariosData();
+        private int? idUsuarioC;
+
+        // Este método se ejecuta antes de cada acción del controlador
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            idUsuarioC = idUsuarioClaim != null ? (int?)Convert.ToInt32(idUsuarioClaim.Value) : null;
+            base.OnActionExecuting(context);
+        }
 
         public IActionResult Listar()
         {
-            var oLista = _UsuariosDatos.Listar();
+            var oLista = _UsuariosDatos.Listar(idUsuarioC);
 
             return View(oLista);
         }
@@ -32,7 +43,7 @@ namespace gestionactivos.Controllers
                 return View();
 
             string mensajeError;
-            var respuesta = _UsuariosDatos.Guardar(oUsuario, out mensajeError);
+            var respuesta = _UsuariosDatos.Guardar(oUsuario, out mensajeError, idUsuarioC);
 
             if (respuesta)
             {
@@ -56,9 +67,6 @@ namespace gestionactivos.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-
-
-
             //Recibir un objeto y guardarlo en la base de datos
             var respuesta = _UsuariosDatos.Editar(oUsuario);
             if (respuesta)

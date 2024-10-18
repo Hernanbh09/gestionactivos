@@ -57,7 +57,12 @@
                 </select>
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
-
+            <div class="mb-3">
+                <label class="form-label">Seleccionar Imagen (PNG), Fondo Transparente </label>
+                <input type="file" id="imagenInput" class="form-control" accept="image/png">
+                <input type="hidden" asp-for="ImagenBase64" id="imagenBase64">
+                <span asp-validation-for="ImagenBase64" class="text-danger"></span>
+            </div>
 
             <button type="submit" class="btn btn-primary">Guardar</button>
             <a asp-action="Listar" asp-controller="Usuarios" class="btn btn-warning">Volver a la lista</a>
@@ -67,3 +72,18 @@
 
     </div>
 </div>
+<script>
+    document.getElementById('imagenInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file && file.type === 'image/png') {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const base64String = event.target.result.split(',')[1]; // Obtener solo la parte Base64
+                document.getElementById('imagenBase64').value = base64String;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Por favor, seleccione un archivo PNG válido.');
+        }
+    });
+</script>

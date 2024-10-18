@@ -1,5 +1,6 @@
-﻿using gestionactivos.Models;
-using Microsoft.Data.SqlClient;
+﻿using gestionactivos.Error;
+using gestionactivos.Models;
+using System.Data.SqlClient;
 using System.Data;
 using System.Globalization;
 
@@ -16,9 +17,10 @@ namespace gestionactivos.Data
             connectionString = conexion.getCadenaSQL();
         }
 
-        public List<DevolucionModel> ConsultarCedula(string cedula)
+        public List<DevolucionModel> ConsultarCedula(string cedula, int? idUsuario)
         {
             List<DevolucionModel> funcionarios = new List<DevolucionModel>();
+            var errorLogger = new ErrorLogger();
 
             // Validar la cédula antes de realizar la consulta
             if (string.IsNullOrWhiteSpace(cedula))
@@ -35,7 +37,7 @@ namespace gestionactivos.Data
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@cedula", cedula);
+                        command.Parameters.Add("@cedula", SqlDbType.VarChar).Value = cedula;
 
                         connection.Open();
 
@@ -67,13 +69,11 @@ namespace gestionactivos.Data
                                     ModeloAdicional = reader.IsDBNull(19) ? string.Empty : reader.GetString(19),
                                     SerialAdicional = reader.IsDBNull(20) ? string.Empty : reader.GetString(20),
                                     PlacaAdicional = reader.IsDBNull(21) ? string.Empty : reader.GetString(21),
-
                                 };
 
                                 funcionarios.Add(funcionario);
-                                
-                                Console.WriteLine($"ResponsableIdFuncionario: {funcionarios}");
-                            
+                                // Cambié Console.WriteLine por un logger adecuado
+                                // logger.LogInformation($"ResponsableIdFuncionario: {funcionario.ResponsableIdFuncionario}");
                             }
                         }
                     }
@@ -81,13 +81,12 @@ namespace gestionactivos.Data
             }
             catch (SqlException ex)
             {
-                // Manejar excepciones relacionadas con SQL
-                // Por ejemplo, registrar el error o lanzar una excepción personalizada
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(ConsultarCedula), idUsuario);
                 throw new Exception("Error al consultar la cédula en la base de datos.", ex);
             }
             catch (Exception ex)
             {
-                // Manejar otras excepciones
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(ConsultarCedula), idUsuario);
                 throw new Exception("Error inesperado al consultar la cédula.", ex);
             }
 
@@ -95,8 +94,10 @@ namespace gestionactivos.Data
         }
 
 
-        public bool GuardarFirmaFuncionario(int idFuncionario, string dataURL)
+
+        public bool GuardarFirmaFuncionario(int CedulaFuncionario, string dataURL)
         {
+            var errorLogger = new ErrorLogger();
             try
             {
                 // Extraer la parte Base64 de la cadena Data URL
@@ -104,11 +105,11 @@ namespace gestionactivos.Data
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string sqlQuery = "sp_GuardarFirmarFunci"; // Nombre del procedimiento almacenado
+                    string sqlQuery = "sp_GuardarFirmarFunciDe"; // Nombre del procedimiento almacenado
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@IdFuncionario", idFuncionario);
+                        command.Parameters.AddWithValue("@CedulaFuncionario", CedulaFuncionario);
                         command.Parameters.AddWithValue("@FirmaFuncionario", base64String); // Pasar la cadena Base64 directamente
 
                         connection.Open();
@@ -120,12 +121,13 @@ namespace gestionactivos.Data
             catch (Exception ex)
             {
                 // Registra el error (opcionalmente)
-                Console.WriteLine(ex.Message);
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaFuncionario), CedulaFuncionario);
                 return false; // Si ocurre un error, devolvemos false
             }
         }
         public bool GuardarFirmaContratista(int idContratista, string dataURLR)
         {
+            var errorLogger = new ErrorLogger();
             try
             {
                 string base64String = dataURLR.Split(',')[1]; // Convertir Base64 a binario
@@ -148,7 +150,7 @@ namespace gestionactivos.Data
             catch (Exception ex)
             {
                 // Registra el error (opcionalmente)
-                Console.WriteLine(ex.Message);
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaContratista), idContratista);
                 return false; // Si ocurre un error, devolvemos false
             }
         }
@@ -157,40 +159,47 @@ namespace gestionactivos.Data
         public DevolucionModel DevolucionEquipoTerminado(int idFuncionario, int idFuncionarioContra, int idArticulo, int idUsuario, int idMovimiento, string Observacion)
         {
             DevolucionModel devolucionEquipo = new DevolucionModel();
+            var errorLogger = new ErrorLogger();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                string sqlQuery = "sp_RegistrarMovimiento";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    // Parámetros de entrada
-                    command.Parameters.AddWithValue("@idEvento", 2); // Devolución
-                    command.Parameters.AddWithValue("@idFuncionario", idFuncionario);
-                    command.Parameters.AddWithValue("@idFuncionarioContra", idFuncionarioContra);
-                    command.Parameters.AddWithValue("@idArticulo", idArticulo);
-                    command.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    command.Parameters.AddWithValue("@Observacion", Observacion);
-                    command.Parameters.AddWithValue("@idMovimiento", idMovimiento);
-
-                    // Parámetro de salida para @idMovimientos
-                    SqlParameter outputIdMovimientos = new SqlParameter("@idMovimientos", SqlDbType.Int);
-                    outputIdMovimientos.Direction = ParameterDirection.Output;
-                    command.Parameters.Add(outputIdMovimientos);
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-
-                    // Recuperar el valor de salida @idMovimientos
-                    if (outputIdMovimientos.Value != DBNull.Value)
+                    string sqlQuery = "sp_RegistrarMovimiento";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
-                        // Almacena el idMovimientos en el modelo
-                        devolucionEquipo.IdMovimientos = (int)outputIdMovimientos.Value; // Asegúrate de que la propiedad IdMovimientos exista en DevolucionModel
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Parámetros de entrada
+                        command.Parameters.AddWithValue("@idEvento", 2); // Devolución
+                        command.Parameters.AddWithValue("@idFuncionario", idFuncionario);
+                        command.Parameters.AddWithValue("@idFuncionarioContra", idFuncionarioContra);
+                        command.Parameters.AddWithValue("@idArticulo", idArticulo);
+                        command.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        command.Parameters.AddWithValue("@Observacion", Observacion);
+                        command.Parameters.AddWithValue("@idMovimiento", idMovimiento);
+
+                        // Parámetro de salida para @idMovimientos
+                        SqlParameter outputIdMovimientos = new SqlParameter("@idMovimientos", SqlDbType.Int);
+                        outputIdMovimientos.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(outputIdMovimientos);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+                        // Recuperar el valor de salida @idMovimientos
+                        if (outputIdMovimientos.Value != DBNull.Value)
+                        {
+                            // Almacena el idMovimientos en el modelo
+                            devolucionEquipo.IdMovimientos = (int)outputIdMovimientos.Value; // Asegúrate de que la propiedad IdMovimientos exista en DevolucionModel
+                        }
                     }
                 }
             }
-
+            catch (Exception ex)
+            {
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(DevolucionEquipoTerminado), idUsuario);
+            }
             return devolucionEquipo;
         }
 

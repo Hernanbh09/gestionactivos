@@ -1,4 +1,5 @@
-﻿using gestionactivos.Models;
+﻿using gestionactivos.Error;
+using gestionactivos.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,42 +8,53 @@ namespace gestionactivos.Data
     public class ArticulosData
     {
 
-        public List<ArticulosModel> Listar()
+        public List<ArticulosModel> Listar(int? idUsuario)
         {
 
             var olist = new List<ArticulosModel>();
             //instacion de conexion
             var cn = new Conexion();
-            using (var conexion = new SqlConnection(cn.getCadenaSQL()))
+            var errorLogger = new ErrorLogger();
+            try
             {
-                conexion.Open();
-                SqlCommand cmd = new SqlCommand("sp_ListarA", conexion);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using (var dr = cmd.ExecuteReader())
+                using (var conexion = new SqlConnection(cn.getCadenaSQL()))
                 {
-                    while (dr.Read())
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_ListarA", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = cmd.ExecuteReader())
                     {
-                        //lectura de todo el resultado
-                        olist.Add(new ArticulosModel()
+                        while (dr.Read())
                         {
-                            idArticulo = Convert.ToInt32(dr["idArticulo"]),
-                            Categoria = dr["Categoria"].ToString(),
-                            Modelo = dr["Modelo"].ToString(),
-                            Serial = dr["Serial"].ToString(),
-                            Placa = dr["Placa"].ToString(),
+                            //lectura de todo el resultado
+                            olist.Add(new ArticulosModel()
+                            {
+                                idArticulo = Convert.ToInt32(dr["idArticulo"]),
+                                Categoria = dr["Categoria"].ToString(),
+                                Modelo = dr["Modelo"].ToString(),
+                                Serial = dr["Serial"].ToString(),
+                                Placa = dr["Placa"].ToString(),
 
-                        });
+                            });
 
+                        }
                     }
                 }
             }
+            catch (Exception ex )
+            {
+                errorLogger.RegistrarError(ex, "Articulos Metodo:" + nameof(Listar), idUsuario);
+            }
+
+           
             return olist;
         }
 
-        public string Guardar(ArticulosModel oArticulo)
+        public string Guardar(ArticulosModel oArticulo, int? idUsuario)
         {
             string mensaje = null;
+            var errorLogger = new ErrorLogger();
             try
             {
                 var cn = new Conexion();
@@ -64,39 +76,54 @@ namespace gestionactivos.Data
             catch (SqlException ex)
             {
                 mensaje = ex.Message;  // Capturar el mensaje de error SQL
+                errorLogger.RegistrarError(ex, "Articulos Metodo:" + nameof(Guardar), idUsuario);
             }
             return mensaje;
         }
 
-        public ArticulosModel Obtener(int idArticulo)
+        public ArticulosModel Obtener(int idArticulo, int? idUsuario)
         {
             var oArticulos = new ArticulosModel();
             var cn = new Conexion();
-            using (var conexion = new SqlConnection(cn.getCadenaSQL()))
-            {
-                conexion.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerA", conexion);
-                cmd.Parameters.AddWithValue("idArticulo", idArticulo);
-                cmd.CommandType = CommandType.StoredProcedure;
+            var errorLogger = new ErrorLogger();
 
-                using (var dr = cmd.ExecuteReader())
+            try
+            {
+                using (var conexion = new SqlConnection(cn.getCadenaSQL()))
                 {
-                    while (dr.Read())
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_ObtenerA", conexion);
+                    cmd.Parameters.AddWithValue("idArticulo", idArticulo);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = cmd.ExecuteReader())
                     {
-                        oArticulos.idArticulo = Convert.ToInt32(dr["idArticulo"]);
-                        oArticulos.Categoria = dr["Categoria"].ToString();
-                        oArticulos.Modelo = dr["Modelo"].ToString();
-                        oArticulos.Serial = dr["Serial"].ToString();
-                        oArticulos.Placa = dr["Placa"].ToString();
+                        while (dr.Read())
+                        {
+                            oArticulos.idArticulo = Convert.ToInt32(dr["idArticulo"]);
+                            oArticulos.Categoria = dr["Categoria"].ToString();
+                            oArticulos.Modelo = dr["Modelo"].ToString();
+                            oArticulos.Serial = dr["Serial"].ToString();
+                            oArticulos.Placa = dr["Placa"].ToString();
+                        }
                     }
                 }
             }
+            catch (Exception ex )
+            {
+
+                errorLogger.RegistrarError(ex, "Articulos Metodo:" + nameof(Obtener), idUsuario);
+            }
+
+
+           
             return oArticulos;
         }
 
-        public bool Editar(ArticulosModel oArticulo)
+        public bool Editar(ArticulosModel oArticulo, int? idUsuario)
         {
             bool rspta;
+            var errorLogger = new ErrorLogger();
             try
             {
                 //instacion de conexion
@@ -126,16 +153,17 @@ namespace gestionactivos.Data
             {
                 string error = ex.Message;
                 rspta = false;
+                errorLogger.RegistrarError(ex, "Articulos Metodo:" + nameof(Editar), idUsuario);
 
-              
             }
             return rspta;
 
         }
 
-        public bool Eliminar(int idArticulo)
+        public bool Eliminar(int idArticulo, int? idUsuario)
         {
             bool rspta;
+            var errorLogger = new ErrorLogger();
             try
             {
                 //instacion de conexion
@@ -157,6 +185,7 @@ namespace gestionactivos.Data
             {
                 string error = ex.Message;
                 rspta = false;
+                errorLogger.RegistrarError(ex, "Articulos Metodo:" + nameof(Eliminar), idUsuario);
             }
 
             return rspta;

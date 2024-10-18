@@ -46,6 +46,7 @@ namespace gestionactivos.Models
         public string? Clientes { get; set; }
         public int? idSedes { get; set; }
         public string? NombreSedes { get; set; }
+        public int? Estado { get; set; }
 
 
     }

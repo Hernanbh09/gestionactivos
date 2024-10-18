@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -12,9 +12,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Clientes\Editar.cshtml" />
+    <None Include="Views\Clientes\Eliminar.cshtml" />
+    <None Include="Views\Clientes\Guardar.cshtml" />
+    <None Include="Views\Clientes\Listar.cshtml" />
+    <None Include="Views\Sedes\Editar.cshtml" />
+    <None Include="Views\Sedes\Eliminar.cshtml" />
+    <None Include="Views\Sedes\Guardar.cshtml" />
+    <None Include="Views\Sedes\Listar.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="itext7" Version="8.0.5" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />

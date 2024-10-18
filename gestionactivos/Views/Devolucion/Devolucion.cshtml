@@ -70,7 +70,7 @@
                         <td>@articulo.PlacaArticulo</td>
 
                         <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DevolverEquipo_@articulo.idMovimientos">Devolver</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DevolverEquipo" id="@articulo.idMovimientos">Devolver</button>
                         </td>
                     </tr>
 
@@ -104,97 +104,48 @@
                         </td>
                     </tr>
 
-                    <!-- Modal para cada fila -->
-                    <div class="modal fade" id="DevolverEquipo_@articulo.idMovimientos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                    <!-- Modal -->
+                    <div class="modal fade" id="DevolverEquipo" tabindex="-1" aria-labelledby="devolverEquipoLabel" aria-hidden="true" data-bs-backdrop="static">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5">Devolver Equipo</h1>
+                                    <h5 class="modal-title" id="devolverEquipoLabel">Devolver Equipo</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    @if (!string.IsNullOrEmpty(articulo.EncargadoCedula))
-                                    {
-                                        <button id="open-signature-modal-funcionario_@articulo.EncargadoIdFuncionario" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signatureModalFuncionario_@articulo.EncargadoIdFuncionario" data-bs-backdrop="static"> Firmar Entrega Funcionario</button>
-                                    }
-
-                                    @if (!string.IsNullOrEmpty(articulo.ResponsableCedula))
-                                    {
-                                        <button id="open-signature-modal-contratista_@articulo.ResponsableIdFuncionario" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#signatureModalContratista_@articulo.ResponsableIdFuncionario" data-bs-backdrop="static"> Firmar Entrega Contratista</button>
-                                    }
-
-                                    <div class="alert alert-success mt-3" style="display:none;" id="successMensajeFirmaFunc">Se agregó correctamente la firma de funcionario.</div>
-                                    <div class="alert alert-success mt-3" style="display:none;" id="successMensajeFirmaCont">Se agregó correctamente la firma de Contratista.</div>
-                                    <br /><br />
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a comment here" id="Observaciones_@articulo.idArticulo" style="overflow: hidden; height: 100px"></textarea>
-                                        <label for="Observaciones">Observaciones</label>
+                                    <div class="mb-3">
+                                        <label for="comentarios" class="form-label">Comentarios:</label>
+                                        <textarea class="form-control" id="comentarios" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary devolver-equipo-btn"
-                                            data-idfuncionario="@articulo.EncargadoIdFuncionario"
-                                            data-idfuncionariocontra="@articulo.ResponsableIdFuncionario"
-                                            data-idarticulo="@articulo.idArticulo"
-                                            data-idmovimiento="@articulo.idMovimientos">
-                                        Devolver Equipo
-                                    </button>
+                                    <button type="button" class="btn btn-danger" id="confirmarDevolucion">Devolver</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="rotate-device-overlay">
-                        <div>
-                            <h1>Por favor, gira tu dispositivo a modo horizontal para firmar</h1>
-                        </div>
-                    </div>
-                    <!-- Modal Firma Funcionario -->
-                    <div class="modal fade" id="signatureModalFuncionario_@articulo.EncargadoIdFuncionario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signatureModalLabelFuncionario" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal fade" id="DevolverDetalle" tabindex="-1" aria-labelledby="devolverDetalleLabel" aria-hidden="true">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="signatureModalLabelFuncionario">Firma Funcionario</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <h5 class="modal-title" id="devolverDetalleLabel">Devolver Detalle</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <canvas id="signature-pad-funcionario_@articulo.EncargadoIdFuncionario" style="border: 1px solid #000; width: 400px; height: 200px;" data-id="@articulo.EncargadoIdFuncionario" data-idmovimientos="@articulo.idMovimientos"></canvas>
-                                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaFuncionario_@articulo.EncargadoIdFuncionario">Error al firmar, firma dentro del recuadro.</div>
-                                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaFunc_@articulo.EncargadoIdFuncionario">Error al firmar funcionario.</div>
+                                <div class="modal-body" id="devolverDetalleBody">
+                                    <div class="mb-3">
+                                        <canvas id="signatureCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" id="clearCanvas">Limpiar Firma</button>
+                                    <button type="button" class="btn btn-primary" id="saveSignature">Guardar Firma</button>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-danger" id="clear-funcionario_@articulo.EncargadoIdFuncionario">Limpiar</button>
-                                    <button type="button" class="btn btn-success" id="save-funcionario_@articulo.EncargadoIdFuncionario">Guardar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Modal Firma Contratista -->
-                    <div class="modal fade" id="signatureModalContratista_@articulo.ResponsableIdFuncionario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signatureModalLabelContratista" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="signatureModalLabelContratista">Firma Contratista</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <canvas id="signature-pad-contratista_@articulo.ResponsableIdFuncionario" style="border: 1px solid #000; width: 400px; height: 200px;" data-id="@articulo.ResponsableIdFuncionario" data-idmovimientos="@articulo.idMovimientos"></canvas>
-                                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaRequeridaContratista_@articulo.ResponsableIdFuncionario">Error al firmar, firma dentro del recuadro.</div>
-                                    <div class="alert alert-danger mt-3" style="display:none;" id="errorMensajeFirmaCont_@articulo.ResponsableIdFuncionario">Error al firmar Contratista.</div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-danger" id="clear-contratista_@articulo.ResponsableIdFuncionario">Limpiar</button>
-                                    <button type="button" class="btn btn-success" id="save-contratista_@articulo.ResponsableIdFuncionario">Guardar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 }
             </tbody>
         </table>
@@ -203,243 +154,116 @@
 
 @section script{
     <script>
-        var signaturePads = {};
-
         document.addEventListener('DOMContentLoaded', function () {
-            setupEventListeners();
-        });
+            let signaturePad;
 
-        function setupEventListeners() {
-            window.addEventListener('resize', handleWindowResize);
-            // Usar delegación de eventos para manejar modales dinámicamente
-            $(document).on('shown.bs.modal', '[id^="signatureModalFuncionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                initializeSignaturePad(id, 'funcionario');
-                resizeCanvas(id, 'funcionario');
-                signaturePads[id].clear();
-                checkOrientation();
+            const devolverButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
+
+            devolverButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const idMovimientos = this.id;
+                    const modalTitle = document.getElementById('devolverEquipoLabel');
+                    modalTitle.textContent = `Devolver Equipo - ID: ${idMovimientos}`;
+
+                    const row = this.closest('tr');
+                    const encargadoId = row.querySelector('td:nth-child(1)').textContent;
+                    const responsableId = row.querySelector('td:nth-child(5)').textContent;
+
+                    const modalBody = document.querySelector('.modal-body');
+                    modalBody.innerHTML = `
+                            <p>¿Está seguro de que desea devolver el equipo?</p>
+                            <div class="mb-3">
+                                <label for="comentarios" class="form-label">Comentarios:</label>
+                                <textarea class="form-control" id="comentarios" rows="3"></textarea>
+                            </div>
+                        `;
+
+                    if (encargadoId) {
+                        const buttonEncargado = document.createElement('button');
+                        buttonEncargado.className = 'btn btn-danger me-2';
+                        buttonEncargado.textContent = 'Devolver para Encargado';
+                        buttonEncargado.onclick = function () {
+                            abrirSegundoModal(idMovimientos, encargadoId, 'Encargado');
+                        };
+                        modalBody.appendChild(buttonEncargado);
+                    }
+
+                    if (responsableId) {
+                        const buttonResponsable = document.createElement('button');
+                        buttonResponsable.className = 'btn btn-danger';
+                        buttonResponsable.textContent = 'Devolver para Responsable';
+                        buttonResponsable.onclick = function () {
+                            abrirSegundoModal(idMovimientos, responsableId, 'Responsable');
+                        };
+                        modalBody.appendChild(buttonResponsable);
+                    }
+                });
             });
 
-            $(document).on('shown.bs.modal', '[id^="signatureModalContratista_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                initializeSignaturePad(id, 'contratista');
-                resizeCanvas(id, 'contratista');
-                signaturePads[id].clear();
-                checkOrientation();
-            });
+            function abrirSegundoModal(idMovimientos, funcionarioId, tipoFuncionario) {
+                const modalTitle = document.getElementById('devolverDetalleLabel');
+                modalTitle.textContent = `Devolver Detalle - ID Movimiento: ${idMovimientos}`;
 
-            // Delegación para limpiar y guardar firmas
-            $(document).on('click', '[id^="clear-funcionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                clearSignaturePad(id, 'funcionario');
-            });
+                const modalBody = document.getElementById('devolverDetalleBody');
+                modalBody.innerHTML = `
+                        <div class="mb-3">
+                            <canvas id="signatureCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="clearCanvas">Limpiar Firma</button>
+                        <button type="button" class="btn btn-primary" id="saveSignature">Guardar Firma</button>
+                    `;
 
-            $(document).on('click', '[id^="save-funcionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                saveSignatureF(id);
-            });
+                // Inicializar Signature Pad
+                const canvas = document.getElementById('signatureCanvas');
+                signaturePad = new SignaturePad(canvas);
 
-            $(document).on('click', '[id^="clear-contratista_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                clearSignaturePad(id, 'contratista');
-            });
+                // Botón para limpiar la firma
+                const clearButton = document.getElementById('clearCanvas');
+                clearButton.addEventListener('click', () => {
+                    signaturePad.clear();
+                });
 
-            $(document).on('click', '[id^="save-contratista_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                saveSignatureR(id);
-            });
-        }
+                // Botón para guardar la firma
+                const saveButton = document.getElementById('saveSignature');
+                saveButton.addEventListener('click', () => {
+                    guardarFirma(funcionarioId);
+                });
 
-        function initializeSignaturePad(id, type) {
-            var canvasId = type === 'funcionario' ? `signature-pad-funcionario_${id}` : `signature-pad-contratista_${id}`;
-            var canvas = document.getElementById(canvasId);
-
-            if (!signaturePads[id]) {
-                signaturePads[id] = new SignaturePad(canvas);
+                // Mostrar el segundo modal
+                const devolverDetalleModal = new bootstrap.Modal(document.getElementById('DevolverDetalle'));
+                devolverDetalleModal.show();
             }
-        }
 
-        function resizeCanvas(id, type) {
-            var ratio = Math.max(window.devicePixelRatio || 1, 1);
-            var canvasId = type === 'funcionario' ? `signature-pad-funcionario_${id}` : `signature-pad-contratista_${id}`;
-            var canvas = document.getElementById(canvasId);
-
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext("2d").scale(ratio, ratio);
-        }
-
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                document.getElementById('rotate-device-overlay').style.display = 'flex';
-            } else {
-                document.getElementById('rotate-device-overlay').style.display = 'none';
-            }
-        }
-
-        function handleWindowResize() {
-            Object.keys(signaturePads).forEach(id => {
-                if ($(`#signatureModalFuncionario_${id}`).is(':visible')) {
-                    resizeCanvas(id, 'funcionario');
-                    checkOrientation();
+            function guardarFirma(funcionarioId) {
+                if (signaturePad.isEmpty()) {
+                    alert("Por favor, firme en el recuadro.");
+                    return;
                 }
-                if ($(`#signatureModalContratista_${id}`).is(':visible')) {
-                    resizeCanvas(id, 'contratista');
-                    checkOrientation();
-                }
-            });
-        }
 
-        function clearSignaturePad(id, type) {
-            if (signaturePads[id]) {
-                signaturePads[id].clear();
-            }
-        }
+                const dataURL = signaturePad.toDataURL();
 
-        function saveSignatureF(idFuncionario) {
-            var idMovimientos = $('#signature-pad-funcionario_' + idFuncionario).data('idmovimientos');
-
-            // Comprobar si el signature pad está vacío
-            if (signaturePads[idFuncionario].isEmpty()) {
-                $('#errorMensajeFirmaRequeridaFuncionario').show();
-            } else {
-                $('#errorMensajeFirmaRequeridaFuncionario').hide();
-                var dataURL = signaturePads[idFuncionario].toDataURL();
-
+                // Enviar la firma al servidor
                 $.ajax({
                     url: '@Url.Action("SaveSignatureFuncionario", "Devolucion")',
                     type: 'POST',
                     data: {
-                        idFuncionario: idFuncionario,
+                        CedulaFuncionario: funcionarioId,
                         dataURL: dataURL
                     },
                     success: function (response) {
                         if (response.success) {
-                            $('#successMensajeFirmaFunc').show();
-                            $('#errorMensajeFirmaFunc').hide();
-
-                            // Ocultar el modal de firma después de guardar
-                            $('#signatureModalFuncionario_' + idFuncionario).modal('hide'); // Cerrar modal de firma
-
-                            // Mostrar mensaje en el modal DevolverEquipo correspondiente
-                            $('#successMensajeFirmaFunc')
-                                .appendTo('#DevolverEquipo-' + idMovimientos + ' .modal-body')
-                                .show();
-
-                            // Abrir automáticamente el modal DevolverEquipo
-                            setTimeout(function () {
-                                $('#DevolverEquipo_' + idMovimientos).modal('show');
-                            }, 100); // Retraso de 100 ms
-
+                            alert("Firma guardada exitosamente.");
                         } else {
-                            $('#successMensajeFirmaFunc').hide();
-                            $('#errorMensajeFirmaFunc').show();
+                            alert("Error al guardar la firma: " + response.message);
                         }
                     },
-                    error: function (xhr, status, error) {
-                        alert('Error en la solicitud AJAX.');
+                    error: function () {
+                        alert("Error en la solicitud de guardado de firma.");
                     }
                 });
             }
-        }
-        function saveSignatureR(idContratista) {
-            var idMovimientos = $('#signature-pad-contratista_' + idContratista).data('idmovimientos');
-            // Comprobar si el signature pad está vacío
-            if (signaturePads[idContratista].isEmpty()) {
-                $('#errorMensajeFirmaRequeridaContratista').show();
-            } else {
-                $('#errorMensajeFirmaRequeridaContratista').hide();
-                var dataURLR = signaturePads[idContratista].toDataURL();
-                $.ajax({
-                    url: '@Url.Action("SaveSignatureContratista", "Devolucion")',
-                    type: 'POST',
-                    data: {
-                        idContratista: idContratista,
-                        dataURLR: dataURLR
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            $('#successMensajeFirmaCont').show();
-                            $('#errorMensajeFirmaCont').hide();
-
-                            // Ocultar el modal de firma después de guardar
-                            $('#signatureModalContratista_' + idContratista).modal('hide'); // Cerrar modal de firma
-
-                            // Mostrar mensaje en el modal DevolverEquipo correspondiente
-                            $('#successMensajeFirmaCont')
-                                .appendTo('#DevolverEquipo-' + idMovimientos + ' .modal-body')
-                                .show();
-
-                            // Comprobar ID antes de abrir el modal
-                            console.log('ID Movimientos:', idMovimientos);
-                            var modalID = '#DevolverEquipo_' + idMovimientos;
-
-                            // Asegúrate de que el modal está cerrado antes de abrir
-                            $(modalID).modal('hide'); // Cerrar el modal si está abierto
-                            setTimeout(function () {
-                                $(modalID).modal('show');
-                            }, 100); // Retraso de 100 ms
-
-                        } else {
-                            $('#successMensajeFirmaCont').hide();
-                            $('#errorMensajeFirmaCont').show();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert('Error en la solicitud AJAX.');
-                    }
-                });
-            }
-        }
-        $(document).ready(function () {
-            $(document).on('click', '.devolver-equipo-btn', function () {
-                var idFuncionario = $(this).data('idfuncionario');
-                var idFuncionarioContra = $(this).data('idfuncionariocontra');
-                var idArticulo = $(this).data('idarticulo');
-                var idMovimiento = $(this).data('idmovimiento');
-                var observacion = $('#Observaciones_' + idArticulo).val();
-
-                if (observacion === undefined || observacion.trim() === "") {
-                    $('#error-message').text("Por favor, ingrese una observación.");
-                    return;
-                }
-
-                $.ajax({
-                    url: '@Url.Action("DevolverEquipo", "Devolucion")',
-                    type: 'POST',
-                    data: {
-                        idFuncionario: idFuncionario,
-                        idFuncionarioContra: idFuncionarioContra,
-                        idArticulo: idArticulo,
-                        idMovimiento: idMovimiento,
-                        Observacion: observacion
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            // Remover la fila principal y la fila de detalles
-                            $('#DevolucionTable tr[data-id="' + idArticulo + '"]').next().remove(); // Eliminar la fila de detalles
-                            $('#DevolucionTable tr[data-id="' + idArticulo + '"]').remove(); // Eliminar la fila principal
-
-                            // Verificar si quedan filas en la tabla
-                            if ($('#DevolucionTable tbody tr').length === 0) {
-                                $('#DevolucionTable').remove(); // Eliminar la tabla
-                                $('#message-container').html('<div class="alert alert-success mt-3" >Se devuelve equipo correctamente.</div>'); // Mostrar el mensaje
-                            }
-
-                            // Cerrar el modal
-                            $('#DevolverEquipo_' + idMovimiento).modal('hide'); // Cambia `idMovimiento` por el ID del modal correspondiente.
-                        } else {
-                            console.error('Error: ' + response.errorMessage);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error en la solicitud AJAX.');
-                    }
-                });
-            });
         });
-
-
     </script>
+
 
 }

@@ -39,7 +39,7 @@
                     <form id="logoutForm" asp-controller="Login" asp-action="Logout" method="post" style="display: inline;">
                         <button type="submit" class="cerrar">Cerrar sesión</button>
                     </form>
-                    
+
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <div class="nav-bottom">
                 <div class="container3">
@@ -57,11 +57,20 @@
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         @if (User.IsInRole("Administrador"))
                         {
+                            <li><a asp-controller="Clientes" asp-action="Listar">Clientes</a></li>
+                            <li><a asp-controller="Sedes" asp-action="Listar">Sedes</a></li>
                             <li><a asp-controller="Usuarios" asp-action="Listar">Usuarios</a></li>
                             <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                             <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
                             <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-                          
+
+                        }
+                        @if (User.IsInRole("Coordinador"))
+                        {
+                            <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
+                            <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
+                            <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
+
                         }
                         @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Tecnico"))
                         {
@@ -73,9 +82,9 @@
                     </ul>
                 </div>
             </div>
-            
+
         </nav>
-      
+
 
         <!-- Menú lateral -->
         <div class="offcanvas offcanvas-start" id="offcanvasMenu" tabindex="-1" aria-labelledby="offcanvasMenuLabel">
@@ -88,11 +97,20 @@
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     @if (User.IsInRole("Administrador"))
                     {
+                        <li><a asp-controller="Clientes" asp-action="Listar">Clientes</a></li>
+                        <li><a asp-controller="Sedes" asp-action="Listar">Sedes</a></li>
                         <li><a asp-controller="Usuarios" asp-action="Listar">Usuarios</a></li>
                         <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
                         <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
                         <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-                       
+
+                    }
+                    @if (User.IsInRole("Coordinador"))
+                    {
+                        <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
+                        <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
+                        <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
+
                     }
                     @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Tecnico"))
                     {
@@ -108,17 +126,17 @@
     </header>
 
 
-        <main role="main" class="pb-3">
-            <div class="container">
-                @RenderBody()
-                <button id="subirArriba" class="btn btn-primary" title="Subir arriba">
-                    <i class="bi bi-arrow-up"></i> <!-- Usando Bootstrap Icons -->
-                </button>
+    <main role="main" class="pb-3">
+        <div class="container">
+            @RenderBody()
+            <button id="subirArriba" class="btn btn-primary" title="Subir arriba">
+                <i class="bi bi-arrow-up"></i> <!-- Usando Bootstrap Icons -->
+            </button>
 
-            </div>
-        </main>
+        </div>
+    </main>
 
-        
+
 
     <footer class="footer">
         <div class="container2">

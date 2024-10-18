@@ -25,5 +25,7 @@ namespace gestionactivos.Models
 
         [Required(ErrorMessage = "El campo Rol es obligatorio")]
         public string? Rol { get; set; }
+
+        public string? ImagenBase64 { get; set; }
     }
 }

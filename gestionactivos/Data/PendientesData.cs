@@ -1,4 +1,5 @@
-﻿using gestionactivos.Models;
+﻿using gestionactivos.Error;
+using gestionactivos.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -13,41 +14,52 @@ namespace gestionactivos.Data
             Conexion conexion = new Conexion();
             connectionString = conexion.getCadenaSQL();
         }
-        public List<PendientesModel> Listar()
+        public List<PendientesModel> Listar(int? idUsuario)
         {
             var olist = new List<PendientesModel>();
             var cn = new Conexion();
 
-            using (var conexion = new SqlConnection(cn.getCadenaSQL()))
+            var errorLogger = new ErrorLogger();
+            try
             {
-                conexion.Open();
-                SqlCommand cmd = new SqlCommand("sp_ConsultarPendientes", conexion);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using (var dr = cmd.ExecuteReader())
+                using (var conexion = new SqlConnection(cn.getCadenaSQL()))
                 {
-                    while (dr.Read())
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_ConsultarPendientes", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = cmd.ExecuteReader())
                     {
-                        olist.Add(new PendientesModel()
+                        while (dr.Read())
                         {
-                            idMovimientos = Convert.ToInt32(dr["idMovimientos"]),
-                            idFuncionarioResponsable = Convert.ToInt32(dr["idFuncionarioResponsable"]),
-                            Evento = dr["Evento"].ToString(),
-                            FechaMovimiento = Convert.ToDateTime(dr["FechaMovimiento"]), // Leer la fecha del movimiento
-                            Cedula = dr["Cedula"].ToString(), // Leer la cédula del funcionario
-                            NombreCompleto = dr["NombreCompleto"].ToString(), // Leer el nombre completo concatenado
-                            Placa = dr["Placa"].ToString(), // Leer la placa del artículo
-                            Serial = dr["Serial"].ToString() // Leer el serial del artículo
-                        });
+                            olist.Add(new PendientesModel()
+                            {
+                                idMovimientos = Convert.ToInt32(dr["idMovimientos"]),
+                                idFuncionarioEncargado = Convert.ToInt32(dr["idFuncionario"]),
+                                Evento = dr["Evento"].ToString(),
+                                FechaMovimiento = Convert.ToDateTime(dr["FechaMovimiento"]), // Leer la fecha del movimiento
+                                Cedula = dr["Cedula"].ToString(), // Leer la cédula del funcionario
+                                NombreCompleto = dr["NombreCompleto"].ToString(), // Leer el nombre completo concatenado
+                                Placa = dr["Placa"].ToString(), // Leer la placa del artículo
+                                Serial = dr["Serial"].ToString() // Leer el serial del artículo
+                            });
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                errorLogger.RegistrarError(ex, "Pendientes Metodo:" + nameof(Listar), idUsuario);
+            }
+
+         
             return olist;
         }
 
 
         public bool GuardarFirmaFuncionario(int idFuncionario, string dataURL)
         {
+            var errorLogger = new ErrorLogger();
             try
             {
                 // Extraer la parte Base64 de la cadena Data URL
@@ -71,7 +83,7 @@ namespace gestionactivos.Data
             catch (Exception ex)
             {
                 // Registra el error (opcionalmente)
-                Console.WriteLine(ex.Message);
+                errorLogger.RegistrarError(ex, "Pendientes Metodo:" + nameof(GuardarFirmaFuncionario), idFuncionario);
                 return false; // Si ocurre un error, devolvemos false
             }
         }
@@ -79,6 +91,7 @@ namespace gestionactivos.Data
 
         public bool ActualizaPendiente(int idMovimiento)
         {
+            var errorLogger = new ErrorLogger();
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -98,7 +111,7 @@ namespace gestionactivos.Data
             catch (Exception ex)
             {
                 // Registra el error (opcionalmente)
-                Console.WriteLine(ex.Message);
+                errorLogger.RegistrarError(ex, "Pendientes Metodo:" + nameof(ActualizaPendiente), idMovimiento);
                 return false; // Si ocurre un error, devolvemos false
             }
         }

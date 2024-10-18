@@ -536,6 +536,12 @@
                         $('#placaForm').show();
                     } else {
                         $('#resultadosCedula').hide();
+                        $('#resultadosPlaca').hide();
+                        $('#AgregarAdicional').hide();
+                        $('#Contratista').hide();
+                        $('#Firmar').hide();
+                        $('#Asignar').hide();
+
                         $('#errorMensajeCedula').show();
                         $('#placaForm').hide();
                     }
@@ -846,6 +852,7 @@
                 },
                 success: function (response) {
                     if (response.success) {
+                        $('#errorMensajeCorreo').hide();
                         $('#successMensajeAsignar').show();
                         var idAsignacion = response.idAsignacion;
                         generar(idAsignacion);

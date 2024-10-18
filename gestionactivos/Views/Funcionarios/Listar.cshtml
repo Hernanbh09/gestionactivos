@@ -43,8 +43,18 @@
                         <td>@item.Cargo</td>
                         <td>@item.Piso</td>
                         <td>
-                            <a asp-action="Editar" asp-controller="Funcionarios" class="btn btn-primary btn-sm" asp-route-idFuncionario="@item.idFuncionario">Editar</a>
-                            <a asp-action="Eliminar" asp-controller="Funcionarios" class="btn btn-danger btn-sm" asp-route-idFuncionario="@item.idFuncionario">Eliminar</a>
+                                @if(item.Estado == 1)
+                                {
+                                    <a asp-action="Editar" asp-controller="Funcionarios" class="btn btn-primary btn-sm" asp-route-idFuncionario="@item.idFuncionario">Editar</a>
+                                    <a asp-action="Eliminar" asp-controller="Funcionarios" class="btn btn-danger btn-sm" asp-route-idFuncionario="@item.idFuncionario">Eliminar</a>
+                                }@if (item.Estado == 0)
+                                {
+                                    <div class="alert alert-primary" role="alert" style="height:100%; width:100%; padding: 2px; margin: 0;">
+                                        Desactivado
+                                    </div>
+                                }
+
+                            
                         </td>
                     </tr>
                 }

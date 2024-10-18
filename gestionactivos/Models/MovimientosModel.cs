@@ -12,6 +12,8 @@
         public string? Placa { get; set; }
         public string? Serial { get; set; }
         public string? Archivo { get; set; }
+        public string? FechaMovimiento { get; set; }
+
 
     }
 }

@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using gestionactivos.pdf;
 using gestionactivos.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace gestionactivos.Controllers
 {
@@ -26,6 +27,17 @@ namespace gestionactivos.Controllers
 
 
         private readonly CorreoService _correoService;
+        private int? idUsuario;
+
+        // Este método se ejecuta antes de cada acción del controlador
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            idUsuario = idUsuarioClaim != null ? (int?)Convert.ToInt32(idUsuarioClaim.Value) : null;
+            base.OnActionExecuting(context);
+        }
+
+
 
         public AsignacionController(CorreoService correoService)
         {
@@ -41,7 +53,7 @@ namespace gestionactivos.Controllers
         public IActionResult ResultadoCedula(string Cedula)
         {
             AsignacionData data = new AsignacionData();
-            AsignacionModel funcionario = data.ConsultarCedula(Cedula);
+            AsignacionModel funcionario = data.ConsultarCedula(Cedula, idUsuario);
 
             if (funcionario != null)
             {
@@ -58,15 +70,21 @@ namespace gestionactivos.Controllers
         {
             AsignacionData data2 = new AsignacionData();
             List<AsignacionModel> articulos = new List<AsignacionModel>();
+            string errorMessage;
 
             try
             {
-                articulos = data2.ConsultarPlaca(Placa);
+                articulos = data2.ConsultarPlaca(Placa, idUsuario, out errorMessage);
             }
             catch (SqlException ex)
             {
-                // Si ocurre un error, puedes retornar el mensaje del error
                 return Json(new { success = false, errorMessage = ex.Message });
+            }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                // Si hay un error en el mensaje
+                return Json(new { success = false, errorMessage = errorMessage });
             }
 
             if (articulos != null && articulos.Count > 0)
@@ -75,7 +93,7 @@ namespace gestionactivos.Controllers
             }
             else
             {
-                return Json(new { success = false });
+                return Json(new { success = false, errorMessage = "No se encontraron resultados para la Placa del Artículo." });
             }
         }
 
@@ -84,7 +102,7 @@ namespace gestionactivos.Controllers
         {
             AsignacionData data3 = new AsignacionData();
 
-            AsignacionModel contratista = data3.ConsultarCedulaContra(cedulaContra);
+            AsignacionModel contratista = data3.ConsultarCedulaContra(cedulaContra, idUsuario);
             if (contratista != null)
             {
                 return Json(new { success = true, data = contratista });
@@ -99,7 +117,7 @@ namespace gestionactivos.Controllers
         public IActionResult ResultadoPlacaAdicional(string PlacaAdicional)
         {
             AsignacionData data4 = new AsignacionData();
-            AsignacionModel adicionales = data4.ConsultarPlacaAdicional(PlacaAdicional);
+            AsignacionModel adicionales = data4.ConsultarPlacaAdicional(PlacaAdicional, idUsuario);
             if (adicionales != null)
             {
                 return Json(new { success = true, data = adicionales });
@@ -116,7 +134,7 @@ namespace gestionactivos.Controllers
         public IActionResult AgregarPlacaAdicional(int IdArticulo, int IdAdicionalAgregar)
         {
             AsignacionData data4 = new AsignacionData();
-            var resultado = data4.AgregarAdicional(IdArticulo, IdAdicionalAgregar);
+            var resultado = data4.AgregarAdicional(IdArticulo, IdAdicionalAgregar, idUsuario);
             return Json(new { success = resultado.Success, message = resultado.Message });
         }
 

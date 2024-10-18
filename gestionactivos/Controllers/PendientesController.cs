@@ -3,15 +3,30 @@ using gestionactivos.Models;
 using gestionactivos.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 
 namespace gestionactivos.Controllers
 {
     [Authorize(Policy = "GlobalPolicy")] // Aplicar la política global
-    [Authorize(Roles = "Administrador,Tecnico")]
+    [Authorize(Roles = "Administrador,Coordinador,Tecnico")]
     public class PendientesController : Controller
     {
         // Método GET para listar los pendientes
         private readonly CorreoService _correoService;
+        private int? idUsuario;
+
+        // Este método se ejecuta antes de cada acción del controlador
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            idUsuario = idUsuarioClaim != null ? (int?)Convert.ToInt32(idUsuarioClaim.Value) : null;
+            base.OnActionExecuting(context);
+        }
+
+
+
+
         public PendientesController(CorreoService correoService)
         {
             _correoService = correoService;
@@ -19,7 +34,7 @@ namespace gestionactivos.Controllers
         public IActionResult Pendientes()
         {
             PendientesData data = new PendientesData();
-            List<PendientesModel> listaPendientes = data.Listar(); // Llamada al método Listar()
+            List<PendientesModel> listaPendientes = data.Listar(idUsuario); // Llamada al método Listar()
             return View(listaPendientes); // Pasar los datos a la vista
         }
 

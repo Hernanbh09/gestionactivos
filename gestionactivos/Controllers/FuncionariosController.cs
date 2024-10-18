@@ -2,6 +2,8 @@
 using gestionactivos.Data;
 using gestionactivos.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 
 
 namespace gestionactivos.Controllers
@@ -11,63 +13,80 @@ namespace gestionactivos.Controllers
     public class FuncionariosController : Controller
     {
         FuncionariosData _ContactoDatos = new FuncionariosData();
+        private int? idUsuario;
+
+        // Este método se ejecuta antes de cada acción del controlador
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            idUsuario = idUsuarioClaim != null ? (int?)Convert.ToInt32(idUsuarioClaim.Value) : null;
+            base.OnActionExecuting(context);
+        }
 
         public IActionResult Listar()
         {
             //La visata de mostar contactos
 
-            var oLista = _ContactoDatos.Listar();
+            var oLista = _ContactoDatos.Listar(idUsuario);
 
             return View(oLista);
         }
 
+        // Método GET para cargar la vista de guardado
         public IActionResult Guardar()
         {
-            var clientes = _ContactoDatos.ListarClientes();
-
-            // Pasar la lista de clientes a la vista usando ViewData
+            // Cargar los clientes para el dropdown
+            var clientes = _ContactoDatos.ListarClientes(idUsuario);
             ViewData["Clientes"] = clientes;
 
-            //Metodo solo devuelve la vista
+            // Retornar la vista vacía
             return View();
         }
-        
+
+        // Método POST para procesar el guardado
         [HttpPost]
         public IActionResult Guardar(FuncionarioModel oContacto, int idCliente, int idSedes)
         {
-            if (!ModelState.IsValid)
+            // Validar el modelo y las selecciones de cliente y sede
+            if (!ModelState.IsValid || idCliente == 0 || idSedes == 0)
             {
-                // Cargar los clientes nuevamente antes de devolver la vista
-                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
-                // Opcionalmente, podrías también cargar las sedes si es necesario
-                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente); // Cargar sedes por cliente si es necesario
+                // Agregar un mensaje de error si no se seleccionó cliente o sede
+                if (idCliente == 0 || idSedes == 0)
+                {
+                    ModelState.AddModelError("", "Debes seleccionar la sede y el cliente.");
+                }
 
-                return View(oContacto); // Devuelve la vista con el modelo y los datos cargados
+                // Cargar los clientes y sedes nuevamente
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes(idUsuario);
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente, idUsuario); // Cargar sedes basadas en cliente
+
+                return View(oContacto); // Devuelve la vista con los errores y datos
             }
 
+            // Asignar los valores seleccionados
             oContacto.idClientes = idCliente;
             oContacto.idSedes = idSedes;
 
-            // Guarda el contacto usando la capa de datos
+            // Guardar el contacto
             var data = new FuncionariosData();
-            var resultado = data.Guardar(oContacto, idSedes);
+            var resultado = data.Guardar(oContacto, idSedes, idCliente, idUsuario);
 
+            // Si el guardado es exitoso
             if (resultado.Resultado)
             {
-              
-                // Redirige a la lista si el guardado fue exitoso
                 return RedirectToAction("Listar");
             }
             else
             {
-                // Cargar los clientes nuevamente en caso de fallo
-                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
-                // Cargar las sedes si es necesario
-                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente); // Cargar sedes por cliente
+                // Cargar los clientes y sedes nuevamente en caso de fallo
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes(idUsuario);
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(idCliente, idUsuario);
 
-                // Maneja el caso en que el guardado falló
-                ModelState.AddModelError("", resultado.Mensaje); // Agrega el mensaje de error al ModelState
-                return View(oContacto); // Devuelve la vista con el modelo
+                // Agregar el mensaje de error al ModelState
+                ModelState.AddModelError("", resultado.Mensaje);
+
+                // Retornar la vista con el error
+                return View(oContacto);
             }
         }
 
@@ -75,7 +94,7 @@ namespace gestionactivos.Controllers
         [HttpPost]
         public JsonResult ObtenerSedes(int idCliente)
         {
-            var sedes = _ContactoDatos.ListarSedes(idCliente);
+            var sedes = _ContactoDatos.ListarSedes(idCliente, idUsuario);
             return Json(sedes);
         }
 
@@ -92,11 +111,11 @@ namespace gestionactivos.Controllers
             }
 
             // Obtener las listas de clientes
-            var clientes = _ContactoDatos.ListarClientes();
+            var clientes = _ContactoDatos.ListarClientes(idUsuario);
             ViewData["Clientes"] = clientes;
 
             // Comprobar si idClientes es válido antes de obtener las sedes
-            var sedes = oContacto.idClientes.HasValue ? _ContactoDatos.ListarSedes(oContacto.idClientes.Value) : new List<FuncionarioModel>();
+            var sedes = oContacto.idClientes.HasValue ? _ContactoDatos.ListarSedes(oContacto.idClientes.Value, idUsuario) : new List<FuncionarioModel>();
             ViewData["Sedes"] = sedes;
 
             return View(oContacto);
@@ -109,20 +128,20 @@ namespace gestionactivos.Controllers
             if (!ModelState.IsValid)
             {
                 // Si la validación falla, recargar las listas para la vista
-                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
-                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0);
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes(idUsuario);
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0, idUsuario);
                 return View(oContacto);
             }
 
             // Llamar al método de edición en la capa de datos
-            var respuesta = _ContactoDatos.Editar(oContacto);
+            var respuesta = _ContactoDatos.Editar(oContacto, idUsuario);
             if (respuesta)
                 return RedirectToAction("Listar");
             else
             {
                 // Si hay un error, recargar las listas y devolver la vista
-                ViewData["Clientes"] = _ContactoDatos.ListarClientes();
-                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0);
+                ViewData["Clientes"] = _ContactoDatos.ListarClientes(idUsuario);
+                ViewData["Sedes"] = _ContactoDatos.ListarSedes(oContacto.idClientes ?? 0, idUsuario);
                 return View(oContacto);
             }
         }

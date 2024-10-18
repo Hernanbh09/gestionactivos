@@ -1,7 +1,8 @@
 ﻿using gestionactivos.Data;
+using gestionactivos.Error;
 using gestionactivos.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,76 +16,59 @@ public class LoginData
         Conexion conexion = new Conexion();
         connectionString = conexion.getCadenaSQL();
     }
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public LoginModel ConsultarUsuario(string Correo, string Clave)
     {
+        var errorLogger = new ErrorLogger();
         LoginModel usuario = null;
         string hashClave = ObtenerHashSha256(Clave);
 
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        try
         {
-            string sqlQuery = "sp_Login"; // Nombre del procedimiento almacenado
-            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                command.CommandType = CommandType.StoredProcedure;
-
-                // Parámetro de entrada para Correo
-                SqlParameter correoParam = new SqlParameter("@Correo", SqlDbType.VarChar, 100)
+                string sqlQuery = "sp_Login"; // Nombre del procedimiento almacenado
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
-                    Value = Correo
-                };
-                command.Parameters.Add(correoParam);
+                    command.CommandType = CommandType.StoredProcedure;
 
-                // Parámetro de entrada para Clave (hash)
-                SqlParameter claveParam = new SqlParameter("@Contrasena", SqlDbType.VarChar, 256)
-                {
-                    Value = hashClave
-                };
-                command.Parameters.Add(claveParam);
+                    // Parámetros...
+                    SqlParameter correoParam = new SqlParameter("@Correo", SqlDbType.VarChar, 100) { Value = Correo };
+                    SqlParameter claveParam = new SqlParameter("@Contrasena", SqlDbType.VarChar, 256) { Value = hashClave };
+                    SqlParameter mensajeParam = new SqlParameter("@Mensaje", SqlDbType.VarChar, 100) { Direction = ParameterDirection.Output };
+                    SqlParameter idUsuarioParam = new SqlParameter("@idUsuario", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                    SqlParameter rolParam = new SqlParameter("@Rol", SqlDbType.VarChar, 50) { Direction = ParameterDirection.Output };
+                    SqlParameter nombreCompletoParam = new SqlParameter("@NombreCompleto", SqlDbType.VarChar, 100) { Direction = ParameterDirection.Output };
 
-                // Parámetro de salida para Mensaje
-                SqlParameter mensajeParam = new SqlParameter("@Mensaje", SqlDbType.VarChar, 100)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(mensajeParam);
+                    // Añadir parámetros al comando...
+                    command.Parameters.AddRange(new[] { correoParam, claveParam, mensajeParam, idUsuarioParam, rolParam, nombreCompletoParam });
 
-                // Parámetro de salida para idUsuario
-                SqlParameter idUsuarioParam = new SqlParameter("@idUsuario", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(idUsuarioParam);
+                    connection.Open();
+                    command.ExecuteNonQuery();
 
-                // Parámetro de salida para Rol
-                SqlParameter rolParam = new SqlParameter("@Rol", SqlDbType.VarChar, 50)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(rolParam);
-
-                // Parámetro de salida para NombreCompleto
-                SqlParameter nombreCompletoParam = new SqlParameter("@NombreCompleto", SqlDbType.VarChar, 100)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(nombreCompletoParam);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-
-                // Obtenemos los valores de los parámetros de salida
-                string mensaje = (string)mensajeParam.Value;
-                if (!string.IsNullOrEmpty(mensaje) && mensaje.Contains("Inicio de sesión exitoso"))
-                {
-                    usuario = new LoginModel
+                    // Obtenemos los valores de los parámetros de salida
+                    string mensaje = (string)mensajeParam.Value;
+                    if (!string.IsNullOrEmpty(mensaje) && mensaje.Contains("Inicio de sesión exitoso"))
                     {
-                        IdUsuario = (int)idUsuarioParam.Value,
-                        Rol = (string)rolParam.Value,
-                        NombreCompleto = (string)nombreCompletoParam.Value
-                    };
+                        usuario = new LoginModel
+                        {
+                            IdUsuario = (int)idUsuarioParam.Value,
+                            Rol = (string)rolParam.Value,
+                            NombreCompleto = (string)nombreCompletoParam.Value
+                        };
+                    }
+                    else
+                    {
+                        // Llamar al nuevo método para registrar el mensaje de error general
+                        errorLogger.RegistrarError($"Correo: {Correo}, Mensaje: {mensaje}", "Clientes Metodo:" + nameof(ConsultarUsuario));
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            errorLogger.RegistrarError(ex, "Clientes Metodo:" + nameof(ConsultarUsuario));
         }
 
         return usuario;

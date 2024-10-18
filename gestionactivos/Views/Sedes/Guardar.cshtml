@@ -1,0 +1,68 @@
+﻿@model SedesModel
+
+
+
+<h1>Guardar</h1>
+
+<div class="card">
+    <div class="card-header">
+        Crear Sede
+    </div>
+    <div class="card-body">
+
+
+        @* Mostrar el mensaje si existe en ViewBag (para errores) *@
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Guardar" asp-controller="Sedes" method="post">
+
+
+            <div class="mb-3">
+                <select class="form-select" id="seleccioneCliente" name="idClientes">
+                    <option value="0" disabled selected>Seleccione un cliente</option>
+                    @if (ViewData["Clientes"] != null)
+                    {
+                        var clientes = (List<SedesModel>)ViewData["Clientes"];
+                        foreach (var cliente in clientes)
+                        {
+                            <option value="@cliente.idClientes">@cliente.Cliente</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="0">No hay clientes disponibles</option>
+                    }
+                </select>
+            </div>
+
+
+
+            <div class="mb-3">
+                <label class="form-label">Nombre Sedes</label>
+                <input asp-for="NombreSede" type="text" class="form-control">
+                <span asp-validation-for="NombreSede" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Direccion Sede</label>
+                <input asp-for="DireccionSede" type="text" class="form-control">
+                <span asp-validation-for="DireccionSede" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cuidad Sedes</label>
+                <input asp-for="CuidadSede" type="text" class="form-control">
+                <span asp-validation-for="CuidadSede" class="text-danger"></span>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Sedes" class="btn btn-warning">Volver a la lista</a>
+        </form>
+    </div>
+</div>

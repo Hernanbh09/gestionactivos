@@ -3,7 +3,7 @@
     public class PendientesModel
     {
         public int idMovimientos { get; set; }
-        public int idFuncionarioResponsable { get; set; }
+        public int idFuncionarioEncargado { get; set; }
         public string Evento { get; set; }
         public DateTime FechaMovimiento { get; set; } // Agregar campo FechaMovimiento
         public string Cedula { get; set; } // Agregar campo Cedula

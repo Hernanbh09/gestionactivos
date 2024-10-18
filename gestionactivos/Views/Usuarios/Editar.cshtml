@@ -11,15 +11,15 @@
     </div>
     <div class="card-body">
         <form asp-action="Editar" asp-controller="Usuarios" method="post">
-            <input  asp-for="idUsuario" type="hidden" type="text" class="form-control" />
+            <input asp-for="idUsuario" type="hidden" type="text" class="form-control" />
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input asp-for="Nombre" type="text" class="form-control"/>
+                <input asp-for="Nombre" type="text" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
                 @* <div class="alert alert-danger mt-3" role="alert" style="">
-                    <span asp-validation-for="Nombre"></span>
+                <span asp-validation-for="Nombre"></span>
                 </div> *@
-               
+
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellido</label>
@@ -33,16 +33,15 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input asp-for="Contrasena" type="password" class="form-control"/>
+                <input asp-for="Contrasena" type="password" class="form-control" />
                 <span asp-validation-for="Contrasena" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cargo</label>
-                <input asp-for="Cargo" type="text" class="form-control"/>
+                <input asp-for="Cargo" type="text" class="form-control" />
                 <span asp-validation-for="Cargo" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Rol</label>
                 <select class="form-select" id="seleccioneRol" name="Rol" asp-for="Rol">
                     <option value="" disabled selected>Seleccione un rol</option>
                     <option value="Administrador">Administrador</option>

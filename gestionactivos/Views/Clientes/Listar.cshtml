@@ -1,0 +1,37 @@
+﻿@model List<ClientesModel>
+<div class="card">
+    <div class="card-header">
+        Lista de Clientes
+    </div>
+    <div class="card-body">
+        <a asp-action="Guardar" asp-controller="Clientes" class="btn btn-success">Crear Cliente</a>
+        <br />
+        <br />
+        <div class="table-responsive">
+            <!-- Agregar esta línea -->
+            <table id="ClientesTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Clientes</th>
+                        <th>Editar - Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Clientes</td>
+                            
+                            <td>
+                                <a asp-action="Editar" asp-controller="Clientes" class="btn btn-primary btn-sm" asp-route-idClientes="@item.idClientes">Editar</a>
+                                <a asp-action="Eliminar" asp-controller="Clientes" class="btn btn-danger btn-sm" asp-route-idClientes="@item.idClientes">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div> <!-- Cerrar div .table-responsive -->
+    </div>
+
+</div>
+

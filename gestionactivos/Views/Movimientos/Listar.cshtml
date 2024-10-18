@@ -20,6 +20,7 @@
                     <th>Modelo</th>
                     <th>Serial</th>
                     <th>Placa</th>
+                    <td>Fecha Movimiento</td>
                     <th>Ver Archivo</th>
                 </tr>
             </thead>
@@ -35,7 +36,7 @@
                         <td>@item.Modelo</td>
                         <td>@item.Serial</td>
                         <td>@item.Placa</td>
-
+                            <td>@item.FechaMovimiento</td>
                         <td>
                             @if (!string.IsNullOrEmpty(item.Archivo))
                             {

@@ -1,0 +1,37 @@
+﻿@model ClientesModel
+
+<div class="card">
+    <div class="card-header">
+        Editar Clientes
+    </div>
+    <div class="card-body">
+
+        @* Mostrar el mensaje si existe en ViewBag (para éxito) *@
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
+        @* Mostrar el mensaje si existe en ViewBag (para errores) *@
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Editar" asp-controller="Clientes" method="post">
+            <input asp-for="idClientes" type="text" class="form-control" />
+            <div class="mb-3">
+                <label class="form-label">Clientes</label>
+                <input asp-for="Clientes" type="text" class="form-control" />
+                <span asp-validation-for="Clientes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Clientes" class="btn btn-warning">Volver a la lista</a>
+        </form>
+    </div>
+</div>

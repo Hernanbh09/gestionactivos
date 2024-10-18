@@ -3,6 +3,7 @@ using gestionactivos.Models;
 using gestionactivos.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -18,6 +19,16 @@ namespace gestionactivos.Controllers
         private readonly ICompositeViewEngine _viewEngine;
         private readonly CorreoService _correoService;
         // Constructor que inyecta el motor de vistas
+
+        private int? idUsuario;
+
+        // Este método se ejecuta antes de cada acción del controlador
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            idUsuario = idUsuarioClaim != null ? (int?)Convert.ToInt32(idUsuarioClaim.Value) : null;
+            base.OnActionExecuting(context);
+        }
         public DevolucionController(ICompositeViewEngine viewEngine, CorreoService correoService)
         {
             _correoService = correoService;
@@ -36,7 +47,7 @@ namespace gestionactivos.Controllers
             if (!string.IsNullOrWhiteSpace(cedula))
             {
                 DevolucionData data = new DevolucionData();
-                List<DevolucionModel> funcionarios = data.ConsultarCedula(cedula);
+                List<DevolucionModel> funcionarios = data.ConsultarCedula(cedula, idUsuario);
 
                 if (funcionarios != null && funcionarios.Any())
                 {
@@ -75,12 +86,12 @@ namespace gestionactivos.Controllers
 
 
         [HttpPost]
-        public IActionResult SaveSignatureFuncionario(int idFuncionario, string dataURL)
+        public IActionResult SaveSignatureFuncionario(int CedulaFuncionario, string dataURL)
         {
             try
             {
                 DevolucionData data5 = new DevolucionData();
-                bool GuardarFirmaFunc = data5.GuardarFirmaFuncionario(idFuncionario, dataURL);
+                bool GuardarFirmaFunc = data5.GuardarFirmaFuncionario(CedulaFuncionario, dataURL);
                 if (GuardarFirmaFunc)
                 {
                     return Json(new { success = true });

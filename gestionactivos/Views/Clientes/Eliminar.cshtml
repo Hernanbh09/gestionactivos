@@ -1,0 +1,26 @@
+﻿@model ClientesModel
+
+
+<div class="card">
+    <div class="card-header">
+        Eliminar Clientes
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Eliminar" asp-controller="Clientes" method="post">
+
+            <input asp-for="idClientes" type="hidden" class="form-control" />
+
+            <div class="alert alert-danger" role="alert">
+                Desea eliminar el Cliente: @Html.DisplayTextFor(m => m.Clientes) ?
+            </div>
+
+
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Listar" asp-controller="Clientes" class="btn btn-warning">Volver a la lista</a>
+        </form>
+
+
+
+    </div>
+</div>

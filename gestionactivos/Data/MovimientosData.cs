@@ -1,4 +1,5 @@
-﻿using gestionactivos.Models;
+﻿using gestionactivos.Error;
+using gestionactivos.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,39 +8,51 @@ namespace gestionactivos.Data
     public class MovimientosData
     {
 
-        public List<MovimientosModel> Listar()
+        public List<MovimientosModel> Listar(int? idUsuario)
         {
             var olist = new List<MovimientosModel>();
             var cn = new Conexion();
+            var errorLogger = new ErrorLogger();
 
-            using(var conexion = new SqlConnection(cn.getCadenaSQL()))
+            try
             {
-                conexion.Open();
-                SqlCommand cmd = new SqlCommand("sp_ConsultarMovimiento", conexion);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using (var dr = cmd.ExecuteReader())
+                using (var conexion = new SqlConnection(cn.getCadenaSQL()))
                 {
-                    while (dr.Read())
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_ConsultarMovimiento", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = cmd.ExecuteReader())
                     {
-                        //lectura de todo el resultado
-                        olist.Add(new MovimientosModel()
+                        while (dr.Read())
                         {
-                            idMovimientos = Convert.ToInt32(dr["idMovimientos"]),
-                            Evento = dr["Evento"].ToString(),
-                            NombreEncargado = dr["NombreEncargado"].ToString(),
-                            NombreResponsable = dr["NombreResponsable"].ToString(),
-                            Categoria = dr["Categoria"].ToString(),
-                            Modelo = dr["Modelo"].ToString(),
-                            Serial = dr["Serial"].ToString(),
-                            Placa = dr["Placa"].ToString(),
-                            Archivo = dr["Archivo"].ToString(),
+                            //lectura de todo el resultado
+                            olist.Add(new MovimientosModel()
+                            {
+                                idMovimientos = Convert.ToInt32(dr["idMovimientos"]),
+                                Evento = dr["Evento"].ToString(),
+                                FechaMovimiento = dr["FechaMovimiento"].ToString(),
+                                NombreEncargado = dr["NombreEncargado"].ToString(),
+                                NombreResponsable = dr["NombreResponsable"].ToString(),
+                                Categoria = dr["Categoria"].ToString(),
+                                Modelo = dr["Modelo"].ToString(),
+                                Serial = dr["Serial"].ToString(),
+                                Placa = dr["Placa"].ToString(),
+                                Archivo = dr["Archivo"].ToString(),
 
-                        });
+                            });
 
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+
+                errorLogger.RegistrarError(ex, "Movimientos Metodo:" + nameof(Listar), idUsuario);
+            }
+
+          
             return olist;
 
         }

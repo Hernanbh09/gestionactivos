@@ -1,0 +1,177 @@
+﻿
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*background: linear-gradient(130deg, #5cc3e3, #84bb04, #fc7c34);*/
+/*    background-color: #042c4c;*/
+body {
+    background-color: #042c4c;
+    /*background-image: url('../img/fon.jpg');
+    background-size: cover;*/ /* Ajusta el tamaño de la imagen para que cubra toda la pantalla */
+    /*background-position: center;*/ /* Centra la imagen */
+    /*background-repeat: no-repeat;*/
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 1200px;
+    max-width: 1000px;
+    height: 600px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    overflow: hidden; /* Evitar que el contenido se desborde */
+    margin: 20px;
+/*    background: linear-gradient(130deg, #5cc3e3, #84bb04, #fc7c34);*/
+}
+
+.left,
+.right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 50%; /* Ambos lados ocupan el 50% del ancho */
+}
+
+.left {
+    color: white;
+    text-align: center;
+}
+
+    .left img {
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        max-width: 100%;
+    }
+
+    .left h1 {
+        /*color: #042c4c;*/
+        color:white;
+        font-size: 2.5em;
+        margin-top: 20px;
+        text-transform: uppercase;
+    }
+
+.right {
+    flex-direction: column;
+    color: white;
+}
+
+    .right h2 {
+        /*color: #042c4c;*/
+        color:white;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+form{
+    width:100%
+}
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+
+    .input-group i {
+        position: absolute;
+        right: 10px;
+        top: 35px;
+        color: #aaa;
+    }
+
+.login-btn {
+    /*background: #5cc3e3;*/
+    background: #fc7c34;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: rgb(209, 112, 112);
+    border: 1px solid rgb(218, 44, 44);
+    width: 300px;
+    height: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        width: 90%; /* El ancho se reduce para pantallas pequeñas */
+    }
+
+    .left,
+    .right {
+        width: 100%; /* Ambos bloques ocupan el 100% del ancho */
+        padding: 20px;
+    }
+
+        .left h1 {
+            font-size: 2em; /* Tamaño más pequeño en móviles */
+        }
+
+    .right {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .right h2 {
+        font-size: 1.5em;
+    }
+
+    .input-group input {
+        font-size: 0.9em;
+    }
+
+    .login-btn {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+}

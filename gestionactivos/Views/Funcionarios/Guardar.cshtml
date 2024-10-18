@@ -15,7 +15,8 @@
     <div class="card-body">
         
         <form asp-action="Guardar" asp-controller="Funcionarios" method="post">
-
+          
+        
             <div class="mb-3">
                 <select class="form-select" id="seleccioneCliente" name="idCliente">
                     <option value="0" disabled selected>Seleccione un cliente</option>
@@ -33,17 +34,17 @@
                     }
                 </select>
             </div>
-
             <div class="mb-3">
                 <select class="form-select" id="seleccioneSedes" name="idSedes">
                     <option value="0" disabled selected>Seleccione una Sede</option>
                 </select>
             </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="mb-3">
                 <label class="form-label">Cedula</label>
                 <input asp-for="Cedula" type="text" class="form-control">
-                <div asp-validation-summary="All" class="text-danger"></div>
+                
                 <span asp-validation-for="Cedula" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -64,7 +65,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Correo</label>
-                <input asp-for="Correo" type="text" class="form-control">
+                <input asp-for="Correo" type="email" class="form-control">
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
             <div class="mb-3">

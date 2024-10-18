@@ -37,9 +37,9 @@
                         <td>@item.Placa</td>
                         <td>@item.Serial</td>
                         <td>
-                            @if (item.idFuncionarioResponsable > 0)
+                            @if (item.idFuncionarioEncargado > 0)
                             {
-                                <button id="open-signature-modal-funcionario_@item.idFuncionarioResponsable" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signatureModalFuncionario_@item.idFuncionarioResponsable" data-bs-backdrop="static">Firmar Entrega Funcionario</button>
+                                <button id="open-signature-modal-funcionario_@item.idFuncionarioEncargado" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signatureModalFuncionario_@item.idFuncionarioEncargado" data-bs-backdrop="static">Firmar Entrega Funcionario</button>
                             }
                             else
                             {
@@ -49,7 +49,7 @@
                     </tr>
 
                     <!-- Modal de firma para cada funcionario -->
-                    <div class="modal fade" id="signatureModalFuncionario_@item.idFuncionarioResponsable" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="signatureModalFuncionario_@item.idFuncionarioEncargado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -57,14 +57,14 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <canvas id="signature-pad-funcionario_@item.idFuncionarioResponsable" class="signature-pad" data-idmovimientos="@item.idMovimientos"></canvas>
-                                    <div id="errorMensajeFirmaRequeridaFuncionario_@item.idFuncionarioResponsable" style="display:none;color:red;">La firma es obligatoria</div>
-                                    <div id="errorMensajeFirmaFunc_@item.idFuncionarioResponsable" class="alert alert-danger mt-3" style="display:none;">Error al guardar la firma.</div>
+                                    <canvas id="signature-pad-funcionario_@item.idFuncionarioEncargado" class="signature-pad" data-idmovimientos="@item.idMovimientos"></canvas>
+                                    <div id="errorMensajeFirmaRequeridaFuncionario_@item.idFuncionarioEncargado" style="display:none;color:red;">La firma es obligatoria</div>
+                                    <div id="errorMensajeFirmaFunc_@item.idFuncionarioEncargado" class="alert alert-danger mt-3" style="display:none;">Error al guardar la firma.</div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" id="clear-funcionario_@item.idFuncionarioResponsable" class="btn btn-warning">Limpiar</button>
-                                    <button type="button" id="save-funcionario_@item.idFuncionarioResponsable" class="btn btn-primary">Guardar Firma</button>
+                                    <button type="button" id="clear-funcionario_@item.idFuncionarioEncargado" class="btn btn-warning">Limpiar</button>
+                                    <button type="button" id="save-funcionario_@item.idFuncionarioEncargado" class="btn btn-primary">Guardar Firma</button>
                                 </div>
                             </div>
                         </div>

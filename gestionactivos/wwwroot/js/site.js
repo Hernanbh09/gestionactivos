@@ -30,9 +30,12 @@ let table5 = new DataTable('#AdicionalesTable', {
     autoWidth: true // Por ejemplo, para hacerla responsive
 });
 
-
-
-let table6 = new DataTable('#clientesTable', {
+let table6 = new DataTable('#ClientesTable', {
+    pageLength: 5, // Puedes cambiar la configuración aquí también
+    responsive: true,
+    autoWidth: true // Por ejemplo, para hacerla responsive
+});
+let table7 = new DataTable('#SedesTable', {
     pageLength: 5, // Puedes cambiar la configuración aquí también
     responsive: true,
     autoWidth: true // Por ejemplo, para hacerla responsive
