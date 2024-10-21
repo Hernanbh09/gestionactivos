@@ -91,7 +91,7 @@ namespace gestionactivos.Controllers
             try
             {
                 DevolucionData data5 = new DevolucionData();
-                bool GuardarFirmaFunc = data5.GuardarFirmaFuncionario(CedulaFuncionario, dataURL);
+                bool GuardarFirmaFunc = data5.GuardarFirmaFuncionario(CedulaFuncionario, dataURL, idUsuario);
                 if (GuardarFirmaFunc)
                 {
                     return Json(new { success = true });
@@ -107,27 +107,27 @@ namespace gestionactivos.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult SaveSignatureContratista(int idContratista, string dataURLR)
-        {
-            try
-            {
-                DevolucionData data6 = new DevolucionData();
-                bool GuardarFirmaFunc = data6.GuardarFirmaContratista(idContratista, dataURLR);
-                if (GuardarFirmaFunc)
-                {
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Error al guardar la firma en la base de datos." });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
+        //[HttpPost]
+        //public IActionResult SaveSignatureContratista(int idContratista, string dataURLR)
+        //{
+        //    try
+        //    {
+        //        DevolucionData data6 = new DevolucionData();
+        //        bool GuardarFirmaFunc = data6.GuardarFirmaContratista(idContratista, dataURLR);
+        //        if (GuardarFirmaFunc)
+        //        {
+        //            return Json(new { success = true });
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, message = "Error al guardar la firma en la base de datos." });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = ex.Message });
+        //    }
+        //}
 
 
 

@@ -5,6 +5,7 @@ using System.Data;
 using Newtonsoft.Json;
 using iText.StyledXmlParser.Jsoup.Helper;
 using gestionactivos.Error;
+using System.Diagnostics.Eventing.Reader;
 
 namespace gestionactivos.Data
 {
@@ -353,10 +354,11 @@ namespace gestionactivos.Data
             return AsignarEquipoTermi;
         }
 
-        public (string CorreoEncargado, string CorreoResponsable) ObtenerCorreoPorAsignacion(int idAsignacion)
+        public (string CorreoEncargado, string CorreoResponsable, string evento) ObtenerCorreoPorAsignacion(int idAsignacion)
         {
             string correoEncargado = null;
             string correoResponsable = null;
+            string evento = null;
             var errorLogger = new ErrorLogger();
 
 
@@ -380,6 +382,7 @@ namespace gestionactivos.Data
                                 // Aquí verificamos si los correos existen
                                 correoEncargado = reader.IsDBNull(0) ? null : reader.GetString(0);
                                 correoResponsable = reader.IsDBNull(1) ? null : reader.GetString(1);
+                                evento = reader.IsDBNull(2) ? null : reader.GetString(2);
                             }
                         }
                         else
@@ -397,7 +400,7 @@ namespace gestionactivos.Data
                 errorLogger.RegistrarError(ex, "Asignacion Metodo:" + nameof(ObtenerCorreoPorAsignacion), idAsignacion);
             }
 
-            return (correoEncargado, correoResponsable);
+            return (correoEncargado, correoResponsable,evento);
         }
 
 

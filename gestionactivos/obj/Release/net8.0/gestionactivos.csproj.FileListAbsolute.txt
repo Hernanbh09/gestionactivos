@@ -857,6 +857,7 @@ D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Tex
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.Encoding.dll
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.Encoding.Extensions.dll
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.Encodings.Web.dll
+D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.Json.dll
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.RegularExpressions.dll
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Threading.Channels.dll
 D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Threading.dll
@@ -1157,4 +1158,3 @@ D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\refint\gestiona
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\gestionactivos.pdb
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\gestionactivos.genruntimeconfig.cache
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\ref\gestionactivos.dll
-D:\Documentos\gestiondeactivos\gestionactivos\bin\Release\net8.0\refs\System.Text.Json.dll

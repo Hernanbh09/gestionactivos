@@ -26,8 +26,18 @@ namespace gestionactivos.Services
                 var correos = data.ObtenerCorreoPorAsignacion(idAsignacion);
 
                 // Asegúrate de que las propiedades sean accesibles
-                string correoEncargado = correos.CorreoEncargado;
-                string correoResponsable = correos.CorreoResponsable;
+                //string correoEncargado = correos.CorreoEncargado;
+                //string correoResponsable = correos.CorreoResponsable;
+
+                string evento = correos.evento;
+
+
+
+                string correo = "coordinador_parquecomputacional@mintic.gov.co";
+                string correo2 = "bhernandezm.sumimas@gmail.com";
+                string correoCopia = "Soporte_equipos@mintic.gov.co";
+                
+
 
                 // Verificar que las propiedades de SMTP no sean nulas
                 if (_smtpSettings == null || string.IsNullOrEmpty(_smtpSettings.From) || string.IsNullOrEmpty(_smtpSettings.FromName))
@@ -48,27 +58,59 @@ namespace gestionactivos.Services
                     var mensaje = new MailMessage
                     {
                         From = new MailAddress(_smtpSettings.From, _smtpSettings.FromName),
-                        Subject = "Asunto del correo",
-                        Body = "Body del correo aquí",  // Cambia según sea necesario
-                        IsBodyHtml = true
-                    };
 
-                    // Verificar y agregar destinatario
-                    if (!string.IsNullOrEmpty(correoEncargado))
+                        IsBodyHtml = true
+
+
+                        //Body = "Body del correo aquí",  // Cambia según sea necesario
+                        //IsBodyHtml = true
+
+                    };
+                    // Verificar el tipo de evento para definir el cuerpo del correo
+
+                    // Verificar el tipo de evento para definir el Subject y el Body del correo
+                    if (evento == "Devolucion - Historica")
                     {
-                        mensaje.To.Add(correoEncargado);
+                        mensaje.Subject = "Devolución de equipo";
+                        mensaje.Body = $"<html><body>" +
+                                       $"<p>Estimado usuario,</p>" +
+                                       $"<p>Le informamos que se ha realizado una nueva asignación de equipo.</p>" +
+                                       $"<p>Revisa el adjunto para más detalles </p>" +
+                                       $"<img src='https://i.ibb.co/WynBGXj/Devolucion.png' alt='Devolución' />" +
+                                       $"<p>Saludos,</p>" +
+                                       $"</body></html>";
                     }
                     else
                     {
-                        Console.WriteLine("No se encontró el correo del encargado.");
-                        return false;
+                        mensaje.Subject = "Asignación de equipo";
+                        mensaje.Body = $"<html><body>" +
+                                       $"<p>Estimado usuario,</p>" +
+                                       $"<p>Le informamos que se ha realizado una nueva asignación de equipo.</p>" +
+                                        $"<p>Revisa el adjunto para más detalles  </p>" +
+                                       $"<img src='https://i.ibb.co/B2XqFgm/Asignacion.png' alt='Asignación' />" +
+                                       $"<p>Saludos,</p>" +
+                                       $"</body></html>";
                     }
+                    // Verificar y agregar destinatario
+                    //if (!string.IsNullOrEmpty(correoEncargado))
+                    //{
+                    //    mensaje.To.Add(correoEncargado);
 
-                    // Agregar correo del responsable como CC si existe
-                    if (!string.IsNullOrEmpty(correoResponsable))
-                    {
-                        mensaje.CC.Add(correoResponsable);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("No se encontró el correo del encargado.");
+                    //    return false;
+                    //}
+
+                    //// Agregar correo del responsable como CC si existe
+                    //if (!string.IsNullOrEmpty(correoResponsable))
+                    //{
+                    //    mensaje.CC.Add(correoResponsable);
+                    //}
+                    mensaje.To.Add(correo);
+                    mensaje.To.Add(correo2);
+                    mensaje.CC.Add(correoCopia);
 
                     // Adjuntar el PDF al correo
                     Attachment pdfAttachment = new Attachment(pdfPath);

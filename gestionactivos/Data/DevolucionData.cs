@@ -95,7 +95,7 @@ namespace gestionactivos.Data
 
 
 
-        public bool GuardarFirmaFuncionario(int CedulaFuncionario, string dataURL)
+        public bool GuardarFirmaFuncionario( int CedulaFuncionario, string dataURL, int? idUsuario)
         {
             var errorLogger = new ErrorLogger();
             try
@@ -105,11 +105,11 @@ namespace gestionactivos.Data
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string sqlQuery = "sp_GuardarFirmarFunciDe"; // Nombre del procedimiento almacenado
+                    string sqlQuery = "sp_GuardarFirmarFunci"; // Nombre del procedimiento almacenado
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@CedulaFuncionario", CedulaFuncionario);
+                        command.Parameters.AddWithValue("@IdFuncionario", CedulaFuncionario);
                         command.Parameters.AddWithValue("@FirmaFuncionario", base64String); // Pasar la cadena Base64 directamente
 
                         connection.Open();
@@ -121,39 +121,39 @@ namespace gestionactivos.Data
             catch (Exception ex)
             {
                 // Registra el error (opcionalmente)
-                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaFuncionario), CedulaFuncionario);
+                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaFuncionario), idUsuario);
                 return false; // Si ocurre un error, devolvemos false
             }
         }
-        public bool GuardarFirmaContratista(int idContratista, string dataURLR)
-        {
-            var errorLogger = new ErrorLogger();
-            try
-            {
-                string base64String = dataURLR.Split(',')[1]; // Convertir Base64 a binario
+        //public bool GuardarFirmaContratista(int idContratista, string dataURLR)
+        //{
+        //    var errorLogger = new ErrorLogger();
+        //    try
+        //    {
+        //        string base64String = dataURLR.Split(',')[1]; // Convertir Base64 a binario
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    string sqlQuery = "sp_GuardarFirmarFunci"; // Nombre del procedimiento almacenado
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@IdFuncionario", idContratista);
-                        command.Parameters.AddWithValue("@FirmaFuncionario", base64String);
+        //        using (SqlConnection connection = new SqlConnection(connectionString))
+        //        {
+        //            string sqlQuery = "sp_GuardarFirmarFunci"; // Nombre del procedimiento almacenado
+        //            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+        //            {
+        //                command.CommandType = CommandType.StoredProcedure;
+        //                command.Parameters.AddWithValue("@IdFuncionario", idContratista);
+        //                command.Parameters.AddWithValue("@FirmaFuncionario", base64String);
 
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        return true; // Si se ejecuta correctamente, devolvemos true
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Registra el error (opcionalmente)
-                errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaContratista), idContratista);
-                return false; // Si ocurre un error, devolvemos false
-            }
-        }
+        //                connection.Open();
+        //                command.ExecuteNonQuery();
+        //                return true; // Si se ejecuta correctamente, devolvemos true
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Registra el error (opcionalmente)
+        //        errorLogger.RegistrarError(ex, "Devolucion Metodo:" + nameof(GuardarFirmaContratista), idContratista);
+        //        return false; // Si ocurre un error, devolvemos false
+        //    }
+        //}
 
 
         public DevolucionModel DevolucionEquipoTerminado(int idFuncionario, int idFuncionarioContra, int idArticulo, int idUsuario, int idMovimiento, string Observacion)

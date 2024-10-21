@@ -70,11 +70,20 @@
                         <td>@articulo.PlacaArticulo</td>
 
                         <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DevolverEquipo" id="@articulo.idMovimientos">Devolver</button>
+                            <button type="button" class="btn btn-danger devolver-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#DevolverEquipo"
+                                    data-idfuncionario="@articulo.EncargadoIdFuncionario"
+                                    data-idfuncionariocontra="@articulo.ResponsableIdFuncionario"
+                                    data-idarticulo="@articulo.idArticulo"
+                                    data-idmovimiento="@articulo.idMovimientos">
+                                Devolver
+                            </button>
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr data-id="@articulo.idAdicional">
+                        
                         <td colspan="14">
                             <div class="table-responsive">
                                 <table class="table table-sm table-striped">
@@ -105,7 +114,7 @@
                     </tr>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="DevolverEquipo" tabindex="-1" aria-labelledby="devolverEquipoLabel" aria-hidden="true" data-bs-backdrop="static">
+                    <div class="modal fade" id="DevolverEquipo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -120,12 +129,15 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-danger" id="confirmarDevolucion">Devolver</button>
+                                    <button type="button" class="btn btn-danger" id="confirmarDevolucion">
+                                        Devolver
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="DevolverDetalle" tabindex="-1" aria-labelledby="devolverDetalleLabel" aria-hidden="true">
+                        <div class="modal fade" id="DevolverDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -133,11 +145,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body" id="devolverDetalleBody">
-                                    <div class="mb-3">
-                                        <canvas id="signatureCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
-                                    </div>
-                                    <button type="button" class="btn btn-secondary" id="clearCanvas">Limpiar Firma</button>
-                                    <button type="button" class="btn btn-primary" id="saveSignature">Guardar Firma</button>
+                                   
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -145,7 +153,12 @@
                             </div>
                         </div>
                     </div>
-
+                    <div id="rotate-device-overlay">
+                        <div>
+                            <h1>Por favor, gira tu dispositivo a modo horizontal para firmar</h1>
+                        </div>
+                    </div>
+                    <div id="alert-container"></div>
                 }
             </tbody>
         </table>
@@ -154,20 +167,42 @@
 
 @section script{
     <script>
+        
         document.addEventListener('DOMContentLoaded', function () {
+            function checkOrientation() {
+                // Detectar si la altura es mayor que el ancho (modo vertical)
+                if (window.innerHeight > window.innerWidth) {
+                    // Mostrar el overlay
+                    document.getElementById('rotate-device-overlay').style.display = 'flex';
+                } else {
+                    // Ocultar el overlay
+                    document.getElementById('rotate-device-overlay').style.display = 'none';
+                }
+            }
+
+            // Comprobar la orientación al cargar la página
+            checkOrientation();
+
+            // Comprobar la orientación cada vez que el tamaño de la ventana cambia
+            window.addEventListener('resize', checkOrientation);
+
             let signaturePad;
 
             const devolverButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
 
             devolverButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    const idMovimientos = this.id;
+                    const idMovimientos = this.getAttribute('data-idmovimiento');
                     const modalTitle = document.getElementById('devolverEquipoLabel');
                     modalTitle.textContent = `Devolver Equipo - ID: ${idMovimientos}`;
 
                     const row = this.closest('tr');
-                    const encargadoId = row.querySelector('td:nth-child(1)').textContent;
-                    const responsableId = row.querySelector('td:nth-child(5)').textContent;
+                    // const encargadoId = row.querySelector('td:nth-child(1)').textContent;
+                    
+                    // const responsableId = row.querySelector('td:nth-child(5)').textContent;
+
+                    const encargadoId = $(this).data('idfuncionario');
+                    const responsableId = $(this).data('idfuncionariocontra');
 
                     const modalBody = document.querySelector('.modal-body');
                     modalBody.innerHTML = `
@@ -180,8 +215,8 @@
 
                     if (encargadoId) {
                         const buttonEncargado = document.createElement('button');
-                        buttonEncargado.className = 'btn btn-danger me-2';
-                        buttonEncargado.textContent = 'Devolver para Encargado';
+                        buttonEncargado.className = 'btn btn-primary me-2';
+                        buttonEncargado.textContent = `Firma Encargado `;
                         buttonEncargado.onclick = function () {
                             abrirSegundoModal(idMovimientos, encargadoId, 'Encargado');
                         };
@@ -190,8 +225,8 @@
 
                     if (responsableId) {
                         const buttonResponsable = document.createElement('button');
-                        buttonResponsable.className = 'btn btn-danger';
-                        buttonResponsable.textContent = 'Devolver para Responsable';
+                        buttonResponsable.className = 'btn btn-warning';
+                        buttonResponsable.textContent = `Firma Responsable `;
                         buttonResponsable.onclick = function () {
                             abrirSegundoModal(idMovimientos, responsableId, 'Responsable');
                         };
@@ -207,7 +242,7 @@
                 const modalBody = document.getElementById('devolverDetalleBody');
                 modalBody.innerHTML = `
                         <div class="mb-3">
-                            <canvas id="signatureCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
+                            <canvas id="signatureCanvas" width="400" height="200" style="border:1px solid #000;"></canvas>
                         </div>
                         <button type="button" class="btn btn-secondary" id="clearCanvas">Limpiar Firma</button>
                         <button type="button" class="btn btn-primary" id="saveSignature">Guardar Firma</button>
@@ -251,18 +286,121 @@
                         dataURL: dataURL
                     },
                     success: function (response) {
-                        if (response.success) {
-                            alert("Firma guardada exitosamente.");
-                        } else {
-                            alert("Error al guardar la firma: " + response.message);
-                        }
+                        // Eliminar cualquier alerta anterior
+                        $('#devolverDetalleBody .alert').remove();
+
+                        let alertType = response.success ? 'alert-success' : 'alert-danger';
+                        let alertMessage = response.success ?
+                            'Firma guardada exitosamente.' :
+                            `Error al guardar la firma: ${response.message}`;
+
+                        // Crear el mensaje de alerta
+                        const alertHtml = `
+                        <div class="alert ${alertType} alert-dismissible fade show" role="alert">
+                            ${alertMessage}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+
+                        // Agregar la alerta al cuerpo del modal
+                        $('#devolverDetalleBody').prepend(alertHtml);
                     },
                     error: function () {
-                        alert("Error en la solicitud de guardado de firma.");
+                        // Eliminar cualquier alerta anterior
+                        $('#devolverDetalleBody .alert').remove();
+
+                        // Crear el mensaje de alerta de error
+                        const alertHtml = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Error en la solicitud de guardado de firma.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+
+                        // Agregar la alerta al cuerpo del modal
+                        $('#devolverDetalleBody').prepend(alertHtml);
                     }
                 });
             }
+
         });
+        $(document).ready(function () {
+            // Evento para capturar el clic en el botón "Devolver"
+            $('.devolver-btn').on('click', function () {
+                // Obtener los valores de los atributos data-*
+                const idFuncionario = $(this).data('idfuncionario');
+                const idFuncionarioContra = $(this).data('idfuncionariocontra');
+
+
+
+                const idArticulo = $(this).data('idarticulo');
+                const idMovimiento = $(this).data('idmovimiento');
+
+                // Asignar estos valores a variables globales o utilizarlas directamente en la función de confirmación
+                $('#confirmarDevolucion').data('idfuncionario', idFuncionario);
+                $('#confirmarDevolucion').data('idfuncionariocontra', idFuncionarioContra);
+                $('#confirmarDevolucion').data('idarticulo', idArticulo);
+                $('#confirmarDevolucion').data('idmovimiento', idMovimiento);
+            });
+            $('#confirmarDevolucion').on('click', function () {
+                // Obtener los valores de los atributos data-* establecidos en el clic anterior
+                const idFuncionario = $(this).data('idfuncionario');
+                const idFuncionarioContra = $(this).data('idfuncionariocontra');
+                const idArticulo = $(this).data('idarticulo');
+                const idMovimiento = $(this).data('idmovimiento');
+                const observacion = $('#comentarios').val();
+
+                // Realizar la solicitud AJAX al servidor
+                $.ajax({
+                    url: '@Url.Action("DevolverEquipo", "Devolucion")',
+                    type: 'POST',
+                    data: {
+                        idFuncionario: idFuncionario,
+                        idFuncionarioContra: idFuncionarioContra,
+                        idArticulo: idArticulo,
+                        idMovimiento: idMovimiento,
+                        Observacion: observacion
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Mostrar un mensaje de éxito
+                            $('#alert-container').html('<div class="alert alert-success">Devolución registrada correctamente.</div>');
+
+                            // Eliminar la fila del movimiento correspondiente
+                            // const movimientoRow = $(`#DevolucionTable tr[data-id="${idMovimiento}"]`);
+                            // movimientoRow.remove();
+
+                            // // Eliminar la fila de adicionales correspondiente al movimiento
+                            // const filaAdicionales = $(`#DevolucionTable tr[data-id="${idArticulo}"]`); // Cambiar aquí según sea necesario
+                            // filaAdicionales.remove(); // Elimina la fila de adicionales
+
+                            // // Cerrar el modal después de un breve tiempo
+                            // setTimeout(() => {
+                            //     $('#DevolverEquipo').modal('hide');
+                            // }, 2000);
+                            $('#DevolucionTable tr[data-id="' + idArticulo + '"]').next().remove(); // Eliminar la fila de detalles
+                            $('#DevolucionTable tr[data-id="' + idArticulo + '"]').remove(); // Eliminar la fila principal
+
+                            // Verificar si quedan filas en la tabla
+                            if ($('#DevolucionTable tbody tr').length === 0) {
+                                $('#DevolucionTable').remove(); // Eliminar la tabla
+                            }
+                            $('#DevolverEquipo').modal('hide');
+                        } else {
+                            // Mostrar un mensaje de error en caso de fallo
+                            $('#alert-container').html(`<div class="alert alert-danger">${response.errorMessage}</div>`);
+                        }
+                    },
+                    error: function () {
+                        // Mostrar un mensaje genérico de error
+                        $('#alert-container').html('<div class="alert alert-danger">Ocurrió un error al procesar la devolución.</div>');
+                    }
+                });
+            });
+
+
+        });
+
     </script>
 
 

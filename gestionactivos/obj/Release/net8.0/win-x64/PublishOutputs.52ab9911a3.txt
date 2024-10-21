@@ -281,6 +281,7 @@ D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Text.Encoding.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Text.Encoding.Extensions.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Text.Encodings.Web.dll
+D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Text.Json.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Text.RegularExpressions.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Threading.Channels.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\refs\System.Threading.dll
@@ -398,7 +399,6 @@ D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\System.Reflection.MetadataLoadContext.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\System.Runtime.Caching.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
-D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\System.Text.Json.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\af\Humanizer.resources.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\ar\Humanizer.resources.dll
 D:\Documentos\gestiondeactivos\gestionactivos\obj\Release\net8.0\win-x64\PubTmp\Out\az\Humanizer.resources.dll
