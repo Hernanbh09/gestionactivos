@@ -111,6 +111,62 @@
                     <div id="adicionalesContainer"></div>
                 </div>
 
+                <div class="form-group">
+                    <div class="row mt-2" id="Entrega" style="display:;">
+                        <!-- Opciones de checkboxes -->
+                        <h3 class="mt-3">Agregar Extras:</h3>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkMaleta">
+                                <label class="form-check-label" for="checkMaleta">Maleta</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkGuaya">
+                                <label class="form-check-label" for="checkGuaya">Guaya</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkBase">
+                                <label class="form-check-label" for="checkBase">Base</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkCargador">
+                                <label class="form-check-label" for="checkCargador">Cargador</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkPadMouse">
+                                <label class="form-check-label" for="checkPadMouse">Pad Mouse</label>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkDiadema">
+                                <label class="form-check-label" for="checkDiadema">Diadema</label>
+                            </div>
+                        </div>
+
+                        <!-- Columna vacía para empujar el botón a la esquina derecha -->
+                        <div class="col-auto ms-auto">
+                            <input type="button" class="btn btn-primary" value="Agregar Extras" onclick="guardarExtras()">
+                        </div>
+
+                        <div class="alert alert-success mt-3" role="alert" id="successMensajeExtras" style="display:none;"></div>
+                        <div class="alert alert-danger mt-3" role="alert" id="errorMensajeAdicionalExtras" style="display:none;"></div>
+
+                    </div>
+                </div>
+
+                </div>
+
+
                 <div id="AgregarAdicional" class="form-group" style="display:none;">
                     <h3 class="mt-3">Agregar Adicional:</h3>
                     <label for="selectadicional" id="labeladicional">Agregar Adicional</label>
@@ -589,7 +645,7 @@
 
                         response.data2.forEach(function (adicional, index) {
                             if (adicional.idAdicional == null) {
-                                $('#AgregarAdicional').show();
+                                $('#AgregarAdicional').hide();
                             } else {
                                 sumaAdicional = index + 1;
                                 adicionalesHtml += `
@@ -619,7 +675,7 @@
                         });
 
                         $('#adicionalesContainer').html(adicionalesHtml);
-                        $('#AgregarAdicional').show();
+                        $('#AgregarAdicional').hide();
                     } else {
                         $('#resultadosPlaca').hide();
 
@@ -627,6 +683,12 @@
                         if (response.errorMessage) {
                             $('#errorMensajePlaca').hide(); // Ocultar mensaje anterior
                             $('#errorMensajePlacaInput').text(response.errorMessage).show();
+
+                            $('#AgregarAdicional').hide();
+                            $('#Contratista').hide();
+                            $('#Firmar').hide();
+                            $('#Asignar').hide();
+
                         } else {
                             $('#errorMensajePlaca').text('No se encontraron resultados para la Placa del Artículo.').show();
                         }
@@ -638,7 +700,55 @@
                 }
             });
         }
+        function guardarExtras() {
+            // Captura el ID del artículo
+            var idArticulo = $('#idArticulo').val();
 
+            // Captura el estado de cada checkbox
+            var maleta = $('#checkMaleta').is(':checked') ? 1 : 0;
+            var guaya = $('#checkGuaya').is(':checked') ? 1 : 0;
+            var base = $('#checkBase').is(':checked') ? 1 : 0;
+            var cargador = $('#checkCargador').is(':checked') ? 1 : 0;
+            var padMouse = $('#checkPadMouse').is(':checked') ? 1 : 0;
+            var diadema = $('#checkDiadema').is(':checked') ? 1 : 0;
+
+            // Llamada AJAX para enviar datos al controlador
+            $.ajax({
+                url: '@Url.Action("GuardarExtrasC", "Asignacion")', // Asegúrate de poner el nombre correcto del controlador
+                type: 'POST',
+                data: {
+                    idArticulo: idArticulo,
+                    Maleta: maleta,
+                    Guaya: guaya,
+                    Base: base,
+                    Cargador: cargador,
+                    PadMouse: padMouse,
+                    Diadema: diadema
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Mostrar mensaje de éxito y ocultar el de error si es necesario
+                        $('#successMensajeExtras').text('Datos guardados correctamente').show();
+                        setTimeout(function () {
+                            $('#successMensajeExtras').hide();
+                        }, 10000);
+                        $('#AgregarAdicional').show();
+                        $('#errorMensajeAdicionalExtras').hide();
+                    } else {
+                        // Mostrar mensaje de error con el mensaje recibido y ocultar el de éxito
+                        $('#errorMensajeAdicionalExtras').text('Error al guardar los datos: ' + response.message).show();
+                        $('#successMensajeExtras').hide();
+                        $('#AgregarAdicional').hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    // Mostrar un mensaje de error general y ocultar el de éxito
+                    $('#errorMensajeAdicionalExtras').text('Error en la solicitud. Por favor, inténtelo de nuevo más tarde.').show();
+                    $('#successMensajeExtras').hide();
+                }
+            });
+        }
 
 
         function consultarPlacaAdicionalBtn() {
@@ -743,7 +853,7 @@
 
                         response.data2.forEach(function (adicional, index) {
                             if (adicional.idAdicional == null) {
-                                $('#AgregarAdicional').show();
+                                $('#AgregarAdicional').hide();
                             } else {
                                 sumaAdicional = index + 1;
                                 adicionalesHtml += `
@@ -781,6 +891,12 @@
                 }
             });
         }
+
+        
+
+
+
+
        
         function MostrarDatosContratista() {
             var select = document.getElementById("selectContratista");
@@ -833,6 +949,7 @@
                 buttonFuncionario.disabled = false; // Habilita el botón
             }
         });
+        
 
         function asignarEquipoBtn() {
             var idFuncionario = $('#idFuncionario').val();

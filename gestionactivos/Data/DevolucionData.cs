@@ -69,6 +69,14 @@ namespace gestionactivos.Data
                                     ModeloAdicional = reader.IsDBNull(19) ? string.Empty : reader.GetString(19),
                                     SerialAdicional = reader.IsDBNull(20) ? string.Empty : reader.GetString(20),
                                     PlacaAdicional = reader.IsDBNull(21) ? string.Empty : reader.GetString(21),
+                                    // Nuevos campos de Extras
+                                    ExtraMaleta = reader.IsDBNull(22) ? false : reader.GetInt32(22) == 1,
+                                    ExtraGuaya = reader.IsDBNull(23) ? false : reader.GetInt32(23) == 1,
+                                    ExtraBase = reader.IsDBNull(24) ? false : reader.GetInt32(24) == 1,
+                                    ExtraCargador = reader.IsDBNull(25) ? false : reader.GetInt32(25) == 1,
+                                    ExtraPadMouse = reader.IsDBNull(26) ? false : reader.GetInt32(26) == 1,
+                                    ExtraDiadema = reader.IsDBNull(27) ? false : reader.GetInt32(27) == 1
+
                                 };
 
                                 funcionarios.Add(funcionario);

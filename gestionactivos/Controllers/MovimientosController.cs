@@ -30,6 +30,11 @@ namespace gestionactivos.Controllers
             var oLista = _MovimientosData.Listar(idUsuario);
             return View(oLista);
         }
-
+        [HttpGet]
+        public IActionResult GetAllMovimientos()
+        {
+            var oLista = _MovimientosData.Listar(idUsuario); // Obtén todos los movimientos
+            return Json(oLista); // Devuelve los movimientos en formato JSON
+        }
     }
 }

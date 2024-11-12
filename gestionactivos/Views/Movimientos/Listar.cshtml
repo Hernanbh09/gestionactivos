@@ -1,61 +1,91 @@
 ﻿@model List<MovimientosModel>
 
+    @{
+    ViewData["Title"] = "Movimientos";
+    }
 <div class="card">
     <div class="card-header">
         Lista de Movimientos
     </div>
     <div class="card-body">
-        
+        <button id="downloadExcel" class="btn btn-success">Descargar Excel</button>
+
         <hr />
         <div class="table-responsive">
-        <table id="MovimientosTable" class="table table-bordered">
-            <thead>
-                <tr>
-
-                    <th>idMovimientos</th>
-                    <th>Evento</th>
-                    <th>NombreEncargado</th>
-                    <th>NombreResponsable</th>
-                    <th>Categoria</th>
-                    <th>Modelo</th>
-                    <th>Serial</th>
-                    <th>Placa</th>
-                    <td>Fecha Movimiento</td>
-                    <th>Ver Archivo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <table id="MovimientosTable" class="table table-bordered">
+                <thead>
                     <tr>
-                        <td>@item.idMovimientos</td>
-                        <td>@item.Evento</td>
-                        <td>@item.NombreEncargado</td>
-                        <td>@item.NombreResponsable</td>
-                        <td>@item.Categoria</td>
-                        <td>@item.Modelo</td>
-                        <td>@item.Serial</td>
-                        <td>@item.Placa</td>
-                            <td>@item.FechaMovimiento</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Archivo))
-                            {
-                                <!-- Botón habilitado si Archivo no es nulo o vacío -->
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verArchivoModal"
-                                        onclick="verArchivo('@item.Archivo')">
-                                    Ver PDF
-                                </button>
-                            }
-                            else
-                            {
-                                <!-- Botón deshabilitado si Archivo es nulo o vacío -->
-                                <button class="btn btn-secondary" disabled>No disponible</button>
-                            }
-                        </td>
+                        <th>idMovimientos</th>
+                        <th>Evento</th>
+                        <th>Nombre Encargado</th>
+                        <th>Nombre Responsable</th>
+                        <th>Categoria</th>
+                        <th>Modelo</th>
+                        <th>Serial</th>
+                        <th>Placa</th>
+                        @* Las siguientes columnas se mostrarán solo si tienen datos *@
+                        @if (Model.Any(item => !string.IsNullOrEmpty(item.CategoriaAdicional)))
+                        {
+                            <th>Categoria Adicional</th>
+                        }
+                        @if (Model.Any(item => !string.IsNullOrEmpty(item.ModeloAdicional)))
+                        {
+                            <th>Modelo Adicional</th>
+                        }
+                        @if (Model.Any(item => !string.IsNullOrEmpty(item.SerialAdicional)))
+                        {
+                            <th>Serial Adicional</th>
+                        }
+                        @if (Model.Any(item => !string.IsNullOrEmpty(item.PlacaAdicional)))
+                        {
+                            <th>Placa Adicional</th>
+                        }
+                        @if (Model.Any(item => !string.IsNullOrEmpty(item.FechaMovimiento)))
+                        {
+                            <th>Fecha Movimiento</th>
+                        }
+                        <th>Ver Archivo</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.idMovimientos</td>
+                            <td>@item.Evento</td>
+                            <td>@item.NombreEncargado</td>
+                            <td>@item.NombreResponsable</td>
+                            <td>@item.Categoria</td>
+                            <td>@item.Modelo</td>
+                            <td>@item.Serial</td>
+                            <td>@item.Placa</td>
+
+                            <td>@(string.IsNullOrEmpty(item.CategoriaAdicional) ? "" : item.CategoriaAdicional)</td>
+                            <td>@(string.IsNullOrEmpty(item.ModeloAdicional) ? "" : item.ModeloAdicional)</td>
+                            <td>@(string.IsNullOrEmpty(item.SerialAdicional) ? "" : item.SerialAdicional)</td>
+                            <td>@(string.IsNullOrEmpty(item.PlacaAdicional) ? "" : item.PlacaAdicional)</td>
+
+
+                            <td>@item.FechaMovimiento</td>
+                            
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Archivo))
+                                {
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verArchivoModal"
+                                            onclick="verArchivo('@item.Archivo')">
+                                        Ver PDF
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary" disabled>No disponible</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -76,13 +106,29 @@
         </div>
     </div>
 </div>
-@section script{
+@section script {
     <script>
         function verArchivo(base64Pdf) {
-            // Asignar el archivo PDF Base64 al iframe
             const pdfViewer = document.getElementById("pdfViewer");
             pdfViewer.src = "data:application/pdf;base64," + base64Pdf;
         }
-    </script>
+        document.getElementById('downloadExcel').addEventListener('click', function () {
+            // Hacer una llamada AJAX para obtener todos los datos
+            fetch('@Url.Action("GetAllMovimientos")')
+                .then(response => response.json())
+                .then(data => {
+                    // Convertir los datos a formato de tabla
+                    const ws = XLSX.utils.json_to_sheet(data);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, ws, "Movimientos");
 
+                    // Exportar a archivo Excel
+                    XLSX.writeFile(workbook, 'movimientos.xlsx');
+                })
+                .catch(error => {
+                    console.error('Error al obtener datos:', error);
+                });
+        });
+
+    </script>
 }

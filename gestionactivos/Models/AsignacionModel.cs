@@ -41,5 +41,10 @@
         public string? Serial { get; set; }
         public object IdAsignacion { get; set; }
         public string idUsuario { get; internal set; }
+
+
+        //Campos Extras
+
+
     }
 }

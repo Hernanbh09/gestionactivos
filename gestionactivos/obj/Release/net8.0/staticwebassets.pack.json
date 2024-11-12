@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets\\Img\\Devolucion.png"
     },
     {
+      "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Devolucion2.png",
+      "PackagePath": "staticwebassets\\Img\\Devolucion2.png"
+    },
+    {
+      "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Pendiente.png",
+      "PackagePath": "staticwebassets\\Img\\Pendiente.png"
+    },
+    {
       "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Plantilla\\logoSumimas.png",
       "PackagePath": "staticwebassets\\Img\\Plantilla\\logoSumimas.png"
     },
@@ -27,6 +35,10 @@
     {
       "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\fondo.avif",
       "PackagePath": "staticwebassets\\Img\\fondo.avif"
+    },
+    {
+      "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\icon.ico",
+      "PackagePath": "staticwebassets\\Img\\icon.ico"
     },
     {
       "Id": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\logo.svg",

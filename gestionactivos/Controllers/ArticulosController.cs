@@ -30,6 +30,9 @@ namespace gestionactivos.Controllers
 
         public IActionResult Guardar()
         {
+
+            var listaCategoria= _ArticulosData.ListarA(); // Obtén la lista de clientes
+            ViewData["Categoria"] = listaCategoria;
             return View();
         }
 
@@ -38,7 +41,8 @@ namespace gestionactivos.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-
+            var listaCategoria = _ArticulosData.ListarA(); // Obtén la lista de clientes
+            ViewData["Categoria"] = listaCategoria;
             var mensaje = _ArticulosData.Guardar(oArticulo, idUsuario);
 
             if (string.IsNullOrEmpty(mensaje))
@@ -53,6 +57,9 @@ namespace gestionactivos.Controllers
         public IActionResult Editar(int idArticulo)
         {
             var oarticulo = _ArticulosData.Obtener(idArticulo, idUsuario);
+            var listaCategoria = _ArticulosData.ListarA(); // Obtén la lista de clientes
+            ViewData["Categoria"] = listaCategoria;
+
             return View(oarticulo);
         }
 
@@ -63,6 +70,7 @@ namespace gestionactivos.Controllers
                 return View();
 
             var respuesta = _ArticulosData.Editar(oArticulo, idUsuario);
+            
             if (respuesta)
                 return RedirectToAction("Listar");
             else

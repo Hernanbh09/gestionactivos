@@ -1,4 +1,8 @@
 ﻿@model List<gestionactivos.Models.PendientesModel>
+
+@{
+    ViewData["Title"] = "Pendientes";
+    }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.0.1/signature_pad.min.js"></script>
 <link href="~/css/site.css" rel="stylesheet" />
 <div class="card">
@@ -13,136 +17,161 @@
         <hr />
         <div class="table-responsive">
             <table id="MovimientosTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>idMovimientos</th>
-                    <th>Evento</th>
-                    <th>Fecha Movimiento</th>
-                    <th>Cédula</th>
-                    <th>Nombre Completo</th>
-                    <th>Placa</th>
-                    <th>Serial</th>
-                    <th>Firmar Funcionario Responsable</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+                <thead>
                     <tr>
-                        <td>@item.idMovimientos</td>
-                        <td>@item.Evento</td>
-                        <td>@item.FechaMovimiento.ToString("dd/MM/yyyy")</td>
-                        <td>@item.Cedula</td>
-                        <td>@item.NombreCompleto</td>
-                        <td>@item.Placa</td>
-                        <td>@item.Serial</td>
-                        <td>
-                            @if (item.idFuncionarioEncargado > 0)
-                            {
-                                <button id="open-signature-modal-funcionario_@item.idFuncionarioEncargado" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signatureModalFuncionario_@item.idFuncionarioEncargado" data-bs-backdrop="static">Firmar Entrega Funcionario</button>
-                            }
-                            else
-                            {
-                                <button class="btn btn-secondary" disabled>No disponible</button>
-                            }
-                        </td>
+                        <th>idMovimientos</th>
+                        <th>Evento</th>
+                        <th>Fecha Movimiento</th>
+                        <th>Cédula</th>
+                        <th>Nombre Completo</th>
+                        <th>Placa</th>
+                        <th>Serial</th>
+                        <th>Firmar Funcionario Responsable</th>
                     </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.idMovimientos</td>
+                            <td>@item.Evento</td>
+                            <td>@item.FechaMovimiento.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Cedula</td>
+                            <td>@item.NombreCompleto</td>
+                            <td>@item.Placa</td>
+                            <td>@item.Serial</td>
+                            <td>
+                                @if (item.idFuncionarioEncargado > 0)
+                                {
+                                    <button class="btn btn-primary open-signature-modal-funcionario"
+                                            data-idfuncionario="@item.idFuncionarioEncargado"
+                                            data-idmovimientos="@item.idMovimientos">
+                                        Firma Entrega Funcionario
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary" disabled>No disponible</button>
+                                }
+                            </td>
+                        </tr>
 
-                    <!-- Modal de firma para cada funcionario -->
-                    <div class="modal fade" id="signatureModalFuncionario_@item.idFuncionarioEncargado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Firmar Entrega Funcionario</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <canvas id="signature-pad-funcionario_@item.idFuncionarioEncargado" class="signature-pad" data-idmovimientos="@item.idMovimientos"></canvas>
-                                    <div id="errorMensajeFirmaRequeridaFuncionario_@item.idFuncionarioEncargado" style="display:none;color:red;">La firma es obligatoria</div>
-                                    <div id="errorMensajeFirmaFunc_@item.idFuncionarioEncargado" class="alert alert-danger mt-3" style="display:none;">Error al guardar la firma.</div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" id="clear-funcionario_@item.idFuncionarioEncargado" class="btn btn-warning">Limpiar</button>
-                                    <button type="button" id="save-funcionario_@item.idFuncionarioEncargado" class="btn btn-primary">Guardar Firma</button>
+                        <!-- Overlay -->
+                        <div id="rotate-device-overlay">
+                            <div>
+                                <h1>Por favor, gira tu dispositivo a modo horizontal para firmar</h1>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="signatureModalFuncionario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="signatureModalLabel">Firma</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <canvas id="signature-pad-funcionario" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-danger" id="clear-funcionario">Limpiar</button>
+                                        <button type="button" class="btn btn-success" id="save-funcionario">Guardar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                }
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
 @section script {
     <script>
-        var signaturePads = {}; // Almacenar los pads de firma
+        var signaturePadFuncionario;
 
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeSignaturePad();
             setupEventListeners();
         });
 
-        function setupEventListeners() {
-            // Inicializar el modal de firma para el funcionario
-            $(document).on('shown.bs.modal', '[id^="signatureModalFuncionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                initializeSignaturePad(id);
-                resizeCanvas(id);
-                signaturePads[id].clear();
-            });
+        function initializeSignaturePad() {
+            var canvasFuncionario = document.getElementById('signature-pad-funcionario');
+            signaturePadFuncionario = new SignaturePad(canvasFuncionario);
+        }
 
-            $(window).on('resize', function () {
-                Object.keys(signaturePads).forEach(id => {
-                    resizeCanvas(id);
+        function setupEventListeners() {
+            // Seleccionar todos los botones de firma y agregarles el evento de click
+            document.querySelectorAll('.open-signature-modal-funcionario').forEach(button => {
+                button.addEventListener('click', function () {
+                    var idFuncionario = button.getAttribute('data-idfuncionario');
+                    var idMovimientos = button.getAttribute('data-idmovimientos');
+                    openSignatureModalF(idFuncionario, idMovimientos);
                 });
             });
 
-            $(document).on('click', '[id^="clear-funcionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                clearSignaturePad(id);
+            window.addEventListener('resize', handleWindowResize);
+
+            $('#signatureModalFuncionario').on('shown.bs.modal', function () {
+                resizeCanvas();
+                signaturePadFuncionario.clear();
+                checkOrientation();
             });
 
-            $(document).on('click', '[id^="save-funcionario_"]', function () {
-                var id = this.id.split('_')[1]; // Extraer el ID único
-                saveSignatureF(id);
+            document.getElementById('clear-funcionario').addEventListener('click', clearSignaturePadF);
+
+            // Aquí ajustamos el botón "Guardar" para que obtenga idFuncionario y idMovimientos desde el modal.
+            document.getElementById('save-funcionario').addEventListener('click', function () {
+                saveSignatureF();
             });
         }
 
-        function initializeSignaturePad(id) {
-            var canvas = document.getElementById(`signature-pad-funcionario_${id}`);
-            if (!signaturePads[id]) {
-                signaturePads[id] = new SignaturePad(canvas);
-            }
+        function openSignatureModalF(idFuncionario, idMovimientos) {
+            $('#signatureModalFuncionario').data('idfuncionario', idFuncionario);
+            $('#signatureModalFuncionario').data('idmovimientos', idMovimientos);
+            $('#signatureModalFuncionario').modal('show');
+            checkOrientation();
         }
 
-        function resizeCanvas(id) {
-            var canvas = document.getElementById(`signature-pad-funcionario_${id}`);
+        function resizeCanvas() {
             var ratio = Math.max(window.devicePixelRatio || 1, 1);
-
+            var canvas = document.getElementById('signature-pad-funcionario');
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
         }
 
-        function clearSignaturePad(id) {
-            if (signaturePads[id]) {
-                signaturePads[id].clear();
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                document.getElementById('rotate-device-overlay').style.display = 'flex';
+            } else {
+                document.getElementById('rotate-device-overlay').style.display = 'none';
             }
         }
 
+        function handleWindowResize() {
+            if ($('#signatureModalFuncionario').is(':visible')) {
+                resizeCanvas();
+                checkOrientation();
+            }
+        }
 
-        function saveSignatureF(idFuncionario) {
-            var idMovimientos = $('#signature-pad-funcionario_' + idFuncionario).data('idmovimientos');
+        function clearSignaturePadF() {
+            signaturePadFuncionario.clear();
+        }
 
-            if (signaturePads[idFuncionario].isEmpty()) {
-                $('#errorMensajeFirmaRequeridaFuncionario').show();
+        function saveSignatureF() {
+            // Obtener idFuncionario e idMovimientos directamente del modal
+            var idFuncionario = $('#signatureModalFuncionario').data('idfuncionario');
+            var idMovimientos = $('#signatureModalFuncionario').data('idmovimientos');
+
+            if (signaturePadFuncionario.isEmpty()) {
+                alert('Debe agregar una firma antes de guardar.');
             } else {
-                $('#errorMensajeFirmaRequeridaFuncionario').hide();
-                var dataURL = signaturePads[idFuncionario].toDataURL();
+                var dataURL = signaturePadFuncionario.toDataURL();
 
                 $.ajax({
                     url: '@Url.Action("SaveSignatureFuncionario", "Pendientes")',
@@ -154,32 +183,28 @@
                     },
                     success: function (response) {
                         if (response.success) {
-                            $('#signatureModalFuncionario_' + idFuncionario).modal('hide');
-                            $('#successMensajeFirmaFunc').text('Se agregó correctamente la firma de funcionario ' + idFuncionario).show(); // Muestra el mensaje de éxito
-                            $('#errorMensajeFirmaFunc_' + idFuncionario).hide(); // Oculta el mensaje de error
+                            $('#signatureModalFuncionario').modal('hide');
+                            $('#successMensajeFirmaFunc').text('Se agregó correctamente la firma de funcionario ' + idFuncionario).show();
                             updateTableRow(idMovimientos, response);
                         } else {
-                            $('#errorMensajeFirmaFunc_' + idFuncionario).text(response.message).show(); // Muestra el mensaje de error
+                            alert(response.message);
                         }
                     },
-                    error: function (xhr, status, error) {
-                        $('#errorMensajeFirmaFunc_' + idFuncionario).text('Error en la solicitud AJAX.').show(); // Muestra el error en el div
+                    error: function () {
+                        alert('Error en la solicitud AJAX.');
                     }
                 });
             }
-        } 
+        }
         function updateTableRow(idMovimientos, response) {
-            // Suponiendo que la respuesta tiene el nuevo estado que quieres mostrar
-            // Aquí necesitas acceder a la fila que quieres actualizar usando el idMovimientos
             var row = $('#MovimientosTable tbody tr').filter(function () {
-                return $(this).find('td').eq(0).text() == idMovimientos; // Cambia el índice según la posición de idMovimientos
+                return $(this).find('td').eq(0).text() == idMovimientos;
             });
 
             if (row.length) {
-                // Actualiza los datos de la fila según lo que se devuelve en la respuesta
-                // Por ejemplo, puedes cambiar el estado de la columna de firma o cualquier otro dato
-                row.find('td').eq(7).html('<button class="btn btn-success" disabled>Firmado</button>'); // Cambia a "Firmado"
+                row.find('td').eq(7).html('<button class="btn btn-success" disabled>Firmado</button>');
             }
         }
     </script>
+
 }

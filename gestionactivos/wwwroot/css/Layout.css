@@ -185,6 +185,10 @@ header {
 
     }
 
+    .nav-bottom a.active {
+        background-color: #0056b3; /* Cambia el color según lo que necesites */
+        color: white; /* Asegúrate de que el texto sea visible */
+    }
 /* Menu Lateral*/
 .float-button {
     width: 100px;

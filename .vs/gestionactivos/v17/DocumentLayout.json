@@ -1,71 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Documentos\\gestiondeactivos\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|d:\\documentos\\gestiondeactivos\\gestionactivos\\data\\devoluciondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|solutionrelative:gestionactivos\\data\\devoluciondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|d:\\documentos\\gestiondeactivos\\gestionactivos\\controllers\\devolucioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|solutionrelative:gestionactivos\\controllers\\devolucioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|d:\\documentos\\gestiondeactivos\\gestionactivos\\views\\devolucion\\devolucion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1A920567-F299-4768-8946-9549075A7C3A}|gestionactivos\\gestionactivos.csproj|solutionrelative:gestionactivos\\views\\devolucion\\devolucion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DevolucionData.cs",
-              "DocumentMoniker": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Data\\DevolucionData.cs",
-              "RelativeDocumentMoniker": "gestionactivos\\Data\\DevolucionData.cs",
-              "ToolTip": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Data\\DevolucionData.cs",
-              "RelativeToolTip": "gestionactivos\\Data\\DevolucionData.cs",
-              "ViewState": "AQIAAHMAAADAaWZmZuYqwJ4AAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T12:40:07.615Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DevolucionController.cs",
-              "DocumentMoniker": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Controllers\\DevolucionController.cs",
-              "RelativeDocumentMoniker": "gestionactivos\\Controllers\\DevolucionController.cs",
-              "ToolTip": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Controllers\\DevolucionController.cs",
-              "RelativeToolTip": "gestionactivos\\Controllers\\DevolucionController.cs",
-              "ViewState": "AQIAAIQAAAAAAAAAAAAAAKkAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T12:38:39.284Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Devolucion.cshtml",
-              "DocumentMoniker": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Views\\Devolucion\\Devolucion.cshtml",
-              "RelativeDocumentMoniker": "gestionactivos\\Views\\Devolucion\\Devolucion.cshtml",
-              "ToolTip": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\Views\\Devolucion\\Devolucion.cshtml",
-              "RelativeToolTip": "gestionactivos\\Views\\Devolucion\\Devolucion.cshtml",
-              "ViewState": "AQIAAOIAAAAAAAAAAAAkwAoBAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-17T13:26:14.223Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

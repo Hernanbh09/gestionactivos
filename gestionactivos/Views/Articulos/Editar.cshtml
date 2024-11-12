@@ -1,6 +1,8 @@
 ﻿@model ArticulosModel
 
-
+@{
+    ViewData["Title"] = "Editar - Articulo";
+}
 
 <div class="card">
     <div class="card-header">
@@ -10,18 +12,27 @@
         <form asp-action="Editar" asp-controller="Articulos" method="post">
             <input asp-for="idArticulo" type="hidden" type="text" class="form-control" />
             
-            
+            <br />
             <div class="mb-3">
                 <label class="form-label">Categoria</label>
-                <input asp-for="Categoria" type="text" class="form-control" />
-                <span asp-validation-for="Categoria" class="text-danger"></span>
-              
+                <select class="form-select" id="seleccioneCategoria" name="idCategorias">
+                    <option value="0" disabled>Seleccione un Categoria</option>
+                    @if (ViewData["Categoria"] != null)
+                    {
+                        var Categorias = (List<ArticulosModel>)ViewData["Categoria"];
+                        foreach (var Categoria in Categorias)
+                        {
+                            <option value="@Categoria.idCategoria">
+                                Ctg:@Categoria.Categoria - Mo:@Categoria.Modelo
+                            </option>
 
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Modelo</label>
-                <input asp-for="Modelo" type="text" class="form-control" />
-                <span asp-validation-for="Modelo" class="text-danger"></span>
+                        }
+                    }
+                    else
+                    {
+                        <option value="0">No hay Categoria disponibles</option>
+                    }
+                </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Serial</label>
@@ -40,3 +51,24 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Esperar a que el documento esté listo
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener el valor de idCategorias desde el modelo
+        var idCategoriaSeleccionado = @Model.idCategoria;
+
+        // Obtener el elemento select
+        var selectCategoria = document.getElementById("seleccioneCategoria");
+
+        // Verificar si existe el Categoria seleccionado
+        if (selectCategoria) {
+            for (var i = 0; i < selectCategoria.options.length; i++) {
+                if (parseInt(selectCategoria.options[i].value) === idCategoriaSeleccionado) {
+                    selectCategoria.selectedIndex = i; // Selecciona el Categoria
+                    break; // Salir del bucle una vez encontrado
+                }
+            }
+        }
+    });
+</script>

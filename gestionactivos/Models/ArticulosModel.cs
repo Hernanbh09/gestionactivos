@@ -6,11 +6,14 @@ namespace gestionactivos.Models
     {
         public int idArticulo { get; set; }
 
-        [Required(ErrorMessage = "El campo Categoria es obligatorio")]
-        public string? Categoria { get; set; }
 
-        [Required(ErrorMessage = "El campo Modelo es obligatorio")]
+
+        public int idCategoria { get; set; }
+
+        public string? Categoria { get; set; }
         public string? Modelo { get; set; }
+
+
 
         [Required(ErrorMessage = "El campo Serial es obligatorio")]
         public string? Serial { get; set; }

@@ -1,4 +1,6 @@
 ﻿
+using NuGet.Configuration;
+
 namespace gestionactivos.Models
 {
     public class GenerarpdfModel
@@ -41,6 +43,13 @@ namespace gestionactivos.Models
         public string NombreUsuario { get; set; }
         public string ApellidoUsuario { get; set; }
         public string FirmaUsuario { get; set; }
+
+        public Boolean ExtraMaleta { get; set; }
+        public Boolean ExtraGuaya { get; set; }
+        public Boolean ExtraBase { get; set; }
+        public Boolean ExtraCargador { get; set; }
+        public Boolean ExtraPadMouse { get; set; }
+        public Boolean ExtraDiadema { get; set; }
     }
     public class AdicionalModel
     {
@@ -50,5 +59,8 @@ namespace gestionactivos.Models
         public string SerialAdicional { get; set; }
         public string PlacaAdicional { get; set; }
     }
+
+
+    
 
 }

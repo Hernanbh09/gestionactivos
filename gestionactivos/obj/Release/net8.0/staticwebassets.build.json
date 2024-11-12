@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AEZ0f8PIR17vy8d8yT/BCCaAEW2jzVxzKiRd/CjJSXo=",
+  "Hash": "wT8e7PVdoEHVNqXm3VpViikelKvkTudbmZrwkHCOJH0=",
   "Source": "gestionactivos",
   "BasePath": "_content/gestionactivos",
   "Mode": "Default",
@@ -169,6 +169,25 @@
       "OriginalItemSpec": "wwwroot\\Img\\Devolucion.png"
     },
     {
+      "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Devolucion2.png",
+      "SourceId": "gestionactivos",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\",
+      "BasePath": "_content/gestionactivos",
+      "RelativePath": "Img/Devolucion2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Img\\Devolucion2.png"
+    },
+    {
       "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\firmar.webp",
       "SourceId": "gestionactivos",
       "SourceType": "Discovered",
@@ -226,6 +245,25 @@
       "OriginalItemSpec": "wwwroot\\Img\\fondo.avif"
     },
     {
+      "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\icon.ico",
+      "SourceId": "gestionactivos",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\",
+      "BasePath": "_content/gestionactivos",
+      "RelativePath": "Img/icon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Img\\icon.ico"
+    },
+    {
       "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\logo.svg",
       "SourceId": "gestionactivos",
       "SourceType": "Discovered",
@@ -243,6 +281,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Img\\logo.svg"
+    },
+    {
+      "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Pendiente.png",
+      "SourceId": "gestionactivos",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\",
+      "BasePath": "_content/gestionactivos",
+      "RelativePath": "Img/Pendiente.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Img\\Pendiente.png"
     },
     {
       "Identity": "D:\\Documentos\\gestiondeactivos\\gestionactivos\\wwwroot\\Img\\Plantilla\\logoSumimas.png",

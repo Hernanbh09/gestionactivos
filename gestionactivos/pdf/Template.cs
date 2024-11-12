@@ -9,6 +9,7 @@ using iText.Layout.Borders;
 using iText.Kernel.Geom;
 using gestionactivos.Models;
 using gestionactivos.Error;
+using NuGet.Configuration;
 namespace gestionactivos.pdf
 {
     public class Template
@@ -386,8 +387,6 @@ namespace gestionactivos.pdf
 
 
 
-
-
                 // Crear la tabla principal con 6 columnas
                 float[] mainTableWidthsElementos = { 15, 20, 15, 20, 15, 20 };
                 Table tableElementos = new Table(UnitValue.CreatePercentArray(mainTableWidthsElementos))
@@ -402,81 +401,92 @@ namespace gestionactivos.pdf
                 tableElementos.AddCell(headerElementos);
 
                 // Añadir los subtítulos de las columnas
-                tableElementos.AddCell(new Cell().Add(new Paragraph("ITEM").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
-                tableElementos.AddCell(new Cell().Add(new Paragraph("SERIAL").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
-                tableElementos.AddCell(new Cell().Add(new Paragraph("ITEM").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
-                tableElementos.AddCell(new Cell().Add(new Paragraph("SERIAL").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
-                tableElementos.AddCell(new Cell().Add(new Paragraph("ITEM").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
-                tableElementos.AddCell(new Cell().Add(new Paragraph("SERIAL").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE)); // Nueva columna
+                for (int i = 0; i < 3; i++)
+                {
+                    tableElementos.AddCell(new Cell().Add(new Paragraph("ITEM").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
+                    tableElementos.AddCell(new Cell().Add(new Paragraph("SERIAL").SetBold()).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetPadding(0).SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE));
+                }
 
-
-
+                // Selección de adicionales válidos
                 var adicionales = asignaciones.SelectMany(a => a.Adicionales).ToList();
                 var validAdicionales = adicionales.Where(a => !string.IsNullOrEmpty(a.CategoriaAdicional) ||
                                                               !string.IsNullOrEmpty(a.ModeloAdicional) ||
                                                               !string.IsNullOrEmpty(a.SerialAdicional) ||
                                                               !string.IsNullOrEmpty(a.PlacaAdicional)).ToList();
 
+                int rowCount = 0; // Contador de filas
+
                 if (validAdicionales.Count == 0)
                 {
-                    // Si no hay adicionales válidos, agregar 5 filas en blanco
-                    for (int i = 0; i < 5; i++)
+                    // Si no hay adicionales válidos, sólo se añaden los extras
+                    List<Tuple<string, bool>> extras = new List<Tuple<string, bool>> {
+        new Tuple<string, bool>("Maleta", asignaciones[0].ExtraMaleta),
+        new Tuple<string, bool>("Guaya", asignaciones[0].ExtraGuaya),
+        new Tuple<string, bool>("Base", asignaciones[0].ExtraBase),
+        new Tuple<string, bool>("Cargador", asignaciones[0].ExtraCargador),
+        new Tuple<string, bool>("PadMouse", asignaciones[0].ExtraPadMouse),
+        new Tuple<string, bool>("Diadema", asignaciones[0].ExtraDiadema)
+    };
+
+                    foreach (var extra in extras)
                     {
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
+                        if (extra.Item2 && rowCount < 5)
+                        {
+                            tableElementos.AddCell(new Cell().Add(new Paragraph(extra.Item1)));
+                            tableElementos.AddCell(new Cell().Add(new Paragraph("SI")));
+                            rowCount++;
+                        }
                     }
                 }
                 else
                 {
-                    // Agregar filas con datos
-                    int rowCount = 0;
+                    // Si hay adicionales válidos, agregar y contar las filas
                     foreach (var adicional in validAdicionales)
                     {
-                        // Formatear y agregar datos de adicional
+                        if (rowCount >= 5) break;
+
                         string categoriaModelo = $"{adicional.CategoriaAdicional}, {adicional.ModeloAdicional}";
                         string serialPlaca = $"S/N {adicional.SerialAdicional}, Placa: {adicional.PlacaAdicional}";
 
-                        // Añadir una fila de datos
-                        tableElementos.AddCell(new Cell().Add(new Paragraph(categoriaModelo).SetMarginLeft(2).SetPadding(0)));
+                        tableElementos.AddCell(new Cell().Add(new Paragraph(categoriaModelo)));
                         tableElementos.AddCell(new Cell().Add(new Paragraph(serialPlaca)));
-
                         rowCount++;
-
-                        //// Añadir una fila vacía si se han añadido 3 datos
-                        //if (rowCount % 3 == 0 && rowCount < validAdicionales.Count)
-                        //{
-                        //    tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //    tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //    //tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //    //tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //    //tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //    //tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        //}
                     }
 
-                    // Completar con filas vacías para alcanzar exactamente 5 filas si es necesario
-                    int rowsRequired = 5;
-                    int filledRows = (int)Math.Ceiling((double)rowCount / 3);
-                    int emptyRowsToAdd = Math.Max(0, rowsRequired - filledRows);
+                    // Agregar extras después de los adicionales si hay espacio
+                    List<Tuple<string, bool>> extras = new List<Tuple<string, bool>> {
+        new Tuple<string, bool>("Maleta", asignaciones[0].ExtraMaleta),
+        new Tuple<string, bool>("Guaya", asignaciones[0].ExtraGuaya),
+        new Tuple<string, bool>("Base", asignaciones[0].ExtraBase),
+        new Tuple<string, bool>("Cargador", asignaciones[0].ExtraCargador),
+        new Tuple<string, bool>("PadMouse", asignaciones[0].ExtraPadMouse),
+        new Tuple<string, bool>("Diadema", asignaciones[0].ExtraDiadema)
+    };
 
-                    for (int i = 0; i < emptyRowsToAdd; i++)
+                    foreach (var extra in extras)
                     {
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
-                        tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
+                        if (extra.Item2 && rowCount < 5)
+                        {
+                            tableElementos.AddCell(new Cell().Add(new Paragraph(extra.Item1)));
+                            tableElementos.AddCell(new Cell().Add(new Paragraph("SI")));
+                            rowCount++;
+                        }
+                    }
+                }
+
+                // Rellenar filas vacías hasta alcanzar las 5 filas
+                for (int i = rowCount; i < 5; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
                         tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
                         tableElementos.AddCell(new Cell().Add(new Paragraph("").SetMarginLeft(2).SetPadding(0).SetHeight(10)));
                     }
                 }
 
-
                 // Añadir la tabla al documento
                 document.Add(tableElementos);
+
 
 
 
@@ -519,19 +529,32 @@ namespace gestionactivos.pdf
                     var PisoContratista = asignaciones[0].PisoContratista;
 
                     var FirmaResponsable = asignaciones[0].FirmaContratista;
-                    byte[] imageBytes = Convert.FromBase64String(FirmaResponsable);
+                    byte[] imageBytes = null;
 
-                    ImageData imageData3 = ImageDataFactory.Create(imageBytes);
-                    Image firmaImage3 = new Image(imageData3)
-                        .ScaleToFit(100, 50) // Escala la imagen
-                        .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                    if (FirmaResponsable != null) // Verifica si la firma no es nula
+                    {
+                        imageBytes = Convert.FromBase64String(FirmaResponsable);
+                        ImageData imageData3 = ImageDataFactory.Create(imageBytes);
+                        Image firmaImage3 = new Image(imageData3)
+                            .ScaleToFit(100, 50) // Escala la imagen
+                            .SetHorizontalAlignment(HorizontalAlignment.CENTER);
 
-                    tableObservacion2.AddCell(new Cell().Add(new Paragraph("CEDULA:")));
-                    tableObservacion2.AddCell(new Cell().Add(new Paragraph(CedulaResponsable)));
-                    tableObservacion2.AddCell(new Cell(4, 1).Add(new Paragraph("FIMA CONTRATISTA")) // Columna vacía, ocupa 4 filas
-                        .SetTextAlignment(TextAlignment.CENTER));
-                    tableObservacion2.AddCell(new Cell(4, 1).Add(firmaImage3) // Otra columna vacía, ocupa 4 filas
-                        .SetTextAlignment(TextAlignment.CENTER));
+                        tableObservacion2.AddCell(new Cell().Add(new Paragraph("CEDULA:")));
+                        tableObservacion2.AddCell(new Cell().Add(new Paragraph(CedulaResponsable)));
+                        tableObservacion2.AddCell(new Cell(4, 1).Add(new Paragraph("FIMA CONTRATISTA")) // Columna vacía, ocupa 4 filas
+                            .SetTextAlignment(TextAlignment.CENTER));
+                        tableObservacion2.AddCell(new Cell(4, 1).Add(firmaImage3) // Otra columna vacía, ocupa 4 filas
+                            .SetTextAlignment(TextAlignment.CENTER));
+                    }
+                    else
+                    {
+                        tableObservacion2.AddCell(new Cell().Add(new Paragraph("Pendiente por firmar"))
+                            .SetTextAlignment(TextAlignment.CENTER)); // Mensaje de pendiente
+                    }
+
+
+
+
 
                     tableObservacion2.AddCell(new Cell().Add(new Paragraph("ENTREGADO A:")));
                     tableObservacion2.AddCell(new Cell().Add(new Paragraph(NombreResponsable)));
@@ -565,6 +588,7 @@ namespace gestionactivos.pdf
                         .SetMultipliedLeading(1.2f) // Espaciado entre líneas
                         .SetPadding(5)) // Espacio dentro de la celda
                     );
+
                 }
 
 

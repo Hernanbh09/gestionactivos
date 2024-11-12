@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<gestionactivos.Models.DevolucionModel>
-
+@{
+    ViewData["Title"] = "Devolución";
+}
 <h1>Devolucion</h1>
 <link href="~/css/site.css" rel="stylesheet" />
 <div class="row">
@@ -82,6 +84,38 @@
                         </td>
                     </tr>
 
+                    <tr>
+                        <td colspan="14">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Maleta</th>
+                                            <th>Guaya</th>
+                                            <th>Base</th>
+                                            <th>Cargador</th>
+                                            <th>PadMouse</th>
+                                            <th>Diadema</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <tr>
+                                            <td>@(articulo.ExtraMaleta == true ? "Sí" : "No")</td>
+                                            <td>@(articulo.ExtraGuaya == true ? "Sí" : "No")</td>
+                                            <td>@(articulo.ExtraBase == true ? "Sí" : "No")</td>
+                                            <td>@(articulo.ExtraCargador == true ? "Sí" : "No")</td>
+                                            <td>@(articulo.ExtraPadMouse == true ? "Sí" : "No")</td>
+                                            <td>@(articulo.ExtraDiadema == true ? "Sí" : "No")</td>
+                                        </tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>   
+                    </tr>
+                    @if (articulo.idAdicional != 0)
+                    {
                     <tr data-id="@articulo.idAdicional">
                         
                         <td colspan="14">
@@ -112,7 +146,7 @@
                             </div>
                         </td>
                     </tr>
-
+                    }
                     <!-- Modal -->
                     <div class="modal fade" id="DevolverEquipo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">

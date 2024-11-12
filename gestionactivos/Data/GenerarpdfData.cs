@@ -49,7 +49,7 @@ namespace gestionactivos.Data
                                 // Crear una nueva asignación.
                                 currentAsignacion = new GenerarpdfModel
                                 {
-                                    idAsignacion = reader.GetInt32(reader.GetOrdinal("idMovimiento")),
+                                    
                                     EventoMovimiento = reader.GetString(reader.GetOrdinal("EventoMovimiento")),
                                     FechaMovimiento = reader.GetDateTime(reader.GetOrdinal("FechaMovimiento")),
                                     ObservacionMovimiento = reader.IsDBNull(reader.GetOrdinal("ObservacionMovimiento")) ? null : reader.GetString(reader.GetOrdinal("ObservacionMovimiento")),
@@ -88,7 +88,15 @@ namespace gestionactivos.Data
                                     DireccionEmpresa = reader.GetString(reader.GetOrdinal("DireccionEmpresa")),
                                     NombreUsuario = reader.GetString(reader.GetOrdinal("NombreUsuario")),
                                     ApellidoUsuario = reader.GetString(reader.GetOrdinal("ApellidoUsuario")),
-                                    FirmaUsuario = reader.IsDBNull(reader.GetOrdinal("FirmaUsuario")) ? null : reader.GetString(reader.GetOrdinal("FirmaUsuario"))
+                                    FirmaUsuario = reader.IsDBNull(reader.GetOrdinal("FirmaUsuario")) ? null : reader.GetString(reader.GetOrdinal("FirmaUsuario")),
+
+                                    ExtraMaleta = reader.GetBoolean(reader.GetOrdinal("ExtraMaleta")),
+                                    ExtraGuaya = reader.GetBoolean(reader.GetOrdinal("ExtraGuaya")),
+                                    ExtraBase = reader.GetBoolean(reader.GetOrdinal("ExtraBase")),
+                                    ExtraCargador = reader.GetBoolean(reader.GetOrdinal("ExtraCargador")),
+                                    ExtraPadMouse = reader.GetBoolean(reader.GetOrdinal("ExtraPadMouse")),
+                                    ExtraDiadema = reader.GetBoolean(reader.GetOrdinal("ExtraDiadema")),
+
                                 };
                             }
 

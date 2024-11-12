@@ -1,5 +1,8 @@
 ﻿@model ArticulosModel
 
+@{
+    ViewData["Title"] = "Guardar - Articulo";
+}
 
 <h1>Guardar</h1>
 
@@ -14,14 +17,21 @@
         <form asp-action="Guardar" asp-controller="Articulos" method="post">
 
             <div class="mb-3">
-                <label class="form-label">Categoria</label>
-                <input asp-for="Categoria" type="text" class="form-control">
-                <span asp-validation-for="Categoria" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Modelo</label>
-                <input asp-for="Modelo" type="text" class="form-control">
-                <span asp-validation-for="Modelo" class="text-danger"></span>
+                <select class="form-select" id="seleccioneCategoria" name="idCategoria">
+                    <option value="0" disabled selected>Seleccione un Categoria</option>
+                    @if (ViewData["Categoria"] != null)
+                    {
+                        var Categorias = (List<ArticulosModel>)ViewData["Categoria"];
+                        foreach (var Categoria in Categorias)
+                        {
+                            <option value="@Categoria.idCategoria">Ctg:@Categoria.Categoria - Mo:@Categoria.Modelo</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="0">No hay Articulos disponibles</option>
+                    }
+                </select>
             </div>
 
             <div class="mb-3">

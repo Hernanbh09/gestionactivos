@@ -184,6 +184,34 @@ namespace gestionactivos.Controllers
             }
         }
 
+
+        [HttpPost]
+        public IActionResult GuardarExtrasC(int idArticulo, int Maleta, int Guaya, int Base, int Cargador, int PadMouse, int Diadema)
+        {
+            try
+            {
+                AsignacionData data8 = new AsignacionData();
+                bool GuardarFirmaFunc = data8.GuardarExtras( idArticulo,  Maleta,  Guaya,  Base,  Cargador,  PadMouse,  Diadema);
+                if (GuardarFirmaFunc)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error al guardar los extras." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+
+
+
         [HttpPost]
         public IActionResult AsignarEquipo(int idFuncionario, int idArticulo, int idFuncionarioContra, int? estadoCheckbox)
         {

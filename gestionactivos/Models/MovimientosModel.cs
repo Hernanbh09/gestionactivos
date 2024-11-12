@@ -11,6 +11,10 @@
         public string? Modelo{ get; set; }
         public string? Placa { get; set; }
         public string? Serial { get; set; }
+        public string? CategoriaAdicional { get; set; }
+        public string? ModeloAdicional { get; set; }
+        public string? PlacaAdicional { get; set; }
+        public string? SerialAdicional { get; set; }
         public string? Archivo { get; set; }
         public string? FechaMovimiento { get; set; }
 

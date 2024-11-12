@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using iText.StyledXmlParser.Jsoup.Helper;
 using gestionactivos.Error;
 using System.Diagnostics.Eventing.Reader;
+using iText.Kernel.Pdf.Canvas.Wmf;
+using static iText.Kernel.Pdf.Colorspace.PdfDeviceCs;
 
 namespace gestionactivos.Data
 {
@@ -50,8 +52,8 @@ namespace gestionactivos.Data
                                 funcionario.Cedula = reader.GetString(1);
                                 funcionario.Nombres = reader.GetString(2);
                                 funcionario.Apellidos = reader.GetString(3);
-                                funcionario.Correo = reader.GetString(4);
-                                funcionario.Telefono = reader.GetString(5);
+                                funcionario.Correo = reader.GetString(5);
+                                funcionario.Telefono = reader.GetString(4);
                                 funcionario.Area = reader.GetString(6);
                                 funcionario.Cargo = reader.GetString(7);
                                 funcionario.Piso = reader.GetString(8);
@@ -310,6 +312,48 @@ namespace gestionactivos.Data
                 return false; // Si ocurre un error, devolvemos false
             }
         }
+
+
+        public bool GuardarExtras(int idArticulo , int Maleta , int Guaya , int Base , int Cargador , int PadMouse , int Diadema)
+        {
+            var errorLogger = new ErrorLogger();
+            try
+            {
+                
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = "sp_Extras"; // Nombre del procedimiento almacenado
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@idArticulo", idArticulo);
+                        command.Parameters.AddWithValue("@Maleta", Maleta);
+                        command.Parameters.AddWithValue("@Guaya", Guaya);
+                        command.Parameters.AddWithValue("@Base", Base);
+                        command.Parameters.AddWithValue("@Cargador", Cargador);
+                        command.Parameters.AddWithValue("@PadMouse", PadMouse);
+                        command.Parameters.AddWithValue("@Diadema", Diadema);
+                      
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        return true; // Si se ejecuta correctamente, devolvemos true
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Registra el error (opcionalmente)
+                errorLogger.RegistrarError(ex, "Asignacion Metodo:" + nameof(GuardarExtras), idArticulo);
+                return false; // Si ocurre un error, devolvemos false
+            }
+        }
+
+
+
+
+
 
         public AsignacionModel AsignacionEquipoTerminada(int idFuncionario, int idArticulo, int idFuncionarioContra, int idUsuario, int? estadoCheckbox)
         {

@@ -33,9 +33,9 @@ namespace gestionactivos.Services
 
 
 
-                string correo = "coordinador_parquecomputacional@mintic.gov.co";
+                //string correo = "coordinador_parquecomputacional@mintic.gov.co";
                 string correo2 = "bhernandezm.sumimas@gmail.com";
-                string correoCopia = "Soporte_equipos@mintic.gov.co";
+                //string correoCopia = "Soporte_equipos@mintic.gov.co";
                 
 
 
@@ -74,20 +74,31 @@ namespace gestionactivos.Services
                         mensaje.Subject = "Devolución de equipo";
                         mensaje.Body = $"<html><body>" +
                                        $"<p>Estimado usuario,</p>" +
-                                       $"<p>Le informamos que se ha realizado una nueva asignación de equipo.</p>" +
+                                       $"<p>Le informamos que se ha realizado una nueva devolucion de equipo.</p>" +
                                        $"<p>Revisa el adjunto para más detalles </p>" +
-                                       $"<img src='https://i.ibb.co/WynBGXj/Devolucion.png' alt='Devolución' />" +
+                                       $"<img src='https://i.ibb.co/jvn13BD/Devolucion2.png'  alt='Devolución' />" +
+                                       $"<p>Saludos,</p>" +
+                                       $"</body></html>";
+                    }else if (evento == "Pendiente Firmar")
+                    {
+                        mensaje.Subject = "Pendiente el equipo";    
+                        mensaje.Body = $"<html><body>" +
+                                       $"<p>Estimado usuario,</p>" +
+                                       $"<p>Le informamos que se ha realizado una nueva entrega de equipo pendiente.</p>" +
+                                       $"<p>Revisa el adjunto para más detalles </p>" +
+                                       $"<img src='https://i.ibb.co/2cDzKDh/Pendiente.png'  alt='Pendiente' />" +
                                        $"<p>Saludos,</p>" +
                                        $"</body></html>";
                     }
                     else
                     {
+
                         mensaje.Subject = "Asignación de equipo";
                         mensaje.Body = $"<html><body>" +
                                        $"<p>Estimado usuario,</p>" +
                                        $"<p>Le informamos que se ha realizado una nueva asignación de equipo.</p>" +
                                         $"<p>Revisa el adjunto para más detalles  </p>" +
-                                       $"<img src='https://i.ibb.co/B2XqFgm/Asignacion.png' alt='Asignación' />" +
+                                       $"<img src='https://i.ibb.co/LZMtRSV/Asignacion.png' alt='Asignación' />" +
                                        $"<p>Saludos,</p>" +
                                        $"</body></html>";
                     }
@@ -108,9 +119,9 @@ namespace gestionactivos.Services
                     //{
                     //    mensaje.CC.Add(correoResponsable);
                     //}
-                    mensaje.To.Add(correo);
+                    //mensaje.To.Add(correo);
                     mensaje.To.Add(correo2);
-                    mensaje.CC.Add(correoCopia);
+                    //mensaje.CC.Add(correoCopia);
 
                     // Adjuntar el PDF al correo
                     Attachment pdfAttachment = new Attachment(pdfPath);

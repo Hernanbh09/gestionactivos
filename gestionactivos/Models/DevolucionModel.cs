@@ -34,7 +34,12 @@ namespace gestionactivos.Models
         public string ModeloAdicional { get; set; }
         public string SerialAdicional { get; set; }
         public string PlacaAdicional { get; set; }
-
+        public bool ExtraMaleta { get; set; }
+        public bool ExtraGuaya { get; set; }
+        public bool ExtraBase { get; set; }
+        public bool ExtraCargador { get; set; }
+        public bool ExtraPadMouse { get; set; }
+        public bool ExtraDiadema { get; set; }
 
     }
 }

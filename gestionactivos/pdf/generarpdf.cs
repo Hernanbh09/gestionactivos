@@ -35,7 +35,7 @@ namespace gestionactivos.pdf
                     asignaciones[0].EventoMovimiento = "Pendiente";
                 }
 
-                var NombrePdf = $"{asignaciones[0].EventoMovimiento}_{asignaciones[0].SerialArticulo}_{fechaMovimientoStr}_{asignaciones[0].idAsignacion}.pdf";
+                var NombrePdf = $"{asignaciones[0].EventoMovimiento}_{asignaciones[0].SerialArticulo}_{fechaMovimientoStr}_{idAsignacion}.pdf";
 
                 // Ruta de salida del PDF usando Documentos del usuario
                 string documentosPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

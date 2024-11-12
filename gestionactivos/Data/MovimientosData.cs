@@ -38,6 +38,10 @@ namespace gestionactivos.Data
                                 Modelo = dr["Modelo"].ToString(),
                                 Serial = dr["Serial"].ToString(),
                                 Placa = dr["Placa"].ToString(),
+                                CategoriaAdicional = dr["CategoriaAdicional"].ToString(),
+                                ModeloAdicional = dr["ModeloAdicional"].ToString(),
+                                SerialAdicional = dr["SerialAdicional"].ToString(),
+                                PlacaAdicional = dr["PlacaAdicional"].ToString(),
                                 Archivo = dr["Archivo"].ToString(),
 
                             });

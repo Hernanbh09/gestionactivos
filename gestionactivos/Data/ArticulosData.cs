@@ -51,6 +51,55 @@ namespace gestionactivos.Data
             return olist;
         }
 
+        public List<ArticulosModel> ListarA()
+        {
+            var olist = new List<ArticulosModel>();
+            var errorLogger = new ErrorLogger();
+            try
+            {
+                var cn = new Conexion();
+                using (var conexion = new SqlConnection(cn.getCadenaSQL()))
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_ListarCategoria", conexion);
+                    cmd.Parameters.AddWithValue("TipoCategoria", "Articulo");
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Ejecutar el procedimiento almacenado
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            olist.Add(new ArticulosModel
+                            {
+
+                                idCategoria = Convert.ToInt32(dr["idCategoria"]),
+                                Categoria = dr["Categoria"].ToString(),
+                                Modelo = dr["Modelo"].ToString()
+                            });
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                errorLogger.RegistrarError(ex, "Sede Metodo:" + nameof(ListarA));
+            }
+            return olist;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public string Guardar(ArticulosModel oArticulo, int? idUsuario)
         {
             string mensaje = null;
@@ -64,8 +113,10 @@ namespace gestionactivos.Data
                     conexion.Open();
                     SqlCommand cmd = new SqlCommand("sp_GuardarA", conexion);
 
-                    cmd.Parameters.AddWithValue("Categoria", oArticulo.Categoria);
-                    cmd.Parameters.AddWithValue("Modelo", oArticulo.Modelo);
+                    //cmd.Parameters.AddWithValue("Categoria", oArticulo.Categoria);
+                    //cmd.Parameters.AddWithValue("Modelo", oArticulo.Modelo);
+                    cmd.Parameters.AddWithValue("idCategoria", oArticulo.idCategoria);
+
                     cmd.Parameters.AddWithValue("Serial", oArticulo.Serial);
                     cmd.Parameters.AddWithValue("Placa", oArticulo.Placa);
 
@@ -101,6 +152,7 @@ namespace gestionactivos.Data
                         while (dr.Read())
                         {
                             oArticulos.idArticulo = Convert.ToInt32(dr["idArticulo"]);
+                            oArticulos.idCategoria = Convert.ToInt32(dr["idCategoria"]);
                             oArticulos.Categoria = dr["Categoria"].ToString();
                             oArticulos.Modelo = dr["Modelo"].ToString();
                             oArticulos.Serial = dr["Serial"].ToString();
@@ -134,8 +186,8 @@ namespace gestionactivos.Data
                     conexion.Open();
                     SqlCommand cmd = new SqlCommand("sp_EditarA", conexion);
                     cmd.Parameters.AddWithValue("idArticulo", oArticulo.idArticulo);
-                    cmd.Parameters.AddWithValue("Categoria", oArticulo.Categoria);
-                    cmd.Parameters.AddWithValue("Modelo", oArticulo.Modelo);
+                    cmd.Parameters.AddWithValue("idCategoria", oArticulo.idCategoria);
+
                     cmd.Parameters.AddWithValue("Serial", oArticulo.Serial);
                     cmd.Parameters.AddWithValue("Placa", oArticulo.Placa);
 

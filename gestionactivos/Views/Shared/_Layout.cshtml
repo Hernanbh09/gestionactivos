@@ -1,9 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - gestionactivos</title>
+
+
+
 
     <link href="~/css/layout.css" rel="stylesheet" />
 
@@ -15,13 +20,19 @@
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
 
     <script src="https://kit.fontawesome.com/64317570d5.js" crossorigin="anonymous"></script>
+
+    <link rel="icon" href="https://i.ibb.co/J3nxzCX/icon.png" type="image/png">
+
 </head>
 <body>
 
     <header>
+
+
         <nav class="navegador">
             <div class="nav-top" id="navTop">
                 <div class="img">
@@ -53,33 +64,33 @@
 
             <div class="nav-bottom">
                 <div class="container3">
-                    <ul>
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <ul id="menu">
+                        <li><a href="/Home/Index" data-controller="Home">Home</a></li>
                         @if (User.IsInRole("Administrador"))
                         {
-                            <li><a asp-controller="Clientes" asp-action="Listar">Clientes</a></li>
-                            <li><a asp-controller="Sedes" asp-action="Listar">Sedes</a></li>
-                            <li><a asp-controller="Usuarios" asp-action="Listar">Usuarios</a></li>
-                            <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
-                            <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
-                            <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-
+                            <li><a href="/Clientes/Listar" data-controller="Clientes">Clientes</a></li>
+                            <li><a href="/Sedes/Listar" data-controller="Sedes">Sedes</a></li>
+                            <li><a href="/Usuarios/Listar" data-controller="Usuarios">Usuarios</a></li>
+                            <li><a href="/Funcionarios/Listar" data-controller="Funcionarios">Funcionarios</a></li>
+                            <li><a href="/Articulos/Listar" data-controller="Articulos">Articulos</a></li>
+                            <li><a href="/Adicionales/Listar" data-controller="Adicionales">Adicionales</a></li>
                         }
                         @if (User.IsInRole("Coordinador"))
                         {
-                            <li><a asp-controller="Funcionarios" asp-action="Listar">Funcionarios</a></li>
-                            <li><a asp-controller="Articulos" asp-action="Listar">Articulos</a></li>
-                            <li><a asp-controller="Adicionales" asp-action="Listar">Adicionales</a></li>
-
+                            <li><a href="/Funcionarios/Listar" data-controller="Funcionarios">Funcionarios</a></li>
+                            <li><a href="/Articulos/Listar" data-controller="Articulos">Articulos</a></li>
+                            <li><a href="/Adicionales/Listar" data-controller="Adicionales">Adicionales</a></li>
                         }
                         @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Tecnico"))
                         {
-                            <li><a asp-controller="Movimientos" asp-action="Listar">Movimientos</a></li>
-                            <li><a asp-controller="Pendientes" asp-action="Pendientes">Pendientes</a></li>
-                            <li><a asp-controller="Asignacion" asp-action="Asignacion">Asignar Articulo</a></li>
-                            <li><a asp-controller="Devolucion" asp-action="Devolucion">Devolver Articulo</a></li>
+                            <li><a href="/Movimientos/Listar" data-controller="Movimientos">Movimientos</a></li>
+                            <li><a href="/Pendientes/Pendientes" data-controller="Pendientes">Pendientes</a></li>
+                            <li><a href="/Asignacion/Asignacion" data-controller="Asignacion">Asignar Articulo</a></li>
+                            <li><a href="/Devolucion/Devolucion" data-controller="Devolucion">Devolver Articulo</a></li>
                         }
                     </ul>
+
+
                 </div>
             </div>
 
@@ -153,6 +164,31 @@
             </div>
         </div>
     </footer>
+   
+    <script>
+       
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Obtén el controlador actual de la URL
+            const path = window.location.pathname.split("/");
+            const currentController = path[1]; // el controlador es la segunda parte de la ruta
+
+            // Selecciona todos los enlaces del menú
+            const links = document.querySelectorAll("#menu a");
+
+            // Itera sobre los enlaces para encontrar el activo
+            links.forEach(link => {
+                const controller = link.getAttribute("data-controller");
+
+                // Compara el controlador actual con el atributo del enlace
+                if (controller === currentController) {
+                    link.style.backgroundColor = "#ff9859"; // Cambia al color deseado
+                    link.style.color = "white"; // Cambia el color del texto si es necesario
+                }
+            });
+        });
+    </script>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
